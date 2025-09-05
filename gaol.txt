@@ -99,3 +99,115 @@
     - 영어 의사소통 가능자 등 [인디드](https://kr.indeed.com/q-%ED%83%9C%EC%96%91%EA%B4%91-%EA%B0%9C%EB%B0%9C-%EC%B1%84%EC%9A%A9%EA%B3%B5%EA%B3%A0.html?utm_source=chatgpt.com)
 - **근무 지역**
     - 서울 중구 [인디드](https://kr.indeed.com/q-%ED%83%9C%EC%96%91%EA%B4%91-%EA%B0%9C%EB%B0%9C-%EC%B1%84%EC%9A%A9%EA%B3%B5%EA%B3%A0.html?utm_source=chatgpt.com)
+
+
+
+********************************************************************************************
+
+1. 한화큐셀 (태양광 IoT 연동 시스템 개발)
+
+채용 직무: IoT 연동 시스템 개발, 에너지 관리 시스템(EMS) 개발
+
+기본 채용 조건:
+
+학력: 대졸 이상
+
+전공: 전기전자공학, 컴퓨터공학, 에너지공학 등 관련 전공 선호 (비전공자 가능)
+
+경력: 신입 또는 경력 3년 이하
+
+기술 스택: Python, Java, C/C++, JavaScript
+
+IoT 통신: MQTT, CoAP, HTTP/HTTPS, NB-IoT, LoRa, Zigbee
+
+데이터베이스/서버: MySQL, PostgreSQL, MongoDB, RESTful API, Flask, Spring Boot
+
+클라우드: AWS IoT, Azure IoT Hub, Google Cloud IoT
+
+우대 조건:
+
+태양광 에너지 시스템 이해
+
+IoT 기반 에너지 관리 시스템 개발 경험
+
+임금 정보: 평균 5,500만 원 / 초임 4,500만 원
+
+근무 지역: 경기도 화성시
+
+2. 트루엔 (IoT 보안 및 영상 감시 시스템 개발)
+
+채용 직무: IoT 보안 솔루션 개발, 영상 감시 시스템 개발
+
+기본 채용 조건:
+
+학력: 대졸 이상
+
+전공: 전기전자공학, 컴퓨터공학, 정보보안 등 관련 전공 선호 (비전공자 가능)
+
+경력: 신입 또는 경력 3년 이하
+
+기술 스택: Python, Java, C/C++, Go, Node.js
+
+IoT 통신: MQTT, CoAP, HTTP/HTTPS, Wi-Fi, BLE, Zigbee
+
+보안 기술: TLS/SSL, AES, RSA, OAuth2
+
+데이터베이스/서버: MySQL, PostgreSQL, MongoDB, REST API, WebSocket
+
+우대 조건:
+
+IoT 보안 기술 이해
+
+영상 감시 시스템 개발 경험
+
+임금 정보: 평균 5,200만 원 / 초임 4,200만 원
+
+근무 지역: 서울특별시
+
+3. 아이씨티케이 (ICTK, IoT 보안 칩 및 양자 보안)
+
+채용 직무: IoT 보안 칩 개발, 양자 보안 기술 적용
+
+기본 채용 조건:
+
+학력: 대졸 이상
+
+전공: 전기전자공학, 컴퓨터공학, 정보보안 등 관련 전공 선호 (비전공자 가능)
+
+경력: 신입 또는 경력 3년 이하
+
+기술 스택: C, C++, Python, Rust
+
+IoT 통신: MQTT, CoAP, NB-IoT, BLE, Zigbee
+
+보안 기술: 암호화 알고리즘(AES, RSA, SHA), TPM/보안 칩 설계, 펌웨어
+
+데이터베이스/서버: MySQL, MongoDB, RESTful API, gRPC
+
+우대 조건:
+
+보안 칩 설계 경험
+
+IoT 디바이스 보안 기술 이해
+
+양자 보안 기술 지식
+
+임금 정보: 평균 5,800만 원 / 초임 4,800만 원
+
+근무 지역: 서울특별시 강남구
+
+💡 비전공자 취업 전략
+
+기초 프로그래밍: Python, Java, C/C++ 습득
+
+IoT 통신 프로토콜 이해: MQTT, NB-IoT, LoRa, Zigbee
+
+데이터 처리 및 서버 연동: RESTful API, MySQL, PostgreSQL, MongoDB
+
+클라우드 경험: AWS IoT, Azure IoT Hub, Google Cloud IoT
+
+보안 및 센서 데이터 처리: TLS/SSL, AES, 센서 데이터 분석
+
+포트폴리오 구축: 개인 프로젝트, GitHub 활용
+
+실무 경험 확보: 인턴십, 공모전, 해커톤 참여
