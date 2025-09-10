@@ -11,9 +11,9 @@
         여러 print 사용 시 줄바꿈 구분자 지정(default : blank)
 '''
 
-print("Hello World!")
-print("Hello World!")
-print("Hello World!")
+print("Hello World!")   # Hello World!
+print("Hello World!")   # Hello World!
+print("Hello World!")   # Hello World!
 
 #######################################################################
 # 주석

@@ -37,22 +37,29 @@ ex)studentName
 '''
 
 age = 10
-print(age)
+print(age)  # 10
 
 age = 20
 student_name = "김철수"
 is_student = True
 
 if (is_student):
-    print("age = " + str(age) + ", studen_name = " + student_name)
+    print("age = " + str(age) + ", student_name = " +
+          student_name)  # age = 20, student_name = 김철수
 
 x = 10
 y = 20
-print("x =", x, "y = ", y)
+print("x =", x, "y =", y)   # x = 10 y = 20
+
 # 값의 교환, 여러 변수 할당
 x, y = y, x
-print("x =", x, "y = ", y)
+print("x =", x, "y =", y)   # x = 20 y = 10
 
+# sep= : separator, 구분자 / 기본값 : " " (공백 한 칸)
+#       print() 안에서 여러 값 출력 시, 값 사이에 들어가는 문자
+# end= : 기본값 : "\n" (줄바꿈)
+#      출력 후, 마지막에 붙는 문자
 X, Y = 30, 'a'
 print('X', X, sep='   ', end=' ')
 print('Y', Y)
+# X   30 Y a

@@ -19,8 +19,8 @@
 
 '''
 
-print('"파이썬"은 가장 널리 사용되는 프로그래밍 언어입니다.')
-print("'파이썬'은 가장 널리 사용되는 프로그래밍 언어입니다.")
+print('"파이썬"은 가장 널리 사용되는 프로그래밍 언어입니다.')     # "파이썬"은 가장 널리 사용되는 프로그래밍 언어입니다.
+print("'파이썬'은 가장 널리 사용되는 프로그래밍 언어입니다.")     # '파이썬'은 가장 널리 사용되는 프로그래밍 언어입니다.
 
 true = True
 false = False
@@ -31,11 +31,11 @@ a = 'a'
 b = 1
 c = 3.14
 
-print(type(a))
-print(type(b))
-print(type(c))
-print(type(true))
-print(type(false))
+print(type(a))    # <class 'str'>
+print(type(b))    # <class 'int'>
+print(type(c))    # <class 'float'>
+print(type(true))  # <class 'bool'>
+print(type(false))      # <class 'bool'>
 
 #####################################################################
 # 형 변환(Type case)
@@ -47,9 +47,9 @@ flaot(x) : 실수형으로 변환
 str(x) : 문자형으로 변환
 '''
 
-print("c = ", int(c), type(int(c)))
-print("b = ", float(b), type(float(b)))
-print("b = ", str(b), type(str(b)))
+print("c = ", int(c), type(int(c)))  # c =  3 <class 'int'>
+print("b = ", float(b), type(float(b)))   # b =  1.0 <class 'float'>
+print("b = ", str(b), type(str(b)))  # b =  1 <class 'str'>
 
 ###################################################################
 # 문자열 포매팅 : f-string
@@ -60,7 +60,7 @@ print("b = ", str(b), type(str(b)))
 
 name = "Codingon"
 age = 5
-print(f'{name} is {age} years old.')
+print(f'{name} is {age} years old.')      # Codingon is 5 years old.
 
 #####################################################################
 # 실습1
@@ -75,6 +75,7 @@ year = 2010
 Genre = 'Sci-Fi'
 
 print(f'Title: {title} Director: {director} Year: {year} Genre: {Genre}')
+# Title: Inception Director: Christopher Nolan Year: 2010 Genre: Sci-Fi
 
 #####################################################################
 # 실습2
@@ -88,9 +89,23 @@ age = 32
 mbti = 'ENTJ'
 
 print(f'안녕하세요. \n제 이름은 {name}이고, \n{age}살입니다. \n제 MBTI는 {mbti}에요.')
+# 안녕하세요.
+# 제 이름은 배경은이고,
+# 32살입니다.
+# 제 MBTI는 ENTJ에요.
+
 print('안녕하세요.', f'제 이름은 {name}이고,', f'{age}살입니다.',
       f'제 MBTI는 {mbti}에요.', sep='\n')
+# 안녕하세요.
+# 제 이름은 배경은이고,
+# 32살입니다.
+# 제 MBTI는 ENTJ에요.
+
 print(f"""안녕하세요.
 제 이름은 {name}이고,
 {age}살입니다.
 제 MBTI는 {mbti}에요.""")
+# 안녕하세요.
+# 제 이름은 배경은이고,
+# 32살입니다.
+# 제 MBTI는 ENTJ에요.
