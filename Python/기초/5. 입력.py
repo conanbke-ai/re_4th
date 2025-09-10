@@ -9,7 +9,11 @@ print(name)
 score = input("점수를 입력하세요 \n" + ": ")
 print(f'점수는  : {score}')
 
-# split() : 문자열을 구분자로 나누는 함수
+# split() : 문자열을 구분자로 나누는 함수 (list로 나뉘어짐)
+'''
+문자열만 사용 가능한 함수(숫자 사용 불가)
+split 함수 괄호 안에 구분자 지정 가능 / 기본값 : 공백
+'''
 fruit = "사과 참외 수박".split()
 print(fruit)
 
