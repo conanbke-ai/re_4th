@@ -1,0 +1,58 @@
+#######################################################################
+# 변수(Variable)
+'''
+데이터를 저장할 수 있는 이름이 붙은 공간
+- 변수 선언 : 변수를 처음으로 생성함
+- 값 할당 : 변수에 값을 저장 (파이썬은 변수의 선언과 할당을 동시에 함)
+- = : 대입 연산자, 변수에 값을 대입한다(할당한다)는 의미
+    ex) 변수이름 = 값
+'''
+# 변수명 규칙 :
+'''
+1. 영문자, 숫자, 언스스코어(_)만 사용
+2. 숫자로 시작 불가
+3. 공백 사용 불가
+4. 의미있는 이름 사용
+5. 대소문자 구분
+6. 예약어(keyword) 사용 불가
+    - 프로그래밍 언어가 미리 정해놓은 특별한 의미를 가진 단어
+        문법 구조 구성하기 위해 사용됨
+        ex) if, else, for, while, def, return, class, import, True, False, None ...
+7. 변수 값은 변경 가능함
+    -> 재할당 가능
+'''
+# 불가능한 변수명
+# ex) my-name = "김철수"
+
+'''
+식별자 종류
+- 스네이크 케이스(Snake_Case)
+ex) student_name = "김철수"
+
+- 파스칼 케이스(PascalCase)
+ex) StudentName
+
+- 카멜 케이스(camelCase)
+ex)studentName
+'''
+
+age = 10
+print(age)
+
+age = 20
+student_name = "김철수"
+is_student = True
+
+if (is_student):
+    print("age = " + str(age) + ", studen_name = " + student_name)
+
+x = 10
+y = 20
+print("x =", x, "y = ", y)
+# 값의 교환, 여러 변수 할당
+x, y = y, x
+print("x =", x, "y = ", y)
+
+X, Y = 30, 'a'
+print('X', X, sep='   ', end=' ')
+print('Y', Y)
