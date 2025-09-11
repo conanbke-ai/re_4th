@@ -11,6 +11,19 @@
 
 2. 산술 연산자
     산술 연산자는 숫자에 대해 수학적 연산을 수행
+
+3. 비교 연산자
+    두 값을 비교하여 참(True) 또는 거짓(False)를 반환하는 연산자
+
+4. 논리 연산자
+    여러 개의 조건을 조합하거나 부정할 때 사용하는 연산자
+    ex) and / or / not
+
+** 조건식 평가 순서
+    왼쪽에서 오른쪽으로 순차적으로 평가
+    단축 형가 사용
+        and는 앞의 조건이 False면 뒤는 확인하지 않음
+        or는 앞의 조건이 True면 뒤는 확인하지 않음
 '''
 
 ######################################################################################
@@ -240,3 +253,39 @@ drop = "두둠칫"
 
 intro += drop * 3
 print(intro)
+
+
+######################################################################################################
+# 비교 연산자 예제
+
+x = 10
+y = 20
+print(f'x == y: {x == y}')  # x == y: False
+print(f'x != y: {x != y}')  # x != y: True
+print(f'x > y: {x > y}')    # x > y: False
+print(f'x >= y: {x >= y}')  # x >= y: False
+print(f'x < y: {x < y}')    # x < y: True
+print(f'x <= y: {x <= y}')  # <= y: True
+
+
+# 논리 연산자 예제
+
+# and : 둘 다 True 여야 True
+print(True and True)    # True
+print(False and True)   # False
+print(True and False)   # False
+print(False and False)  # False
+
+# or : 둘 중 하나만 True 여도 True
+print(True or True)    # True
+print(False or True)   # True
+print(True or False)   # True
+print(False or False)  # False
+
+# not : 둘 중 하나만 True 여도 True
+print(f'not True: {not True}')     # False
+print(f'not False: {not False}')   # True
+
+# 왼항부터 순차로 계산
+print(True and False or True)   # True
+print(True and (False or True) and False)    # False
