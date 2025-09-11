@@ -68,6 +68,11 @@ for key, value in person.items():
     print(f'{key} => {value}')
 
 # set 반복
+'''
+- set은 중복이 없고 순서를 보장하지 않는 컬렉션이지만 반복은 가능함
+- 단, 출력 순서는 예측 불가능
+'''
+
 unique_numbers = {3, 1, 4, 1, 5}
 for num in unique_numbers:
     print(num)
