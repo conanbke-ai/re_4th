@@ -168,11 +168,11 @@ print(f'안녕하세요. 저는 {name}이고, {age}살입니다.')
 '''
 
 # 가로, 세로 길이 입력
-width, hight = map(int, input("가로와 세로 길이를 입력해주세요 \n : ").split())
+width, height = map(int, input("가로와 세로 길이를 입력해주세요 \n : ").split())
 # 넓이
-Area = width * hight
+Area = width * height
 # 둘레
-Perimeter = 2 * (width + hight)
+Perimeter = 2 * (width + height)
 
 print(f"""넓이 : {Area}
 둘레 : {Perimeter}""")
