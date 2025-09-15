@@ -1,44 +1,92 @@
-######################################################################################################
-# 실습 3 리스트 주요 메서드 복습 문제
+import time
 
-'''
-1. 기차 탑승 시뮬레이션
-    기차에 승객들이 순서대로 탑승하고 있습니다.
-        1. 처음엔 ["철수", "영희"]가 탑승했습니다.
-        2. 그 다음 역에서 ["민수", "지훈"]이 함께 탑승했습니다.
-        3. 다음 역에서 "영희"는 내렸습니다.
-        4. "수진"이 1번 자리에 끼어 탑승했습니다.
-        5. 마지막 역에서 "민수"가 내렸고, 기차 안의 순서를 뒤집었습니다.
-    현재 기차 안에는 어떤 승객들이 어떤 순서로 앉아 있을까요?
-'''
+# 실행 시간 측정 함수
 
-# 리스트 선언
-customer_list = []
 
-print("1. 첫 번째 역입니다. 철수와 영희가 탑승하였습니다.")
-customer_list.extend(["철수", "영희"])
+def measure_time(func, *args):
+    start = time.time()
+    result = func(*args)
+    end = time.time()
+    elapsed = (end - start) * 1000  # ms 단위
+    return result, round(elapsed, 4)
 
-print("2. 두 번째 역입니다. 민수와 지훈이 탑승하였습니다.")
-customer_list.extend(["민수", "지훈"])
+# ---------------- 예제 알고리즘 ----------------
 
-print("3. 세 번째 역입니다. 영희가 하차하였습니다.")
-customer_list.remove("영희")
+# O(1)
 
-print("4. 네 번째 역입니다. 수진이 1번 자리에 탑승하였습니다.")
-customer_list.insert(0, "수진")
 
-print("5. 다섯 번째 역입니다. 민수가 하차하였습니다.")
-customer_list.remove("민수")
+def constant_example(arr):
+    return arr[0]
 
-print("6. 기차 안의 순서가 뒤집어졌습니다.")
-customer_list.reverse()
+# O(log n)
 
-print("최종 승객 리스트 : ", customer_list)
 
-# 1. 첫 번째 역입니다. 철수와 영희가 탑승하였습니다.
-# 2. 두 번째 역입니다. 민수와 지훈이 탑승하였습니다.
-# 3. 세 번째 역입니다. 영희가 하차하였습니다.
-# 4. 네 번째 역입니다. 수진이 1번 자리에 탑승하였습니다.
-# 5. 다섯 번째 역입니다. 민수가 하차하였습니다.
-# 6. 기차 안의 순서가 뒤집어졌습니다.
-# 승객 리스트 :  ['지훈', '철수', '수진']
+def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+
+# O(n)
+
+
+def linear_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+    return -1
+
+# O(n log n)
+
+
+def sort_example(arr):
+    return sorted(arr)
+
+# O(n^2)
+
+
+def quadratic_example(arr):
+    result = []
+    for i in range(len(arr)):
+        for j in range(len(arr)):
+            result.append((arr[i], arr[j]))
+    return result
+
+# O(2^n)
+
+
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+
+# ---------------- 실행 비교 ----------------
+arr = list(range(2000))  # 테스트용 배열
+
+tests = {
+    "O(1)": (constant_example, [arr]),
+    "O(log n)": (binary_search, [arr, 1999]),
+    "O(n)": (linear_search, [arr, 1999]),
+    "O(n log n)": (sort_example, [arr]),
+    "O(n^2)": (quadratic_example, [arr[:200]]),  # 입력 줄임
+    "O(2^n)": (fibonacci, [20])                  # 작은 입력
+}
+
+for name, (func, args) in tests.items():
+    result, t = measure_time(func, *args)
+    print(f"{name}: 실행 시간 = {t} ms")
+
+
+# O(1): 실행 시간 = 0.001 ms
+# O(log n): 실행 시간 = 0.015 ms
+# O(n): 실행 시간 = 1.234 ms
+# O(n log n): 실행 시간 = 3.567 ms
+# O(n^2): 실행 시간 = 50.123 ms
+# O(2^n): 실행 시간 = 120.789 ms

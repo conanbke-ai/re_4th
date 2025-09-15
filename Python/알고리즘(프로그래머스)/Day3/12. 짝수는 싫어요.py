@@ -8,11 +8,20 @@
 
 
 def solution(n):
+    # 리스트 선언
     answer = []
+
+    # 정수 n+1 만큼 반복
     for i in range(0, n + 1):
+        # 리스트에 할당
         answer.append(i)
+
+    # 1부터 끝까지 2의 간격으로 배열담기
     answer = answer[1::2]
+
+    # 오름차순 정렬
     answer.sort()
+
     return answer
 
 

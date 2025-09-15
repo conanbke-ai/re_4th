@@ -9,11 +9,18 @@
 
 import math
 
+
 def solution(n):
     # 6과 n의 최소공배수
-    l = n * 6 // math.gcd(n, 6)
+    lcm = n * 6 // math.gcd(n, 6)
     # 판 수
-    return l // 6
+    return lcm // 6
+
+
+'''
+math.gcd : 최대공약수
+math.lcm : 최소공배수
+'''
 
 '''
 예시1)

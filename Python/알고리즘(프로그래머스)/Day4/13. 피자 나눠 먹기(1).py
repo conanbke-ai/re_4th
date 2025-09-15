@@ -9,8 +9,19 @@
 
 import math
 
+
 def solution(n):
+
+    # 올림 처리
     return math.ceil(n/7)
+
+
+'''
+math.ceil : 올림
+math.floor : 내림
+math.trunc : 버림
+math.round : 반올림
+'''
 
 '''
 예시1)
