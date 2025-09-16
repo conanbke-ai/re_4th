@@ -241,6 +241,8 @@ for num in numbers:
     dob_nums.append(num * 2)
 print(dob_nums)
 
+# 예시1)
+# num = [num * 2 for num in numbers]
 
 '''
 2. 문자열의 길이 구해서 새 리스트 만들기
@@ -255,6 +257,8 @@ for word in words:
     lens.append(len(word))
 print(lens)
 
+# 예시1)
+# lens = [len(word) for word in words]
 
 '''
 3. 좌표 튜플에서 x, y 좌표 나누기
@@ -271,6 +275,9 @@ for x, y in coordinates:
     y_values.append(y)
 print(f'x_values = {x_values}', f'y_values = {y_values}', sep=", ",)
 
+# 예시1)
+# x_values = [x for x, y in coordinates]
+# y_values = [y for x, y in coordinates]
 
 ######################################################################################################
 # for문과 range()
@@ -332,26 +339,83 @@ for color in colors:
 '- 총 반복 횟수 : len(colors) * len(fruits) = 2 * 2 = 4'
 
 ######################################################################################################
-# 실습 2 구구단 만들기
+# 실습 2 for문과 range()
+
 '''
-4단 생성하기
+1. 입력받은 수의 합 구하기
+    for문과 range()를 사용하여 1부터 사용자가 입력한 수까지의 합 구하기
+'''
+# 정수 입력값 받기
+n = int(input("정수를 입력하여 주십시오. : "))
+# range를 이용한 반복문
+for num in range(1, n+1):
+    num += num
+# 결과값 출력
+print(num)
+
+'''
+2. 4단 생성하기
 '''
 print("[구구단 - 4단]")
+# 1~9까지 곱셈
 for i in range(1, 10):
+    # 결과값 출력
     print(f'4 x {i} = {4 * i}')
 
-
 '''
-전체 생성하기
+3. 구구단 전체 생성하기
 '''
 print("[구구단 만들기]")
+# 1~9 단 반복
 for i in range(1, 10):
     print('##########')
     print(f'## {i} 단 ##')
     print('##########')
+    # 1~9 까지 곱셈
     for x in range(1, 10):
+        # 결과값 출력
         print(f'{i} x {x} = {i * x}')
 
+'''
+4. 3의 배수의 합 구하기
+    for문과 range()룰 사용하여 1부터 100까지의 수 중 3의 배수만 골라 합 출력
+'''
+# 변수 초기화
+sum = 0
+# 1~100 까지 반복
+for x in range(1, 101):
+    # 3의 배수인 경우
+    if x % 3 == 0:
+        # 합산
+        sum += x
+# 결과값 출력
+print(f'3의 배수 합 = {sum}')
+
+# 예시1)
+# total = 0
+# for i in range(3, 101, 3):
+#     total += i
+
+'''
+5. 짝수이면서 5의 배수인 수 출력하기
+    사용자로부터 숫자 n을 입력 받아
+    1부터 n까지의 수 중 짝수이면서 5의 배수인 수 출력
+'''
+# 사용자 정수 입력
+n = int(input("정수 값을 입력해주세요. : "))
+# 1부터 n까지 반복
+for x in range(1, n+1):
+    # 2와 5의 배수인 경우
+    if x % 2 == 0 and x % 5 == 0:
+        # 결과값 출력
+        print(x)
+
+# 예시1)
+# for i in range(1, n+1):
+#       # 2의 배수인 경우 0 이므로 False → not False = True
+#       # 5의 배수인 경우 0 이므로 False → not False = True
+#     if (not i % 2) and (not i % 5):
+#         print(i)
 
 ######################################################################################################
 # 실습 3 별표 만들기

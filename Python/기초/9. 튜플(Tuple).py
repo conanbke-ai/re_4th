@@ -39,7 +39,7 @@ print(f"튜플 좌표: {coordinates_tuple}")
 # 방법 1: 소괄호 사용 (가장 일반적)
 empty_tuple = ()  # 빈 튜플
 numbers = (1, 2, 3, 4, 5)  # 숫자 튜플
-mixed = ("hello", 1, True, 3.14)  # 다양한 타입 혼합 (마지막 콤마는 선택사항)
+mixed = ("hello", 1, True, 3.14, )  # 다양한 타입 혼합 (마지막 콤마는 선택사항)
 print(f'혼합 튜플: {mixed}')
 
 # 방법 2: 소괄호 없이 생성 (콤마로 구분)
@@ -122,9 +122,9 @@ print(f'x 변경 후 - x: {x}, y: {y}')
 # 확장 언패킹 (Python 3+)
 numbers = (1, 2, 3, 4, 5, 6, 7, 8)
 first, *middle, last = numbers  # *를 사용해 중간 값들을 리스트로 수집
-print(f'첫 번째: {first}')
-print(f'중간 값들: {middle}')  # 리스트로 저장됨
-print(f'마지막: {last}')
+print(f'첫 번째: {first}')      # 첫 번째: 1
+print(f'중간 값들: {middle}')   # 리스트로 저장됨    중간 값들: [2, 3, 4, 5, 6, 7]
+print(f'마지막: {last}')        # 마지막: 8
 
 # 하나의 요소만 있는 경우
 first, *rest = (1,)
@@ -150,11 +150,11 @@ print(f"역순 정렬: {fruits[::-1]}")  # 튜플을 뒤집어서 출력
 # 슬라이싱으로 새 튜플 생성
 first_two = fruits[:2]  # 처음 2개
 last_two = fruits[-2:]  # 마지막 2개
-print(f'마지막 2개: {last_two}')
+print(f'마지막 2개: {last_two}')    # 마지막 2개: ('오렌지', '포도')
 
 # 튜플 연결 (새로운 튜플 생성)
 combined = first_two + last_two
-print(f'연결된 튜플: {combined}')
+print(f'연결된 튜플: {combined}')   # 연결된 튜플: ('사과', '바나나', '오렌지', '포도')
 
 # 튜플 생성
 my_tuple = ('a', 'b', 'c', 'd', 'e')
@@ -197,13 +197,16 @@ print(result)   # ('a', 'b', 'a', 'b', 'a', 'b')
 # 비교 연산 (사전식 순서로 비교)
 tuple1 = (1, 3, 3)
 tuple2 = (2, 2, 4)
-
-print(f'{tuple1} < {tuple2}: {tuple1 < tuple2}')  # 첫 번째 요소부터 비교
+# 첫 번째 요소부터 비교
+# (1, 3, 3) < (2, 2, 4): True
+print(f'{tuple1} < {tuple2}: {tuple1 < tuple2}')
+# 첫 번째 요소 1 < 2 가 True 이므로, 바로 종료
+# (1, 3, 3) == (2, 2, 4): False
 print(f'{tuple1} == {tuple2}: {tuple1 == tuple2}')
 
 # 멤버십 연산
-print(f'1이 tuple1에 있는가?: {1 in tuple1}')
-print(f'10이 tuple1에 없는가?: {10 not in tuple1}')
+print(f'1이 tuple1에 있는가?: {1 in tuple1}')       # True
+print(f'10이 tuple1에 없는가?: {10 not in tuple1}')  # False
 
 
 ######################################################################################################
@@ -387,7 +390,7 @@ print("- 정렬이나 뒤섞기 등의 연산이 필요할 때")
 '''
 회원 정보 해킹 사고 발생 / 고객 데이터 복구 작전
     한 스타트업의 데이터 엔지니어입니다. 고객 정보 서버가 해킹을 당해 일부 정보가 손상되었습니다.
-    다행히 튜플 형태로 백업된 데이터가 남아있으며, 이를 기반으로 정확한 정보를 복원하고 분석해야 합ㄴ디ㅏ.
+    다행히 튜플 형태로 백업된 데이터가 남아있으며, 이를 기반으로 정확한 정보를 복원하고 분석해야 합니다.
     튜플의 불변성과 언패킹, 탐색 기능을 적절히 활용하여 문제를 해결하십시오.
 '''
 

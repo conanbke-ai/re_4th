@@ -137,13 +137,15 @@ new_list = [1, 2, 5, 1, 5]
 com_set5 = {i for i in new_list}  # 중복 자동 제거
 print(f"중복 제거 comprehension: {com_set5}")
 
+'- {} 안에 for문 있을 시, set comprehension(각 요소를 set에 넣음) / key:value가 있어야만 dict로 인식됨'
+'- 리스트, 튜플, 딕셔너리도 comprehension 가능'
+
 # 조건부 comprehension
 even_squares = {i**2 for i in range(10) if i % 2 == 0}
 print(f"짝수의 제곱: {even_squares}")
 
-print("\n" + "=" * 60)
-print("5. Set에 저장 가능한 데이터 타입")
-print("=" * 60)
+######################################################################################################
+# Set 에 저장 가능한 데이터 타입
 
 # Hashable(해시 가능한) 타입만 set에 저장 가능 - 불변 타입들
 valid_set = {1, "문자열", (1, 2), 3.14, True, False, None}
@@ -157,14 +159,22 @@ print(f"저장 가능한 타입들: {valid_set}")
 
 print("저장 불가능한 타입: 리스트, 딕셔너리, set (가변 타입들)")
 
+'''
+frozenset()
+    집합과 거의 같지만 불변인 집합
+    한번 생성 시, 요소 추가 및 삭제 불가
+    해시 가능하기 때문에 딕셔너리 혹은 다른 set안에 포함 가능
+    함수를 통해 다른 코드로 집합 저달 시, 의도치 않은 변경 방지
+'''
 # 중첩 set을 만들려면 frozenset() 사용
 nested_set = {frozenset([1, 2]), frozenset([3, 4])}
+# 중첩 set (frozenset 사용): {frozenset({3, 4}), frozenset({1, 2})}
 print(f"중첩 set (frozenset 사용): {nested_set}")
 
 # frozenset은 불변(immutable) 집합
 fs1 = frozenset([1, 2, 3, 3, 4])  # 중복 제거되어 생성
-print(f"frozenset: {fs1}")
-print(f"타입: {type(fs1)}")
+print(f"frozenset: {fs1}")  # frozenset: frozenset({1, 2, 3, 4})
+print(f"타입: {type(fs1)}")  # 타입: <class 'frozenset'>
 
 # frozenset은 불변이므로 수정 메서드들이 모두 에러 발생
 # fs1.add(5)        # AttributeError
@@ -174,16 +184,18 @@ print(f"타입: {type(fs1)}")
 
 # 하지만 집합 연산은 가능 (새로운 frozenset 반환)
 fs2 = frozenset([3, 4, 5, 6])
-print(f"fs1: {fs1}")
-print(f"fs2: {fs2}")
-print(f"합집합: {fs1 | fs2}")
-print(f"교집합: {fs1 & fs2}")
+print(f"fs1: {fs1}")    # fs1: frozenset({1, 2, 3, 4})
+print(f"fs2: {fs2}")    # fs2: frozenset({3, 4, 5, 6})
+print(f"합집합: {fs1 | fs2}")   # 합집합: frozenset({1, 2, 3, 4, 5, 6})
+print(f"교집합: {fs1 & fs2}")   # 교집합: frozenset({3, 4})
 
 # frozenset은 해시 가능하므로 set의 요소나 딕셔너리 키로 사용 가능
 nested_sets = {fs1, fs2}  # frozenset을 포함하는 set
+# frozenset을 포함하는 set: {frozenset({3, 4, 5, 6}), frozenset({1, 2, 3, 4})}
 print(f"frozenset을 포함하는 set: {nested_sets}")
 
 fs_dict = {fs1: "첫 번째 집합", fs2: "두 번째 집합"}
+# frozenset을 키로 하는 딕셔너리: {frozenset({1, 2, 3, 4}): '첫 번째 집합', frozenset({3, 4, 5, 6}): '두 번째 집합'}
 print(f"frozenset을 키로 하는 딕셔너리: {fs_dict}")
 
 
@@ -256,10 +268,7 @@ sym_diff2 = A.symmetric_difference(B)  # 메서드 사용
 print(f"대칭 차집합 (A ⊕ B): {sym_diff1}")
 print(f"메서드로 대칭 차집합: {sym_diff2}")
 
-print("\n" + "=" * 60)
-print("8. 집합 연산으로 업데이트하기")
-print("=" * 60)
-
+# 집합연산으로 업데이트 하기
 A = {1, 2, 3}
 B = {3, 4, 5}
 print(f"원본 A: {A}, B: {B}")
@@ -300,10 +309,7 @@ A_copy = A.copy()
 A_copy |= B  # 동일한 연산
 print(f"A |= B: {A_copy}")
 
-print("\n" + "=" * 60)
-print("9. 집합 관계 확인")
-print("=" * 60)
-
+# 집합 관계 확인
 A = {1, 2, 3}
 B = {1, 2, 3, 4, 5}
 C = {6, 7, 8}
@@ -343,34 +349,39 @@ print(f"A와 B가 서로소인가? A.isdisjoint(B): {A.isdisjoint(B)}")  # False
 '''
 
 # 사용 예제
-s = {1, 2, 3}   # {1, 2, 3, 4}
-s.add(4)        # {1, 2, 3, 4, 5, 6}
-s.update([5, 6])    # {1, 3, 4, 5, 6}
-s.remove(2)         # KeyError
-s.remove(100)       # 존재하지 않아도 에러없음
-s.discard(100)      # 임의의 값 하나 제거
-s.pop()
+s = {1, 2, 3}
+s.add(4)            # {1, 2, 3, 4}
+s.update([5, 6])    # {1, 2, 3, 4, 5, 6}
+s.remove(2)         # {1, 3, 4, 5, 6}
+s.remove(100)       # KeyError
+s.discard(100)      # 존재하지 않아도 에러없음
+s.pop()             # 임의의 값 하나 제거
 
 colors = {"빨강", "노랑", "파랑"}
-print(f"초기 colors: {colors}")
+print(f"초기 colors: {colors}")             # 초기 colors: {'노랑', '파랑', '빨강'}
 
 # add() - 단일 요소 추가
 colors.add("초록")
+# add('초록') 후: {'노랑', '파랑', '빨강', '초록'}
 print(f"add('초록') 후: {colors}")
 
 # 중복 추가 시 변화 없음
 colors.add("초록")  # 이미 있으므로 변화 없음
+# add('초록') 재시도 후: {'노랑', '파랑', '빨강', '초록'}
 print(f"add('초록') 재시도 후: {colors}")
 
 # update() - 여러 요소 한 번에 추가 (iterable 객체 사용)
 colors.update(['보라', '주황'])  # 리스트로 추가
+# update(['보라', '주황']) 후: {'노랑', '파랑', '초록', '빨강', '주황', '보라'}
 print(f"update(['보라', '주황']) 후: {colors}")
 
 colors.update(['검정'], {"하양", "회색"})  # 여러 iterable 동시 추가
+# multiple update 후: {'노랑', '파랑', '회색', '초록', '빨강', '주황', '보라', '검정', '하양'}
 print(f"multiple update 후: {colors}")
 
 # remove() - 특정 요소 제거 (없으면 KeyError)
 colors.remove('검정')
+# remove('검정') 후: {'노랑', '파랑', '회색', '초록', '빨강', '주황', '보라', '하양'}
 print(f"remove('검정') 후: {colors}")
 
 # colors.remove('검정')  # KeyError! 이미 제거된 요소
@@ -378,20 +389,23 @@ print(f"remove('검정') 후: {colors}")
 
 # discard() - 특정 요소 제거 (없어도 에러 없음)
 colors.discard('검정')  # 없어도 에러 없음
+# remove('검정') 후: {'노랑', '파랑', '회색', '초록', '빨강', '주황', '보라', '하양'}
 print(f"discard('검정') 후: {colors}")
 
 colors.discard('주황')  # 있는 요소 제거
+# discard('주황') 후: {'노랑', '파랑', '회색', '초록', '빨강', '보라', '하양'}
 print(f"discard('주황') 후: {colors}")
 
 # pop() - 임의의 요소 제거하고 반환 (순서 보장 안됨)
 popped = colors.pop()
-print(f"pop()으로 제거된 요소: {popped}")
+print(f"pop()으로 제거된 요소: {popped}")           # pop()으로 제거된 요소: 노랑
+# pop() 후 colors: {'파랑', '회색', '초록', '빨강', '보라', '하양'}
 print(f"pop() 후 colors: {colors}")
 
 # clear() - 모든 요소 제거
 colors_copy = colors.copy()  # 백업
 colors.clear()
-print(f"clear() 후: {colors}")
+print(f"clear() 후: {colors}")                     # clear() 후: set()
 
 
 # 사용 예제 - 집합 Set 활용
