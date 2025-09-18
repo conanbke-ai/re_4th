@@ -531,28 +531,33 @@ print(pactorial(5))
     0 이하의 수가 입력될 시 0 리턴
 '''
 
-n = 3
+# n = 7
 
-0 1 2
-1 1 2
+# # i     0 1 2
+# # lst   1 1 2
 
-lst=[]
+# lst=[]
 
-lst = [x+=x for x in range(n)]
+# 반복문 구현
+# for i in range(n):
+#     if i < 0:
+#         lst.append(0)
+#     elif i == 0 or i == 1:
+#         lst.append(1)
+#     else : 
+#         lst.append(lst[i-1] + lst[i-2])
 
-print(lst)
+# print(lst)
 
-    
-
-
-    
-
-
-
-def fivonacci(n):
-
-    if n < 0:
+def fibonachi(n):
+    if n < 0 :
         return 0
+    elif n == 0 or n == 1:
+        return 1
+    return fibonachi(n-1) + fibonachi(n-2)
+
+print(fibonachi(5))
     
-    return n + fivonacci(n) 
+
+
         
