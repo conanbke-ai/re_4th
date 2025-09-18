@@ -600,7 +600,9 @@ print(fiveWord)  # ['apple', 'banana', 'cherry', 'orange']
 '''
 
 for i in range(10):
+    # i 가 5인 경우
     if i == 5:
+        # 반복문 즉시 탈출
         break
     print(i)
 
@@ -610,13 +612,25 @@ for i in range(10):
 # 3
 # 4
 
+# 사용 예제 - 특정 조건에서 검색 중단
+numbers = [1, 3, 5, 7, 9, 11, 13]
+target = 7
+
+for num in numbers:
+    print(f'검색중... {num}')
+    if num == target:
+        print(f'{target}을 찾았어요!')
+        break  # 찾았으니 더 이상 검색할 필요 없음
+
 '''
 2. continue : 현재 반복만 건너뛰고 다음 반복 수행
         반복문 실행 중 continue를 만나면 다음 반복으로 넘어감
 '''
 
 for i in range(5):
+    # i 가 2인 경우
     if i == 2:
+        # 다음 반복으로 넘김
         continue
     print(i)
 
@@ -625,12 +639,40 @@ for i in range(5):
 # 3
 # 4
 
+# 사용 예제 - 특정 값 제외하고 처리
+# 음수 제외하고 출력하기
+scores = [85, -1, 92, 78, -999, 88]  # -1과 -999는 오류값
+
+for score in scores:
+    if score < 0:  # 음수는 오류값이니까
+        print(f'{score}는 잘못된 점수, 건너뜀')
+        continue  # 이번 점수는 무시하고 다음 점수로
+    print(f'  유효한 점수: {score}점')
+
 '''
 3. pass : 아무 동작 하지 않고 자리만 차지
 '''
 
 for i in range(3):
     pass    # 추후 구현 예정인 자리 → 프로그램에 영향 X
+
+for i in range(10):
+    pass      # 그냥 통과~ (아무 일도 안 일어남)
+    print(i)  # 0~9 모두 정상 출력
+print()
+
+# 사용 예제 - 나중에 구현할 코드 자리 채우기
+
+
+def process_data(data):
+    if data > 100:
+        pass  # TODO: 나중에 여기 특별 처리 코드 넣을 예정
+    else:
+        print(f'데이터 처리: {data}')
+
+
+process_data(50)   # 정상 처리
+process_data(150)  # pass라서 아무 일 안 일어남
 
 '''
 4. for - else 구문 : 반복이 정상적으로 모두 수행된 경우 else 블록 실행
@@ -650,6 +692,19 @@ for i in range(5):
     print(i)
 else:
     print("루프 정상 종료")  # 실행되지 않음
+
+# 사용 예제 - 검색 실패 감지
+
+items = ['사과', '바나나', '딸기']
+search_item = '수박'
+
+for item in items:
+    if item == search_item:
+        print(f'{search_item}을 찾았습니다!')
+        break
+else:
+    # break가 안 됐다 = 못 찾았다
+    print(f'{search_item}을 찾을 수 없습니다.')
 
 ######################################################################################################
 # While 문
