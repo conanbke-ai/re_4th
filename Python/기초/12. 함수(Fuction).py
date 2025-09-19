@@ -69,16 +69,22 @@ say_hello()
 
 
 def greet(name):
-    print(f'Hello, {name]}!')
+    print(f'Hello, {name}!')
+
 
 # 매개변수 호출
 # return이 없으므로 None 반환
-greet("CodingOwl")
+result = greet("CodingOwl")  # Hello, CodingOwl! 출력(CodingOwl 인자)
+print(result)   # None
 
 # return 있는 경우
 # add 함수 생성
+
+
 def add(a, b):
     return a + b
+
+
 # return값 변수에 할당
 result = add(3, 5)
 print(result)   # 8
@@ -87,13 +93,17 @@ print(result)   # 8
 print('첫 번째 섹션')
 print('두 번째 섹션')
 
+
 def print_section(title):
     print(f'{title} 섹션')
+
 
 print_section("첫 번째")
 print_section("두 번째")
 
 # 사용 예제 - 사각형 넓이
+
+
 def calculate_area(width, height):
     """
     직사각형의 넓이를 계산합니다.
@@ -104,6 +114,7 @@ def calculate_area(width, height):
         - (float) : 직사각형의 넓이
     """
     return width * height
+
 
 print(calculate_area(10, 20))   # 200
 
@@ -117,6 +128,119 @@ print(calculate_area.__doc__)
 # Return
 #     - (float) : 직사각형의 넓이
 
+######################################################################################################
+# 반환값(Return)
+
+# 사용 예제 - 단일 값 반환
+
+
+def square(n):
+    return n ** 2  # n의 제곱
+
+
+result = square(5)
+print('5의 제곱:', result)  # 25
+
+# 사용 예제 - 여러 값 한번에 반환
+
+
+def calculate_stats(numbers):
+    """숫자 리스트의 통계를 계산"""
+    total = sum(numbers)      # 합계
+    avg = total / len(numbers)  # 평균
+    maxnum = max(numbers)      # 최대값
+    minnum = min(numbers)      # 최소값
+
+    # 4개 값을 한번에 반환!
+    return total, avg, maxnum, minnum
+
+
+numbers = [100, 140, 230, 200]  # 테스트 데이터
+
+# 각각의 변수로 받기
+total, avg, maxnum, minnum = calculate_stats(numbers)
+
+print('합계:', total)    # 670
+print('평균:', avg)      # 167.5
+print('최대값:', maxnum)  # 230
+print('최소값:', minnum)  # 100
+
+# 튜플로 한번에 받기
+stats = calculate_stats(numbers)
+print('전체 결과:', stats)  # (670, 167.5, 230, 100)
+
+'''
+Return 하며 함수가 종료됨
+'''
+
+# 사용예제
+
+
+def check_positive(number):
+    if number > 0:
+        return "양수"
+    elif number < 0:
+        return '음수'
+    else:
+        return '0'
+
+    # ⚠️ 이 코드는 절대 실행 안 됨! (return 후에는 함수 끝)
+    print('코드가 실행이 될까요???')
+
+
+print(check_positive(4))   # "양수"
+print(check_positive(-1))  # "음수"
+print(check_positive(0))   # "0"
+
+# 사용 예제 - 조기 반환(Early Return) - 문제 상황 먼저 처리
+
+
+def divide(a, b):
+    # 문제가 될 상황을 먼저 체크!
+    if b == 0:
+        return "❌ 0으로 나눌 수 없습니다."
+
+    # 정상적인 경우
+    return a / b
+
+
+print(divide(10, 2))  # 5.0
+print(divide(10, 0))  # "❌ 0으로 나눌 수 없습니다."
+
+'''
+기본값 매개변수 사용 가능
+'''
+# 사용 예제
+
+
+def greet(name, greeting='안녕하세요'):  # greeting에 기본값 설정
+    print(f'{greeting}, {name}님')
+
+
+greet('김철수')  # 기본값 사용: "안녕하세요, 김철수님"
+greet('이영희', '반갑습니다')  # 다른 값: "반갑습니다, 이영희님"
+
+# 사용 예제 - 여러 개의 기본값 사용
+
+
+def create_profile(name, age=25, city='서울', job='개발자'):
+    """프로필 만들기 (대부분 기본값 사용)"""
+    return {
+        'name': name,  # 이건 필수!
+        'age': age,    # 기본값: 25
+        'city': city,  # 기본값: 서울
+        'job': job     # 기본값: 개발자
+    }
+
+
+print(create_profile('박민수'))  # 이름만 주고 나머지는 기본값
+# {'name': '박민수', 'age': 25, 'city': '서울', 'job': '개발자'}
+
+print(create_profile('김철수', 30))  # 이름과 나이만 변경
+# {'name': '김철수', 'age': 30, 'city': '서울', 'job': '개발자'}
+
+print(create_profile('이영희', job='모델'))  # 이름과 직업만 변경
+# {'name': '이영희', 'age': 25, 'city': '서울', 'job': '모델'}
 
 ######################################################################################################
 # 실습 1 사칙연산 계산기 함수 만들기
@@ -132,6 +256,8 @@ print(calculate_area.__doc__)
 '''
 
 # 사칙연산 계산 함수 생성
+
+
 def calculate(a, b, operator):
     # 변수 초기화
     result = ""
@@ -150,11 +276,12 @@ def calculate(a, b, operator):
         # 결과 값 실수로 변환
         result = float(a / b)
     # 기타
-    else :
+    else:
         result = "지원하지 않는 연산입니다."
-    
+
     # 결과값 반환
     return result
+
 
 print(calculate(1, 5, "+"))
 print(calculate(1, 5, "-"))
@@ -170,27 +297,38 @@ print(calculate(1, 5, "**"))
 - 인자(Argument) : 함수를 호출할 때 매개변수로 전달하는 실제 값
 '''
 
-# 위치 인자(Positional Arguments)
+# 위치 인자(Positional Arguments) - 순서대로 매핑됨 / 순서 중요
+
+
 def add(a, b):
     return a + b
+
+
 result = add(3, 5)  # a = 3, b = 5로 매칭
 
 '- 인자의 순서대로 매개변수에 대응되는 방식'
 '- 매개변수 개수와 인자 개수가 일치하지 않을 시, TypeError 발생'
 
-# 키워드 인자(Keyword Arguments)
+# 키워드 인자(Keyword Arguments) - 키워드로 매핑됨 / 순서 상관 없음
+
+
 def introduce(name, age):
     print(f'{name}님은 {age}살입니다.')
+
 
 introduce(age=30, name="홍길동")
 
 '- 인자의 이름을 명시하여 전달하는 방식'
 '- 순서와 무관하게 매개변수에 대응 가능'
 '   인자의 순서를 헷갈릴 때 안전하게 사용'
+'- 반드시 위치인자가 키워드 인자보다 앞에 와야 함'
 
 # 기본값 인자(Default Arguments)
+
+
 def greet(name, message="안녕하세요"):
     print(f'{name}님, {message}')
+
 
 # 기본값 사용
 greet("홍길동")
@@ -203,19 +341,40 @@ greet("홍길동", "반갑습니다")
 '   ex) def func(a=1, b): 오류'
 '       def func(a, b=1): 가능'
 
-# 위치 가변 인자 (*args)
+# 위치 가변 인자 (*args) - 개수 제한 없음
+
+
 def add_all(*args):
     return sum(args)
+
 
 print(add_all(1, 2, 3, 4))  # 10
 
 '- 여러 개의 위치 인자를 튜플 형태로 받음'
 '- 함수 정의 시 *args로 표기'
 
-# 키워드 가변 인자(**kwargs)
+
+def sum_all(*numbers):  # *가 붙으면 여러 개를 받을 수 있음
+    """몇 개든 받아서 모두 더하기"""
+    print(f'받은 값들: {numbers} (타입: {type(numbers)})')
+
+    total = 0
+    for num in numbers:
+        total += num  # 하나씩 더하기
+    return total
+
+
+print('합계:', sum_all(1, 2, 3))  # 3개 전달
+print('합계:', sum_all(1, 2, 3, 4, 5, 6, 7, 8))  # 8개 전달
+print('합계:', sum_all())  # 0개도 OK!
+
+# 키워드 가변 인자(**kwargs) - 이름이 있는 여러 값
+
+
 def print_info(**kwargs):
     for key, value in kwargs.items():
         print(f'{key}:{value}')
+
 
 print_info(name="홍길동", age=30, city="서울")
 
@@ -223,10 +382,29 @@ print_info(name="홍길동", age=30, city="서울")
 '- 함수 정의 시 **kwargs로 표기'
 '- 위치 인자 → 기본값 인자 → *args → **kwargs 순서로 정의해야 함'
 
+
+def print_info(**user):  # **가 붙으면 키워드 인자 여러 개
+    """받은 정보를 모두 출력"""
+    print(f'받은 정보: {user} (타입: {type(user)})')
+
+    # 딕셔너리로 받아서 하나씩 출력
+    for key, value in user.items():
+        print(f'  {key}: {value}')
+
+
+print_info(name='김철수', age=20, city='서울')
+# 출력:
+# 받은 정보: {'name': '김철수', 'age': 20, 'city': '서울'}
+#   name: 김철수
+#   age: 20
+#   city: 서울
+
+
 def example(a, b=0, *args, **kwargs):
     pass
 
 # 매개변수 전달 방식
+
 
 '''
 파이썬은 값 전달(Call by Value)가 아닌, 객체 참조에 의한 전달(Call by Object Reference) 방식
@@ -234,8 +412,10 @@ def example(a, b=0, *args, **kwargs):
     - 변경 불가능한 객체(immutable) : 함수 내 변경 → 외부 영향 없음
 '''
 
+
 def modify_list(my_list):
     my_list.append(100)
+
 
 lst = [1, 2, 3]
 modify_list(lst)
@@ -253,6 +433,8 @@ print(lst)  # [1, 2, 3, 100]    (mutable 영향 받음)
 '''
 
 # 평균값을 계산하는 함수
+
+
 def average(*args):
     # 인자가 없는 경우 처리
     if not args:
@@ -267,10 +449,22 @@ print(average())
 print(average(1, 2, 3))
 
 # 가장 긴 문자열 찾는 함수
+
+
 def logest_string(*args):
     return max(*args)
 
+
 print(logest_string("apple", "banana", "cherry", "pinapple"))
+
+# 에단 리더 답변
+
+
+def max_len_word(*args):
+    return max(args,  key=len)
+
+
+print(max_len_word("hello", "banana", 'car', 'apple'))
 
 '''
 2. **kwargs 사용 연습
@@ -282,13 +476,28 @@ print(logest_string("apple", "banana", "cherry", "pinapple"))
 '''
 
 # 사용자 정보 출력 함수
+
+
 def info(**kwargs):
     for num, (key, value) in enumerate(kwargs.items(), start=1):
         print(f'{num}. {key} : {value}', end=", ")
 
+
 info(name="배경은", age=32, email="1234@example.com")
 
+# 에단 리더 답변
+
+
+def user_info_print(**kwargs):
+    for key, value in kwargs.items():
+        print(f'{key} {value}')
+
+
+user_info_print(name='김철수', age=25, email='ethan@gmail.com')
+
 # 10% 할인된 가격 출력 함수
+
+
 def calculate_sail(**kwargs):
     for num, (key, value) in enumerate(kwargs.items(), start=1):
         value *= 0.9
@@ -296,6 +505,41 @@ def calculate_sail(**kwargs):
 
 
 calculate_sail(가방=200000, 신발=150000, 치마=10000)
+
+# 에단 리더 답변
+
+
+def product_info_print(**kwargs):
+    for key, value in kwargs.items():
+        print(f'{key} {value * 0.9}')
+
+
+product_info_print(product1=1000, product2=2500,
+                   product3=3200, product4=1600,)
+
+
+'''
+📌 함수 기본
+  def 함수명(매개변수):
+      실행 코드
+      return 반환값
+
+📌 인자 전달 방식
+  - 위치 인자: 순서대로 전달
+  - 키워드 인자: 이름으로 전달
+  - 기본값: 안 주면 자동으로 들어가는 값
+
+📌 특수 매개변수
+  - *args: 위치 인자 여러 개 (튜플)
+  - **kwargs: 키워드 인자 여러 개 (딕셔너리)
+
+📌 return 특징
+  - 함수를 즉시 종료
+  - 여러 값 반환 가능
+  - 없으면 None 반환
+  
+🎯 함수는 "재사용 가능한 코드 조각"입니다!
+'''
 
 ######################################################################################################
 # 지역변수와 전역변수
@@ -322,12 +566,14 @@ Scope(스코프) : 어떤 이름(변수, 함수 등)을 참조할 수 있는 코
 # 지역 변수(Local Variable) : 함수 내부에서 선언된 변수
 '- 함수가 호출될 때 생성되고, 함수가 끝나면 소멸됨'
 
+
 def greet():
-    message = "안녕하세요" # 지역 변수
+    message = "안녕하세요"  # 지역 변수
     print(message)
 
-greet() 
-print(message) # 오류 발생: message는 지역 변수
+
+greet()
+print(message)  # 오류 발생: message는 지역 변수
 
 '- message는 greet() 함수 내부에서만 유효함'
 '- 함수 바깥에서 접근 시, NameError 발생'
@@ -338,17 +584,21 @@ print(message) # 오류 발생: message는 지역 변수
 # 전역변수
 count = 0
 
+
 def show_count():
     print(f'count = {count}')
+
 
 show_count()    # count: 0
 
 # 함수 내부에서 전역 변수 수정 시 문제 발생
 x = 10
 
+
 def change_x():
     x = x + 5   # UnboundLocalError 발생
     print(x)
+
 
 change_x()
 
@@ -356,10 +606,13 @@ change_x()
 '- 할당 전에 값을 참조하려고 했기 때문에 UnboundLocalError 발생'
 
 # Global 키워드 사용 : 함수 내부에서 전역 변수 수정이 필요할 때
+
+
 def change_x():
     global x    # 전역 변수임을 암시
     x = x + 5
     print(f'[함수 내부] x: {x}')    # x = 15
+
 
 change_x()
 print(f'[함수 외부] x: {x}')    # x = 15
@@ -368,15 +621,25 @@ print(f'[함수 외부] x: {x}')    # x = 15
 '- 전역 상태를 지나치게 사용하는 코드는 유지보수가 어렵고, 에러 발생 가능성 증가'
 '- 전역 변수는 가급적 읽기만 하고, 수정이 필요하다면 매개변수와 반환값으로 전달하는 구조 권장'
 
+
+# 사용 예제 - Global 전역변수 남용 예시
+
+# 사용 예제 - 올바른 예시
+
+# 사용 예제 - 가변 타입(포인터)
+
+
 # nonlocal 키워드(심화, 중첩 함수에서 사용)
 def outer():
     a = 10
+
     def inner():
         nonlocal a
         a += 5
         print(f'[inner] a : {a}')
     inner()
     print(f'[outer] a : {a}')
+
 
 outer()
 
@@ -397,9 +660,10 @@ outer()
 '''
 # 전역 변수 - 사용자 이름 저장
 current_user = ""
-condition = False
 
 # 로그인 함수
+
+
 def login(name):
     global current_user
 
@@ -412,6 +676,8 @@ def login(name):
         print(f'{name}님 로그인 성공')
 
 # 로그아웃 함수
+
+
 def logout():
     global current_user
 
@@ -473,16 +739,19 @@ def 함수이름():
 추천 상황       문제를 작은 문제로 나눌 경우    일반적인 반복 작업(배열 순회 등)
 '''
 # 기본 구조
+
+
 def recursive_func(n):
 
     if n == 0:
         return  # 기본 조건(Base Case)
     print("재귀 호출")
 
-    recursive_func(n-1) # 자기 자신 호출
+    recursive_func(n-1)  # 자기 자신 호출
 
 ######################################################################################################
 # 실습 4 거듭 제곱
+
 
 '''
 자연수 a와 b가 주어졌을 때, a의 b 제곱을 계산하는 재귀 함수 만들기
@@ -490,6 +759,7 @@ def recursive_func(n):
 거듭제곱의 정의
     a**b = a * (a**(b-1))
 '''
+
 
 def n_th_power(a, b):
 
@@ -499,7 +769,7 @@ def n_th_power(a, b):
     return a * n_th_power(a, b-1)
 
 
-print(n_th_power(2, 5)) # 32
+print(n_th_power(2, 5))  # 32
 
 ######################################################################################################
 # 실습 5 팩토리얼(Factorial)
@@ -510,6 +780,7 @@ print(n_th_power(2, 5)) # 32
 3. 디버거를 이용해 재귀함수의 작동을 확인합니다.
     n! = n * (n-1) * (n-2) * ... * 1
 '''
+
 
 def pactorial(n):
 
@@ -544,20 +815,235 @@ print(pactorial(5))
 #         lst.append(0)
 #     elif i == 0 or i == 1:
 #         lst.append(1)
-#     else : 
+#     else :
 #         lst.append(lst[i-1] + lst[i-2])
 
 # print(lst)
 
+
 def fibonachi(n):
-    if n < 0 :
-        return 0
-    elif n == 0 or n == 1:
-        return 1
+    # 음수 값 예외처리 / 음수 입력 허용하지 않는 것이 좋음
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    elif n <= 1:
+        return n
     return fibonachi(n-1) + fibonachi(n-2)
 
+
+def fibonachi(n):
+    if n <= 1:
+        return n
+    return fibonachi(n-1) + fibonachi(n-2)
+
+
 print(fibonachi(5))
-    
+
+# 반복문 사용 시
 
 
-        
+def fibonacci(n):
+    if n < 0:
+        raise ValueError("n must be non-negative")
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+
+# 사용 예제
+'''
+1부터 n까지의 합
+'''
+# 간소화
+
+
+def sum_to_n(n):
+    return sum(range(1, n + 1))
+
+# 재귀 사용
+
+
+def sum_to_n(n):
+
+    if n == 1:
+        return 1
+
+    return n + sum_to_n(n-1)
+
+
+'''
+문자열 뒤집기
+'''
+# 간소화
+
+
+def reverse_string(s):
+
+    return s[::-1]
+
+# 재귀 사용
+
+
+def reverse_string(s):
+
+    if len(s) == 0:
+        return ""
+
+    return s[-1] + reverse_string[s[:-1]]
+
+
+######################################################################################################
+# 람다 함수(Lambda Function)
+
+
+'''
+이름없이 정의되는 익명 함수
+간단한 연산을 한 줄로 표혀할 수 있는 함수 표현식
+
+* 기본 문법
+    lambda 매개변수: 표현식
+
+    - lambda 키워드로 시작, 함수 이름없이 정의
+    - 표현식만 사용 가능 (문장은 불가)
+        - 표현식 : 값을 만들어내는 코드 조각
+        - 문장 : 실행되지만, 값을 직접 반환하지는 않는 코드 조각
+    - 반환값은 자동으로 결과값이 됨(return 키워드 없음)
+
+* 일반 함수와의 비교
+            일반 함수(def)          람다 함수(lambda)
+이름        있음                    없음(익명)
+길이        여러 줄 가능            한 줄로 제한
+기능        복잡한 로직 처리        간단한 표현식 처리
+사용목적    재사용성, 구조적 설계   일회성, 간단한 처리
+
+# 일반 함수
+def add(x, y):
+    return x + y
+
+# 람다 함수
+add_lambda = lambda x, y: x + y
+
+* 사용 시 주의사항
+    - 문장 사용 금지 : return, if, for 문 등은 사용 불가(표현식만 가능)
+    - 디버깅 어려움 : 익명이므로 디버깅 시 함수 이름 없음
+    - 남용 주의 : 복잡한 로직은 def로 명시적으로 작석하는 것이 좋음
+'''
+
+# 사용 예제 - 매개변수가 1개인 람다 함수
+
+
+def increment(x): return x + 1
+
+
+print(increment(5))  # 6
+print((lambda x: x + 1)(5))  # 6
+
+
+def square(x): return x ** 2
+
+
+print(square(5))    # 25
+print((lambda x: x ** 2)(5))    # 25
+
+# 사용 예제 - 매개변수가 2개인 람다 함수
+
+
+def add(a, b): return a + b
+
+
+print(add(3, 4))    # 7
+print((lambda a, b: a + b)(3, 4))   # 7
+
+# 사용 예제 - map, filter와 함께 사용
+# map
+nums = [1, 2, 3]
+#                   원소를 제곱하는 함수
+squares = list(map(lambda x: x**2, nums))   # [1, 4, 9]
+'- map(function, iterable) : iterable의 각 요소에 function을 적용한 결과를 반환'
+
+# filter            짝수만 골라내는 함수
+evnes = list(filter(lambda x: x % 2 == 0, nums))    # [2]
+'- filter(function, iterable) : iterable의 요소 중 fuction의 조건을 만족하는 것만 남김'
+
+# sorted 와 함께 사용
+data = ["apple", "banana", "kiwi", "strawberry"]
+sorted_data = sorted(data, key=lambda word: len(word))
+print(sorted_data)   # ['kiwi', 'apple', 'banana', 'strawberry']
+
+students = [
+    {'name': "홍길동", 'score': 80},
+    {'name': "김철수", 'score': 92},
+    {'name': "이영희", 'score': 72}
+]
+
+students.sort(key=lambda x: x['score'], revers=True)
+
+for student in students:
+    print(f'{students['name']}: {student['score']}점')
+
+
+students.sort(key=lambda x: x['name'])
+
+for student in students:
+    print(f'{students['name']}: {student['score']}점')
+
+'- sorted 함수의 key에는 각 요소에 대해 정렬 기준이 될 값을 반환하는 함수를 넣을 수 있음'
+
+######################################################################################################
+# 실습 7 람다 함수 연습 문제
+
+'''
+1. 특정 조건 만족하는 튜플만 추출
+    아래 학생 튜플 리스트에서 평균 점수가 70점 이상인 학생만 추출하세요.
+    students = [("Alice", [80, 90]), ("Bob", [60, 65]), ("Charlie", [70, 70])]
+'''
+students = [("Alice", [80, 90]), ("Bob", [60, 65]), ("Charlie", [70, 70])]
+
+# 반복문
+# result = []
+# for x, y in students:
+#     if sum(y) / len(y) >= 70:
+#         result.append(x)
+
+# 리스트 컴프리헨션
+# students = [("Alice", [80, 90]), ("Bob", [60, 65]), ("Charlie", [70, 70])]
+# result = [s for s in students if sum(s[1]) / len(s[1]) >= 70]
+# print(result)
+
+# 람다 함수
+result = list(filter(lambda s: sum(s[1]) / len(s[1]) >= 70, students))
+print(result)
+
+'''
+2. 키워드 추출 리스트 만들기
+    아래와 같은 문자열 리스트가 있을 때, 각 문장에서 맨 앞 단어만 추출한 리스트를 만들어보세요.
+    sentences = ["Python is fun", "Lambda functions are powerful", "Coding is creative"]
+
+    str.split() 활용
+'''
+sentences = ["Python is fun",
+             "Lambda functions are powerful", "Coding is creative"]
+
+# filter는 True면 반환하기 때문에 문장 전체가 반환되게 됨
+# 따라서, map을 활용해야 함
+# result = list(filter(lambda x: x.split()[0], sentences))
+# print(result)
+'- split()는 문자열 전용 함수이므로, 리스트에는 적용할 수 없음'
+
+# 문장 전체 리스트에서 split()[0]이 있는 경우만 필터링
+keywords = list(map(lambda s: s.split()[0],
+                    filter(lambda s: len(s.split()) > 0, sentences)))
+
+print(keywords)
+
+'''
+3. 튜플 리스트 정렬하기
+    이름과 나이로 구성된 튜플 리스트를 나이 기준으로 오름차순 정렬하세요.
+    people = [("Alice", 30), ("Bob", 25), ("Charlie", 35)]
+'''
+
+people = [("Alice", 30), ("Bob", 25), ("Charlie", 35)]
+
+result = sorted(people, key=(lambda x: x[1]))
+
+print(result)

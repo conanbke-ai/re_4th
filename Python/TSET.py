@@ -1,32 +1,16 @@
-# 실습 6 피보나치 수열(Fibonacci Numbers)
+students = [
+    {'name': "홍길동", 'score': 80},
+    {'name': "김철수", 'score': 92},
+    {'name': "이영희", 'score': 72}
+]
 
-'''
-1. 먼저 반복문을 활용해서 피보나치 수열을 구현합니다.
-2. 1번을 바탕으로 작동 원리를 파악하고, 재귀함수를 이용해서 피보나치 수열을 구현합니다.
+students.sort(key=lambda x: x['score'], reverse=True)
 
-    0 이하의 수가 입력될 시 0 리턴
-'''
+for student in students:
+    print(f'{students['name']}: {students['score']}점')
 
-n = 7
 
-# i     0 1 2
-# lst   1 1 2
+students.sort(key=lambda x: x['name'])
 
-lst=[]
-
-for i in range(n):
-    if i == 0 or i == 1:
-        lst.append(1)
-    else : 
-        lst.append(lst[i-1] + lst[i-2])
-
-print(lst)
-
-def fibonachi(n):
-    if n < 0 :
-        return 0
-    elif n == 0 or n == 1:
-        return 1
-    return fibonachi(n-1) + fibonachi(n-2)
-
-print(fibonachi(5))
+for student in students:
+    print(f'{students['name']}: {student['score']}점')

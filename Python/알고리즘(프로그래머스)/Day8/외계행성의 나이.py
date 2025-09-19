@@ -11,10 +11,11 @@ a는 0, b는 1, c는 2, ..., j는 9입니다.
     - PROGRAMMERS-962 행성은 알파벳 소문자만 사용합니다.
 '''
 
+
 def solution(age):
-    
+
     lst = str(age)
-    
+
     for i in range(len(lst)):
         if "0" in lst:
             lst = lst.replace("0", "a")
@@ -36,8 +37,9 @@ def solution(age):
             lst = lst.replace("8", "i")
         elif "9" in lst:
             lst = lst.replace("9", "j")
-            
+
     return lst
+
 
 print(solution(23))
 
@@ -52,5 +54,55 @@ def solution(age):
     result = ''.join(mapping[int(digit)] for digit in str(age))
     
     return result
-    
+
+예시2)
+def alien_shift(s: str, k: int) -> str:
+    res = []
+    k = k % 26
+    for ch in s:
+        if 'a' <= ch <= 'z':
+            # 'a'를 0으로 맞추고 더한 뒤 다시 문자로
+            res.append(chr((ord(ch) - ord('a') + k) % 26 + ord('a')))
+        elif 'A' <= ch <= 'Z':
+            res.append(chr((ord(ch) - ord('A') + k) % 26 + ord('A')))
+        else:
+            res.append(ch)
+    return ''.join(res)
+
+예시3)
+def alien_to_indices(s: str) -> str:
+    # 알파벳이면 1~26, 아니면 문자 그대로 (혹은 다른 규칙)
+    parts = []
+    for ch in s:
+        if 'a' <= ch <= 'z':
+            parts.append(str(ord(ch) - ord('a') + 1))  # a->1
+        elif 'A' <= ch <= 'Z':
+            parts.append(str(ord(ch) - ord('A') + 1))  # A->1
+        else:
+            parts.append(ch)
+    return ' '.join(parts)
+
+예시4)
+def alien_reverse_alphabet(s: str) -> str:
+    res = []
+    for ch in s:
+        if 'a' <= ch <= 'z':
+            res.append(chr(ord('z') - (ord(ch) - ord('a'))))
+        elif 'A' <= ch <= 'Z':
+            res.append(chr(ord('Z') - (ord(ch) - ord('A'))))
+        else:
+            res.append(ch)
+    return ''.join(res)
+'''
+
+'''
+아스키코드 참조
+
+* ord()
+    - 문자(char) → 숫자(int, 유니코드 코드포인트) 로 바꿔줌
+    - 파이썬은 문자를 유니코드(Unicode) 로 처리하기 때문에 영어, 알파벳, 한글, 이모지 등 숫자로 변환 가능
+
+* chr()
+    - 숫자(int) → 문자(char) 로 바꿔줌
+    - ord() 의 반대 역할
 '''
