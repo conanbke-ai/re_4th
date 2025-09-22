@@ -1,33 +1,43 @@
-'''
-2. Student 클래스 : 성적 검증(@property 사용)
-    - Student 클래스를 정의하세요.
-    - 인스턴스 변수 __score는 private로 선언합니다.
-    - score에 대한 getter/setter를 @property를 사용하여 정의하세요.
-        - 점수는 0이상 100이하만 허용되며, 범위를 벗어나면 ValueError를 발생시킵니다.(raise ValueError 사용)
-'''
+class SecuritySystem:
+    def __init__(self, password):
+        self.__password = password
+        self.__security_level = 'High'
+        self.__failed_attmepts = 0
 
+    # private method
+    def __encrypt_password(self, pwd):
+        "내부적으로만 사용되는 암호화 메서드"
+        return pwd[::1] + 'encrypted'
 
-class Student:
+    # private method
+    def __check_security(self):
+        "내부 보안 체크"
+        return self.__failed_attmepts < 3
 
-    def __init__(self, score):
-        self.__score = score
+    # public method
+    def authenticate(self, password):
+        if not self.__check_security():  # private 메서드 호출
+            return "계정이 잠겼습니다."
 
-    @property
-    def score(self):
-        return self.__score
+        # 인자로 받은 password를 암호화
+        encrypted = self.__encrypt_password(password)
 
-    @score.setter
-    def score(self, score):
-        if 0 <= score <= 100:
-            self.__score = score
-            return f'점수는 {score}입니다.'
+        # 이미 암호화된 password 비교
+        if encrypted == self.__encrypt_password(self.__password):
+            self.__failed_attmepts = 0
+            return "인증 성공"
         else:
-            raise ValueError("0이상 100이하의 점수만 허용됩니다.")
+            self.__failed_attmepts += 1
+            return f'인증 실패 {self.__failed_attmepts}/3'
 
 
-s1 = Student(100)
-print(s1.score)     # 100
-s1.score = 50
-print(s1.score)     # 50
-# s1.score = 150    # ValueError: 0이상 100이하의 점수만 허용됩니다.
-# print(s1.score)
+security = SecuritySystem("1234")
+# print(security.__password)  # 에러 발생
+# security.__check_security() # 에러발생
+
+print(security.authenticate("1212"))    # 인증 실패 1/3
+print(security.authenticate("1212"))    # 인증 실패 2/3
+print(security.authenticate("1212"))    # 인증 실패 3/3
+print(security.authenticate("1234"))    # 계정이 잠겼습니다.
+
+print(security._SecuritySystem__password)   # 기능은 하지만 권장하지 않음
