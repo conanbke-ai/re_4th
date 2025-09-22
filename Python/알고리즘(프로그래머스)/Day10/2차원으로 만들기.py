@@ -14,18 +14,25 @@ num_list	                n	result
 
 # def solution(num_list, n):
 #     answer = [[]]
-    
+
 #     for i, num in enumerate(num_list):
 #         if i % n != 1:
 #             answer.extend(num_list[i:i+n-1])
-        
+
 #     return answer
 
+
 def solution(num_list, n):
+
     result = []
-    for i in range(0, len(num_list), n):  # n개씩 건너뛰면서 슬라이싱
+
+    # n개씩 건너뛰면서 슬라이싱
+    for i in range(0, len(num_list), n):
+
         result.append(num_list[i:i+n])
+
     return result
+
 
 '''
 예시1)

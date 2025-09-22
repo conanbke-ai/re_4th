@@ -42,7 +42,6 @@ def solution(letter):
 
 '''
 * 문제점
-
     1. for x, y in morse.items() → 모든 모스부호를 반복하면서 letter 전체를 replace하려고 하는 구조는 불필요하게 반복이 많습니다.
     2. letter.replace(word, y) → replace는 문자열 전체를 바꾸므로, 한 글자씩 처리하려는 의도와 맞지 않습니다.
     3. result를 반복문 안에서 덮어쓰기 때문에 마지막 반복 값만 남습니다.
