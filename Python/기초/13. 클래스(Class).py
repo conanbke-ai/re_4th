@@ -845,7 +845,10 @@ print(security.authenticate("1212"))    # 인증 실패 2/3
 print(security.authenticate("1212"))    # 인증 실패 3/3
 print(security.authenticate("1234"))    # 계정이 잠겼습니다.
 
-print(security._SecuritySystem__password)   # 기능은 하지만 권장하지 않음
+print(security._SecuritySystem__password)   # 1234 # 이름 맹글링, 기능은 하지만 권장하지 않음
+
+'- 앞에 __를 붙이면 클래스 외부에서 직접 접근을 어렵게 하는 이름 맹글링(name mangling)이 적용됩니다.'
+'   예: __password → _SecuritySystem__password'
 
 '''
 @property 데코레이터
