@@ -1497,8 +1497,8 @@ class Animal(ABC):
     def sleep(self):
         print(f'{self.name}이(가) 잠을 잡니다.')
 
-    def eat(self)
-    print(f'{self.name}이(가) 먹이를 먹습니다.')
+    def eat(self):
+        print(f'{self.name}이(가) 먹이를 먹습니다.')
 
     # 추상 메서드 - 각 동물마다 다르게 구현
     @abstractmethod
