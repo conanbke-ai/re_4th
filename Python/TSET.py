@@ -1,43 +1,61 @@
-class SecuritySystem:
-    def __init__(self, password):
-        self.__password = password
-        self.__security_level = 'High'
-        self.__failed_attmepts = 0
+######################################################################################################
+# 실습 6 타자 연습 게임 만들기
 
-    # private method
-    def __encrypt_password(self, pwd):
-        "내부적으로만 사용되는 암호화 메서드"
-        return pwd[::1] + 'encrypted'
+'''
+1. 영단어 리스트 중 무작위로 단어가 제시됩니다.
+2. 사용자는 해당 단어를 정확히 입력해야 다음 문제로 넘어갈 수 있습니다.
+3. 10문제를 모두 맞히면, 게임이 종료되고 총 소요 시간이 출력됩니다.
+4. 틀린 경우에는 "오타! 다시 도전!" 메시지를 출력하고, 같은 문제를 다시 도전하게 합니다.
+5. 게임이 시작되기 전, 엔터키를 누르면 시작합니다.
 
-    # private method
-    def __check_security(self):
-        "내부 보안 체크"
-        return self.__failed_attmepts < 3
+* 요구 사항
+    - 단어는 미리 주어진 리스트에서 random.choice()로 무작위 선택
+    - input()으로 사용자 입력
+    - time.time()으로 시작~종료 시간 측정, 소요 시간 계산
+    - 문제마다 번호가 함께 출력
+    - 통과/오타 메시지, 총 타자 시간까지 출력
+'''
+import time
+import random
 
-    # public method
-    def authenticate(self, password):
-        if not self.__check_security():  # private 메서드 호출
-            return "계정이 잠겼습니다."
+words = [
+    "apple", "banana", "cherry", "grape", "orange",
+    "peach", "pear", "plum", "melon", "lemon",
+    "car", "bus", "train", "plane", "ship",
+    "dog", "cat", "horse", "tiger", "lion"
+]
 
-        # 인자로 받은 password를 암호화
-        encrypted = self.__encrypt_password(password)
+ent = input("[타자 게임] 준비되면 엔터!")
 
-        # 이미 암호화된 password 비교
-        if encrypted == self.__encrypt_password(self.__password):
-            self.__failed_attmepts = 0
-            return "인증 성공"
-        else:
-            self.__failed_attmepts += 1
-            return f'인증 실패 {self.__failed_attmepts}/3'
+# 엔터값 들어왔을 때 게임 시작
+if ent == "":
+
+    # 시작 시간 측정
+    start_time = time.time()
+
+    # 10문제 반복
+    for i in range(1, 11):
+
+        print(f'문제 {i}')
+        # 문제 (리스트 랜덤 배열)
+        q = random.choice(words)
+        usr = input("")
+
+        while True:
+            # 정답을 맞출 때까지 반복
+            if usr != q:
+                usr = input("오타! 다시 도전! \n: ")
+            else:
+                print(q)
+                print(usr)
+                print("통과!!")
+                break
+
+    # 종료 시간 측정
+    end_time = time.time()
+
+    print(f'타자 시간 : {end_time - start_time}초')
 
 
-security = SecuritySystem("1234")
-# print(security.__password)  # 에러 발생
-# security.__check_security() # 에러발생
-
-print(security.authenticate("1212"))    # 인증 실패 1/3
-print(security.authenticate("1212"))    # 인증 실패 2/3
-print(security.authenticate("1212"))    # 인증 실패 3/3
-print(security.authenticate("1234"))    # 계정이 잠겼습니다.
-
-print(security._SecuritySystem__password)   # 기능은 하지만 권장하지 않음
+else:
+    print("[타자 게임] 종료")

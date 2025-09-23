@@ -98,6 +98,7 @@ OOP가 중요한 이유
 '''
 
 
+from abc import ABC, abstractmethod
 class Person:
     def __init__(self, name, age):
         # 인스턴스 변수
@@ -515,9 +516,9 @@ account1.withdraw(15000)            # 15000원이 출금되었습니다. 잔액 
 account1.apply_interest()           # 이자 300.0원이 적용되었습니다. 잔액 : 15300.0원
 BankAccount.change_interest_rate(0.04)  # 이자율 0.04 %로 변경되었습니다.
 del account1    # 홍길동의 계좌가 삭제되었습니다.
-                # 총 계좌 수는 1
-                # 김철수의 계좌가 삭제되었습니다.
-                # 총 계좌 수는 0
+# 총 계좌 수는 1
+# 김철수의 계좌가 삭제되었습니다.
+# 총 계좌 수는 0
 
 '- self.account_number = BankAccount.total_acoounts + 1 자체가 클래스 변수를 변화시키지 않으므로 따로 증가해주어야 함'
 '- del account1 하지 않아도 프로그램 종료 시, 전체 객체 삭제됨'
@@ -728,6 +729,7 @@ print(p.age)    # 25
 
 p.name = "철수"
 print(p.name)   # 철수  # 직접 수정 가능
+
 
 class Car:
     def __init__(self, brand, model):
@@ -977,10 +979,10 @@ class Vector:
 
     def __sub__(self, other):
         return Vector(self.x - other.x, self.y - other.y)
-    
+
     def __mul__(self, other):
         return Vector(self.x * other.x, self.y * other.y)
-    
+
     def __eq__(self, other):
         return self.x == other.x or self.y == other.y
 
@@ -1003,7 +1005,7 @@ print(len(v1))  # 5
 v4 = v1 - v2
 print(v4)   # Vector (x = 2 y = 0)
 
-print(v1 == v2) # True
+print(v1 == v2)  # True
 
 ######################################################################################################
 # 실습 3 접근 제어와 정보은닉 연습
@@ -1070,14 +1072,28 @@ class Student:
         else:
             raise ValueError("0이상 100이하의 점수만 허용됩니다.")
 
+    # def get_score(self):
+    #     return self.__score
+
+    # def set_score(self, score):
+    #     if 0 <= score <= 100:
+    #         self.__score = score
+    #     else:
+    #         raise ValueError("0이상 100이하의 점수만 허용됩니다.")
+
 ######################################################################################################
 # 상속과 오버라이딩
+
 
 '''
 상속(Inheritance)의 개념과 필요성
     기존에 정의된 클래스의 속성과 메서드를 물려받아 새로운 클래스를 만드는 것
         - 코드의 재사용성을 높임
         - 공통된 기능은 부모 클래스에 정의하고, 자식 클래스에서 확장하거나 수정
+
+        - 자식클래스는 부모클래스의 모든 것을 물려받음
+        - 부모의 모든 속성과 메서드 사용 가능
+        - 부모클래스가 자식클래스를 사용할 순 없음
 
     * 기본 문법
     class Parent:
@@ -1087,11 +1103,16 @@ class Student:
         # 자식 클래스, Parent로부터 상속
         ...
 '''
+
+
 class Animal:
     def speak(self):
         print("동물이 소리를 냅니다.")
+
+
 class Dog(Animal):
     pass
+
 
 d = Dog()
 d.speak()   # 동물이 소리를 냅니다.
@@ -1115,48 +1136,163 @@ super()를 사용한 부모 생성자 호출
             상속 구조가 변경되어도 자동 추적되므로 안전함
 '''
 
+
 class Parent:
     def __init__(self):
         print("부모 생성자 호출")
+
 
 class Child(Parent):
     def __init__(self):
         super().__init__()  # 부모 생성자 호출
         print("자식 생성자 호출")
 
-c = Child() # 부모 생성자 호출
-            # 자식 생성자 호출
+
+c = Child()  # 부모 생성자 호출
+# 자식 생성자 호출
+
 
 class Animal:
     def speak(self):
         print("동물이 소리를 냅니다.")
+
 
 class Dog(Animal):
     def speak(self):
-        super().speak() # 부모 메서드 호출
+        super().speak()  # 부모 메서드 호출
         print("멍멍!")
 
-d = Dog()   
+
+d = Dog()
 d.speak()   # 동물이 소리를 냅니다.
-            # 멍멍!
+# 멍멍!
 
 '''
 매서드 오버라이딩(Overriding)
-    - 부모 클래스의 메서드를 자식 클래스에서 동일한 이름으로 다시 정의하는 것
+    - 부모 클래스의 메서드를 자식 클래스에서 동일한 이름으로 다시 정의하는 것(상속 관계)
+    - 런타임(동적 바인딩)
     - 기존 기능을 새로운 방식으로 변경하거나 특화된 동작을 구현할 수 있음
+    - 조건
+        메서드 이름 같음
+        매개변수 목록 같음
+        리턴 타입이 같거나 부모보다 더 구체적일 수 있음
+        접근 제어자는 부모보다 좁아질 수 없음
+        JAVA에선 @Override 애너테이션 권장
 '''
+
+
 class Animal:
     def speak(self):
         print("동물이 소리를 냅니다.")
+
 
 class Cat(Animal):
     def speak(self):    # 오버라이딩
         print("야옹!")
 
+
 c = Cat()
 c.speak()   # 야옹!
 
 '- Cat 클래스는 Animal의 speak()을 덮어씀(override)'
+
+'''
+메서드 오버로딩(Overloading)
+    - 같은 이름의 메서드를 여러 개 정의하는 것(매개변수 개수 혹은 타입이 다름)
+    - 컴파일 타임(정적 바인딩)
+    - 조건
+        메서드 이름이 같음
+        매개변수의 개수 또는 타입이 달라야 함
+        리턴 타입만 다른 것은 불가능함
+'''
+
+# 사용 예제 - (JAVA 예시)
+# class Calculator {
+#     int add(int a, int b) {
+#         return a + b;
+#     }
+
+#     double add(double a, double b) {  // 같은 이름, 다른 매개변수 타입
+#         return a + b;
+#     }
+
+#     int add(int a, int b, int c) {    // 같은 이름, 다른 매개변수 개수
+#         return a + b + c;
+#     }
+# }
+
+'- Python은 전통적인 오버로딩 개념이 없음'
+'   동적 타입 언어이기 때문에 같은 이름의 함수를 여러 개 정의할 시, 마지막 정의만 남기 때문'
+
+'''
+1️⃣ 기본 인자(Default Arguments) 활용
+class Calculator:
+    def add(self, a, b=0, c=0):
+        return a + b + c
+
+c = Calculator()
+print(c.add(2, 3))      # 2 + 3 = 5
+print(c.add(2, 3, 4))   # 2 + 3 + 4 = 9
+print(c.add(5))         # 5 + 0 + 0 = 5
+
+
+👉 매개변수 개수에 따라 다른 방식으로 동작 → 오버로딩 효과
+
+2️⃣ 가변 인자(*args, **kwargs) 활용
+class Calculator:
+    def add(self, *args):
+        return sum(args)
+
+c = Calculator()
+print(c.add(1, 2))            # 3
+print(c.add(1, 2, 3, 4, 5))   # 15
+
+
+👉 매개변수 개수를 자유롭게 받아 처리 → 자바의 오버로딩과 비슷한 효과
+
+3️⃣ functools.singledispatch (표준 라이브러리) 활용
+
+👉 매개변수 타입에 따라 다른 함수 실행 가능
+
+from functools import singledispatch
+
+@singledispatch
+def process(value):
+    raise NotImplementedError("지원하지 않는 타입입니다.")
+
+@process.register(int)
+def _(value):
+    return f"정수 처리: {value * 2}"
+
+@process.register(str)
+def _(value):
+    return f"문자열 처리: {value.upper()}"
+
+@process.register(list)
+def _(value):
+    return f"리스트 처리: 길이 {len(value)}"
+
+print(process(10))         # 정수 처리: 20
+print(process("hello"))    # 문자열 처리: HELLO
+print(process([1, 2, 3]))  # 리스트 처리: 길이 3
+
+
+👉 자바/씨++의 오버로딩과 가장 유사한 방식
+'''
+
+
+'''
+* 오버로딩 vs 오버라이딩
+
+구분	    오버로딩(Overloading)	    오버라이딩(Overriding)
+관계	    같은 클래스 내	            상속 관계 (부모 ↔ 자식)
+조건	    매개변수 다름	            매개변수 동일
+리턴 타입	달라도 무방
+            (단, 매개변수만으로 
+            구분 가능해야 함)	        같거나 더 구체적
+시점	    컴파일 타임	런타임
+목적	    메서드 이름 재사용	        부모 메서드 기능 재정의
+'''
 
 ######################################################################################################
 # 실습 4 상속과 오버라이딩 연습
@@ -1184,17 +1320,19 @@ c.speak()   # 야옹!
 - area() 메서드를 오버라이딩하여 base * height / 2 값을 출력합니다.
 '''
 
+
 class Shape:
     def __init__(self, sides, base):
         self.sides = sides
         self.base = base
-    
+
     def printInfo(self):
         return f'변의 개수 : {self.sides}\n밑변의 길이 : {self.base}'
     '- print() return 시, 함수는 None을 리턴하여 출력된다.'
 
     def area(self):
         return "넓이 계산이 정의되지 않았습니다."
+
 
 class Rectangle(Shape):
     def __init__(self, sides, base, height):
@@ -1203,7 +1341,8 @@ class Rectangle(Shape):
 
     def area(self):
         return int(self.height) * int(self.base)
-    
+
+
 class Triagle(Shape):
     def __init__(self, sides, base, height):
         super().__init__(sides, base)
@@ -1211,24 +1350,25 @@ class Triagle(Shape):
 
     def area(self):
         return int(self.height) * int(self.base) / 2
-    
+
+
 r = Rectangle(3, 4, 5)
 print(r.printInfo())    # 변의 개수 : 3
-                        # 밑변의 길이 : 4
-print(r.area()) # 20
+# 밑변의 길이 : 4
+print(r.area())  # 20
 
 t = Triagle(3, 4, 5)
 print(t.printInfo())    # 변의 개수 : 3
-                        # 밑변의 길이 : 4
-print(t.area()) # 10.0
-print(super(Triagle, t).area()) # 넓이 계산이 정의되지 않았습니다.
+# 밑변의 길이 : 4
+print(t.area())  # 10.0
+print(super(Triagle, t).area())  # 넓이 계산이 정의되지 않았습니다.
 print(Shape.area(t))            # 넓이 계산이 정의되지 않았습니다.
 
 ######################################################################################################
 # 추상 클래스
 
 '''
-직접 인스턴스를 만들 수 없으며, 반드시 자식 클래스에서 구현을 완성해야 하는 클래스
+직접 인스턴스(객체)를 만들 수 없으며, 반드시 자식 클래스에서 구현을 완성해야 하는(미완성) 클래스
     공통적인 구조는 정의하되, 구체적인 동작은 상속받은 클래스에서 구현하도록 강제하는 용도로 사용
 
 * 추상 클래스의 목적
@@ -1252,30 +1392,147 @@ print(Shape.area(t))            # 넓이 계산이 정의되지 않았습니다.
     
     ※ 추상 클래스는 직접 인스턴스화 불가능
 '''
+# 구현 구상 중 - 일반 상속만 하려고 했을 때
 
-from abc import ABC, abstractmethod
+
+class Animal:
+    def make_sound(self):
+        pass    # 비어있음 - 구현을 깜빡할 수 있음
+
+
+class Dog(Animal):
+    def eat(self):
+        print("강아지가 밥을 먹습니다.")
+
+
+dog = Dog()
+dog.make_sound()    # 아무것도 안 일어남 - 버그
+
+
+# 구현 구상 중 - 추상 클래스 사용
+class Animal(ABC):
+    @abstractmethod
+    def sound(self):
+        pass
+
+
+class Dog(Animal):
+    def sound(self):
+        print("멍멍!")
+
+
+class Cat(Animal):
+    def sound(self):
+        print("야옹!")
+
+
+animal = Animal()   # 에러 발생(추상 클래스이기 때문에 객체 생성 안됨)
+dog = Dog()         # 추상 메서드를 구현했기 때문에 객체 생성됨
+cat = Cat()         # 추상 메서드를 구현했기 때문에 객체 생성됨
+
+dog.sound()  # 멍멍!
+cat.sound()  # 야옹!
+
+# 구현 구상 중 - 추상 클래스 사용 / 하위 클래스에서 구현하지 않을 시
+
 
 class Animal(ABC):
     @abstractmethod
     def sound(self):
         pass
 
+
 class Dog(Animal):
-    def sound(self):
+    def __init__(self):
         print("멍멍!")
 
+
 class Cat(Animal):
-    def sound(self):
+    def __init__(self):
         print("야옹!")
 
-animal = Animal()   # 에러 발생
-dog = Dog()
-cat = Cat()
 
-dog.sound() # 멍멍!
-cat.sound() # 야옹!
+animal = Animal()   # 에러 발생 (추상 클래스이기 때문에 객체 생성 안됨)
+dog = Dog()         # 에러 발생 (sound() 구현이 안되었기 때문)
+cat = Cat()         # 에러 발생 (sound() 구현이 안되었기 때문)
 
 '- Animal은 공통 인터페이스를 정의하고, 실제 구현은 하위 클래스에서 이루어짐'
+'- 반드시 자식 클래스에서 추상 메서드를 구현해야 함'
+'- 추상 클래스는 직정 객체 생성이 불가함'
+
+
+class Shape(ABC):
+    "추상 클래스"
+    @abstractmethod
+    def area(self):
+        pass
+
+
+class Circle(Shape):
+
+    def __init__(self, radius):
+        # super().__init__()
+        self.radius = radius
+
+    def area(self):
+        return 3.14 * self.radius ** 2
+
+
+# shape = Shape()   # 에러 발생
+circle = Circle(5)
+print(circle.area())    # 78.5
+
+
+class Animal(ABC):
+    "추상 클래스"
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    # 일반 메서드 - 모든 동물이 공통으로 사용
+    def sleep(self):
+        print(f'{self.name}이(가) 잠을 잡니다.')
+
+    def eat(self)
+    print(f'{self.name}이(가) 먹이를 먹습니다.')
+
+    # 추상 메서드 - 각 동물마다 다르게 구현
+    @abstractmethod
+    def make_sound(self):
+        pass
+
+    @abstractmethod
+    def move(self):
+        pass
+
+
+class Dog(Animal):
+
+    def make_sound(self):
+        print(f'{self.name} : 멍멍!')
+
+    def move(self):
+        print(f'{self.name}이(가) 뛰어다닙니다.')
+
+
+class Bird(Animal):
+
+    def make_sound(self):
+        print(f'{self.name} : 짹짹!')
+
+    def move(self):
+        print(f'{self.name}이(가) 날아다닙니다.')
+
+
+dog = Dog("바둑이", 3)
+bird = Bird("참새", 1)
+
+dog.eat()       # 바둑이이(가) 먹이를 먹습니다.
+bird.sleep()    # 참새이(가) 잠을 잡니다.
+
+dog.make_sound()    # 바둑이 : 멍멍!
+bird.move()         # 참새이(가) 날아다닙니다.
 
 ######################################################################################################
 # 실습 5 추상 클래스 연습 문제
@@ -1288,13 +1545,14 @@ cat.sound() # 야옹!
     - Cardpayment : 카드로 {amount}원을 결제합니다. 출력
     - CashPayment : 현금으로 {amount}원을 결제합니다. 출력
 '''
-from abc import ABC, abstractmethod
+
 
 class Payment:
 
     @abstractmethod
     def pay(self):
         pass
+
 
 class CardPayment(Payment):
 
@@ -1304,7 +1562,8 @@ class CardPayment(Payment):
 
     def pay(self):
         return f'카드로 {self.amount}원을 결제합니다.'
-    
+
+
 class CashPayment(Payment):
 
     def __init__(self, amount):
@@ -1313,7 +1572,8 @@ class CashPayment(Payment):
 
     def pay(self):
         return f'현금으로 {self.amount}원을 결제합니다.'
-    
+
+
 card = CardPayment(10000)
 cash = CashPayment(30000)
 
