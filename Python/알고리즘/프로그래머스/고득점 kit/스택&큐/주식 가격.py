@@ -9,6 +9,8 @@
 
 def solution(prices):
     n = len(prices)
+    # 길이가 n인 리스트를 만들고, 모든 원소를 0으로 채운다
+    # 리스트를 초기화하는 가장 빠른 방법
     answer = [0] * n
     stack = []
 
@@ -26,6 +28,9 @@ def solution(prices):
 
     return answer
 
+
+'- 단일 리스트 초기화: [0] * n 이 가장 효율적.'
+'- 중첩 리스트 초기화: 반드시 [0 for _ in range(n)] 같이 컴프리헨션 사용.'
 
 '''
 예시1)

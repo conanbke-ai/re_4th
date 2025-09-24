@@ -1,9 +1,16 @@
-# 파일입출력
+# 파일입출력(I/O)
 
 '''
 프로그램이 저장장치(예: 하드디스크)에 저장된 파일을 읽어오거나, 반대로 데이터를 파일에 저장하는 작업
     - 입력(input) : 파일로부터 데이터를 읽어오는 것
     - 출력(output) : 데이터를 파일로 저장(기록)하는 것
+
+* 필요한 상황
+    1. 설정 파일 저장 : 게임 설정, 프로그램 옵션
+    2. 데이터 백업 : 중요한 정보 보관
+    3. 로그 기록 : 프로그램 실행 기록, 에러 추적
+    4. 데이터 교화 : 엑셀, csv 파일로 다른 프로그램과 데이터 공유
+    5. 대용량 처리 : 메모리에 다 못 담는 빅데이터 처리
 '''
 
 '''
@@ -16,12 +23,38 @@
     - 파일 입출력의 필요성
         - 프로그램 실행 중에 메모리에 저장된 데이터는 프로그램이 종료되면 사라짐
         - 데이터를 프로그램이 종료된 후에도 계속해서 사용하려면 파일에 저장하고
-        - 필요할 때 파일을 읽어서 데이터를 사용할 수 있음
+        - 필요할 때 파일을 읽어서 데이터를 사용할 수 있음(하드 디스크 사용)
 
     - 파일 입출력 프로세스
         파일 열기       →   파일 읽기/쓰기      →   파일 닫기
         f=open(파일경로)    f.read()/f.write()      f.close()
 '''
+# 위험한 방법 - 파일 열기/닫기 수동 작업
+# 1단계 : 파일 열기(open) - 파일과 연결 통로 생성
+import random
+import pickle
+file = open("Python/TEST/member.txt", "r", encoding="utf-8")
+
+# 2단계 - 파일 작업(Read/Write) - 데이터 읽기/쓰기
+content = file.read()
+print(content)
+
+# 3단계 - 파일 닫기(close) - 연결 종료 (반드시 해야 함!)
+file.close()
+
+# 안전한 방법 - with문(권장!) / 파일 자동 닫기
+with open("Python/TEST/member.txt", "r", encoding="utf-8") as f:
+    content = f.read()
+    print(content)
+    # 자동으로 f.close()
+
+# 새 파일 생성 또는 덮어쓰기
+with open("Python/TEST/test.txt", "w", encoding="utf-8") as f:
+    f.write("Hello, World!\n")
+    f.write("파이썬 파일 입출력\n")
+
+with open("Python/TEST/test.txt", "a", encoding="utf-8") as f:
+    f.write("추가된 내용\n")
 
 ######################################################################################################
 # 파일 열기 open()
@@ -99,8 +132,6 @@ close() 함수 : 열린 파일을 닫아 시스템 자원을 해제하는 내장
 
 # 사용 예제
 # 파일을 쓰기 모드('w')로 열고 파일 객체를 f에 저장합니다.
-import pickle
-import random
 f = open("example.txt", "w", encoding="utf-8")
 
 # 파일에 문자열을 씁니다.
@@ -117,8 +148,8 @@ f.close()
 * 파일 읽기 주요 메서드
 
 메서드      설명
-read()      전체 텍스트를 문자열로 반환
-readline()  한 줄씩 반환
+read()      전체 텍스트를 문자열로 반환     메모리 비효율(메모리에 전체 텍스트 크기만큼 사용됨)
+readline()  한 줄씩 반환                    메모리 효율적(메모리에 한 줄 텍스트 크기만큼 사용됨)
 readlines() 줄 목록을 리스트로 반환
 tell()      현재 파일 포인터 위치 확인
 seek(n)     n 위치로 파일 포인터 이동
@@ -134,6 +165,16 @@ f.close()
 '- 줄바꿈 문자(\n) 포함됨'
 '- r 모드 : 파일을 읽기 위해서 연다.(기본값)'
 
+# 문자열 전체 읽기
+with open("Python/TEST/test.txt", "r", encoding="utf-8") as f:
+    content = f.read()
+    print(content)
+
+# 지정한 크기 만큼만 읽기
+with open("Python/TEST/test.txt", "r", encoding="utf-8") as f:
+    content = f.read(3)  # 3byte 만큼 읽기
+    print(content)
+
 # 사용 예제 - readline() : 한 줄씩 순차적으로 읽기
 f = open("example.txt", "r", encoding="utf-8")
 line1 = f.readline()
@@ -145,6 +186,27 @@ f.close()
 '- 호출할 때마다 한 줄씩 반환'
 '- 텍스트 파일을 줄 단위로 처리할 때 유용'
 
+with open("Python/TEST/test.txt", "r", encoding="utf-8") as f:
+    line1 = f.readline()
+    line2 = f.readline()
+    print("첫 번째 줄", line1)
+    print("두 번째 줄", line2)
+
+with open("Python/TEST/test.txt", "r", encoding="utf-8") as f:
+    line1 = f.readline()
+    line2 = f.readline()
+    print("첫 번째 줄 strip() 처리", line1.strip())
+    print("두 번째 줄 strip() 처리", line2.strip())
+
+# 사용 예제 - 반복문을 활용한 파일 기능 - readline() for 문
+f.open("example.txt", "r", encoding="utf-8")
+for line in f:
+    print(line.strip())
+f.close()
+
+'- 파일 객체는 반복 가능한 이터러블 → for문에 직접 사용 가능'
+'- strip() 함수 : 문자열 양쪽에 있는 공백 문자(스페이스, 탭\t, 줄바꿈\n 등)을 제거'
+
 # 사용 예제 - readlines() : 모든 줄을 리스트로 읽기
 f.open("example.txt", "r", encoding="utf-8")
 lines = f.readlines()
@@ -154,14 +216,10 @@ f.close()
 '- 줄 단위 문자열을 리스트 형태로 반환'
 '- ["첫 줄\n", "둘째 줄\n", "셋째 줄\n"] 형태'
 
-# 사용 예제 - 반복문을 활용한 파일 기능
-f.open("example.txt", "r", encoding="utf-8")
-for line in f:
-    print(line.strip())
-f.close()
-
-'- 파일 객체는 반복 가능한 이터러블 → for문에 직접 사용 가능'
-'- strip() 함수 : 문자열 양쪽에 있는 공백 문자(스페이스, 탭, 줄바꿈\n 등)을 제거'
+with open("Python/TEST/test.txt", "r", encoding="utf-8") as f:
+    lines = f.readlines()
+    for line in lines:
+        print(line.strip())
 
 # 사용 예제 - tell() : 현재 읽고 있는 위치(바이트)를 반환
 # 사용 예제 - readlines() : 모든 줄을 리스트로 읽기
@@ -183,6 +241,33 @@ f.close()
 
 '- seek(0)은 파일의 맨 처음으로 이동'
 '- 텍스트를 반복해서 읽거나, 중간 위치로 이동할 때 사용'
+
+with open("Python/TEST/test.txt", "r", encoding="utf-8") as f:
+    print("처음 위치:", f.tell())   # 일반적으로 0
+    line1 = f.readline()
+    print("첫 번째 줄 strip() 처리", line1.strip())
+    print("첫 번째 줄 읽고 난 다음 위치", f.tell())
+    line2 = f.readline()
+    print("두 번째 줄 strip() 처리", line2.strip())
+    print("두 번째 줄 읽고 난 다음 위치", f.tell())
+    f.seek(0)   # 포인터 처음으로
+    line3 = f.readline()
+    print("세 번째 줄 strip() 처리", line3.strip())
+    print("세 번째 줄 읽고 난 다음 위치", f.tell())
+    f.seek(18)   # 포인터 18바이트 자리에 위치
+    line4 = f.readline()
+    print("네 번째 줄 strip() 처리", line4.strip())
+    print("네 번째 줄 읽고 난 다음 위치", f.tell())
+
+# 처음 위치: 0
+# 첫 번째 줄 strip() 처리 Hello, World!
+# 첫 번째 줄 읽고 난 다음 위치 15
+# 두 번째 줄 strip() 처리 파이썬 파일 입출력
+# 두 번째 줄 읽고 난 다음 위치 43
+# 세 번째 줄 strip() 처리 Hello, World!
+# 세 번째 줄 읽고 난 다음 위치 15
+# 네 번째 줄 strip() 처리 이썬 파일 입출력
+# 네 번째 줄 읽고 난 다음 위치 43
 
 ######################################################################################################
 # 파일 쓰기 write()
@@ -322,7 +407,7 @@ with open(filename_member, "w", encoding="utf-8") as f:
     for i in range(3):
         name = input(f"{i+1}번째 회원 이름을 입력하세요: ")
         password = input(f"{i+1}번째 회원 비밀번호를 입력하세요: ")
-        f.write(f"{name}", f"{password}", sep=sepchar, end=endchar)
+        f.write(name + sepchar + password + endchar)
 
 print("\n=== 현재 회원 명부 ===")
 with open(filename_member, "r", encoding="utf-8") as f:
@@ -407,7 +492,8 @@ if login_success:
                 member_tel[n] = tel
     except FileNotFoundError:
         # 파일이 없는 경우 새로 생성
-        pass
+        with open(filename_member_tel, "w", encoding="utf-8") as f:
+            f.write("")
 
     # 새 전화번호 추가 또는 기존 번호 수정
     member_tel[login_name] = phone_number
@@ -415,10 +501,11 @@ if login_success:
     # member_tel.txt에 저장
     with open(filename_member_tel, "w", encoding="utf-8") as f:
         for n, tel in member_tel.items():
-            f.write(f"{n}", f"{tel}", sep=sepchar, end=endchar)
+            f.write(n + sepchar + tel + endchar)
 
 else:
     print("로그인 실패")
+
 
 ######################################################################################################
 # 바이너리 파일 읽고 쓰기
