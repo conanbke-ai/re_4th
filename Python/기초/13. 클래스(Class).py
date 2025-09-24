@@ -1091,21 +1091,78 @@ class Student:
 '''
 상속(Inheritance)의 개념과 필요성
     기존에 정의된 클래스의 속성과 메서드를 물려받아 새로운 클래스를 만드는 것
-        - 코드의 재사용성을 높임
+        - 코드의 재사용성을 높임(코드의 중복을 줄임)
         - 공통된 기능은 부모 클래스에 정의하고, 자식 클래스에서 확장하거나 수정
-
+        - 논리적인 계층 구조 표현
+        - 유지보수 용이
+        
         - 자식클래스는 부모클래스의 모든 것을 물려받음
         - 부모의 모든 속성과 메서드 사용 가능
         - 부모클래스가 자식클래스를 사용할 순 없음
+        - 자식은 자신만의 속성과 메서드를 추가 기능
+        - 부모를 수정하면 모든 자식에 자동 반영
 
     * 기본 문법
     class Parent:
-        # 부모 클래스 정의
+        # 부모 클래스(Base Class) 정의
         ...
     class Child(Parent):
-        # 자식 클래스, Parent로부터 상속
+        # 자식 클래스(파생 클래스, Derived Class), Parent로부터 상속
         ...
+
+* 실생활 예시:
+    - 동물 → 포유류 → 개, 고양이 (공통: 자기, 먹기)
+    - 자동차 → 차량 → 승용차, 트럭 (공통: 운전, 주유)
+    - 가족: 부모 → 자식 (유전자, 성씨 물려받기)
 '''
+# 상속없는 코드 : 같은 코드가 계속 반복됨
+
+
+class Dog:
+    def __init__(self, name, age):
+        self.name = name  # 중복!
+        self.age = age    # 중복!
+
+    def eat(self):  # 중복!
+        print(f'{self.name}이(가) 먹습니다.')
+
+    def sleep(self):  # 중복!
+        print(f'{self.name}이(가) 잠을 잡니다.')
+
+    def bark(self):  # Dog만의 고유 메서드
+        print(f'{self.name}이(가) 멍멍 짖습니다.')
+
+
+class Cat:
+    def __init__(self, name, age):
+        self.name = name  # 또 중복!
+        self.age = age    # 또 중복!
+
+    def eat(self):  # 또 중복!
+        print(f'{self.name}이(가) 먹습니다.')
+
+    def sleep(self):  # 또 중복!
+        print(f'{self.name}이(가) 잠을 잡니다.')
+
+    def meow(self):  # Cat만의 고유 메서드
+        print(f'{self.name}이(가) 야옹 웁니다.')
+
+
+class Bird:
+    def __init__(self, name, age):
+        self.name = name  # 계속 중복!
+        self.age = age    # 계속 중복!
+
+    def eat(self):  # 계속 중복!
+        print(f'{self.name}이(가) 먹습니다.')
+
+    def sleep(self):  # 계속 중복!
+        print(f'{self.name}이(가) 잠을 잡니다.')
+
+    def fly(self):  # Bird만의 고유 메서드
+        print(f'{self.name}이(가) 날아갑니다.')
+
+# 상속 클래스
 
 
 class Animal:
@@ -1119,6 +1176,56 @@ class Dog(Animal):
 
 d = Dog()
 d.speak()   # 동물이 소리를 냅니다.
+
+
+# ✅ 부모 클래스 (기본 클래스, Base Class)
+
+
+class Animal:
+    """모든 동물의 공통 특징을 가진 부모 클래스"""
+
+    def __init__(self, name, age):
+        self.name = name  # 한 번만 정의!
+        self.age = age    # 한 번만 정의!
+        print(f'🐾 {name} 동물이 태어났습니다! (나이: {age})')
+
+    def eat(self):  # 한 번만 정의!
+        print(f'{self.name}이(가) 먹습니다.')
+
+    def sleep(self):  # 한 번만 정의!
+        print(f'{self.name}이(가) 잠을 잡니다.')
+
+# ✅ 자식 클래스들 (파생 클래스, Derived Class)
+
+
+class Dog(Animal):  # Animal을 상속받음!
+    """개 클래스 - Animal의 모든 기능 + 개만의 기능"""
+
+    def bark(self):  # Dog만의 고유 메서드
+        print(f'🐕 {self.name}이(가) 멍멍 짖습니다.')
+
+
+class Cat(Animal):  # Animal을 상속받음!
+    """고양이 클래스 - Animal의 모든 기능 + 고양이만의 기능"""
+
+    def meow(self):  # Cat만의 고유 메서드
+        print(f'🐱 {self.name}이(가) 야옹 웁니다.')
+
+
+class Bird(Animal):  # Animal을 상속받음!
+    """새 클래스 - Animal의 모든 기능 + 새만의 기능"""
+
+    def fly(self):  # Bird만의 고유 메서드
+        print(f'🦅 {self.name}이(가) 날아갑니다.')
+
+
+# 사용 예시
+print("\n📌 상속받은 클래스 사용하기:")
+dog1 = Dog('바둑이', 3)
+dog1.eat()    # 부모(Animal)의 메서드 사용
+dog1.sleep()  # 부모(Animal)의 메서드 사용
+dog1.bark()   # 자신(Dog)만의 메서드 사용
+
 
 '''
 super()를 사용한 부모 생성자 호출
@@ -1196,6 +1303,38 @@ class Cat(Animal):
 
 c = Cat()
 c.speak()   # 야옹!
+
+
+# 오버라이딩 테스트
+
+class Animal:
+    """동물 기본 클래스"""
+
+    def make_sound(self):
+        print('🔊 동물이 소리를 냅니다.')
+
+# 각 동물마다 다른 소리로 오버라이딩
+
+
+class Dog(Animal):
+    """개 - 멍멍 소리로 오버라이딩"""
+
+    def make_sound(self):  # 부모의 make_sound를 덮어씀!
+        print('🐕 멍멍!')
+
+
+class Cat(Animal):
+    """고양이 - 야옹 소리로 오버라이딩"""
+
+    def make_sound(self):  # 부모의 make_sound를 덮어씀!
+        print('🐱 야옹!')
+
+
+print("\n📌 각자 다른 소리 내기:")
+animals = [Dog(), Cat(), Animal()]
+for animal in animals:
+    animal.make_sound()  # 같은 메서드 이름, 다른 동작!
+
 
 '- Cat 클래스는 Animal의 speak()을 덮어씀(override)'
 
@@ -1367,6 +1506,79 @@ print(t.area())  # 10.0
 print(super(Triagle, t).area())  # 넓이 계산이 정의되지 않았습니다.
 print(Shape.area(t))            # 넓이 계산이 정의되지 않았습니다.
 
+
+class Shape:
+    """모든 도형의 부모 클래스"""
+
+    def __init__(self, name):
+        self.name = name
+
+    def area(self):
+        """넓이 계산 - 자식이 오버라이딩해야 함"""
+        return 0  # 기본값
+
+    def info(self):
+        """도형 정보 출력"""
+        print(f'📐 {self.name}의 넓이: {self.area():.2f}')
+
+
+class Rectangle(Shape):
+    """직사각형 - 넓이 = 가로 × 세로"""
+
+    def __init__(self, width, height):
+        super().__init__('직사각형')  # 부모 생성자 호출
+        self.width = width
+        self.height = height
+
+    def area(self):  # 오버라이딩!
+        return self.width * self.height
+
+
+class Circle(Shape):
+    """원 - 넓이 = π × 반지름²"""
+
+    def __init__(self, radius):
+        super().__init__('원')  # 부모 생성자 호출
+        self.radius = radius
+
+    def area(self):  # 오버라이딩!
+        return 3.14 * self.radius * self.radius
+
+
+# 도형 넓이 계산
+print("\n📌 각 도형의 넓이:")
+shapes = [
+    Rectangle(5, 3),  # 5×3 = 15
+    Circle(4)         # 3.14×4×4 = 50.24
+]
+
+for shape in shapes:
+    shape.info()  # 각자 다른 방식으로 넓이 계산!
+
+'''
+📌 상속의 장점
+  1. 코드 재사용 - 중복 제거
+  2. 유지보수 용이 - 한 곳만 수정
+  3. 확장성 - 새 기능 추가 쉬움
+  4. 논리적 구조 - 계층 관계 표현
+
+📌 기본 문법
+  class 자식클래스(부모클래스):
+      # 자식 클래스 내용
+
+📌 super()
+  - 부모 클래스 접근
+  - 부모 생성자 호출
+  - 부모 메서드 호출
+
+📌 오버라이딩
+  - 부모 메서드 재정의
+  - 자식마다 다른 동작
+  - 다형성 구현
+
+🎯 상속은 "물려받고 확장하기"입니다!
+'''
+
 ######################################################################################################
 # 추상 클래스
 
@@ -1377,8 +1589,8 @@ print(Shape.area(t))            # 넓이 계산이 정의되지 않았습니다.
 * 추상 클래스의 목적
     - 공통 인터페이스 정의 : 모든 하위 클래스가 따라야 할 메서드 구조 정의
     - 일관성 유지 : API나 프레임워크의 통일된 동작 보장
-    - 구현 강제 : 필수 메서드를 구현하지 않으면 오류 발생
-    - 코드 재사용 + 설계 명확화 : 일부 구현을 제공하면서도 확장 가능하도록 설계\
+    - 구현 강제 : 필수 메서드를 구현하지 않으면 오류 발생(중요한 메서드 작성을 빼먹지 않도록 함)
+    - 코드 재사용 + 설계 명확화 : 일부 구현을 제공하면서도 확장 가능하도록 설계
 
 * 기본 문법
     from abc import ABC, abstractmethod
@@ -1394,6 +1606,24 @@ print(Shape.area(t))            # 넓이 계산이 정의되지 않았습니다.
     - @abstractmethod가 붙은 메서드는 자식 클래스에서 반드시 구현해야 함
     
     ※ 추상 클래스는 직접 인스턴스화 불가능
+'''
+'''
+📌 추상 클래스 규칙:
+1. ABC를 상속받아야 함
+2. @abstractmethod 데코레이터 사용
+3. 추상 클래스는 직접 객체 생성 불가
+4. 자식은 모든 추상 메서드를 구현해야 함
+'''
+'''
+📊 비교표:
+┌─────────────┬──────────────────┬──────────────────┐
+│   구분      │   일반 클래스     │   추상 클래스     │
+├─────────────┼──────────────────┼──────────────────┤
+│ 객체 생성   │      ✅ 가능      │     ❌ 불가능     │
+│ 상속 목적   │     선택사항      │      필수사항      │
+│ 메서드 구현 │     선택사항      │   추상메서드 필수  │
+│ 용도        │   실제 객체 생성   │   설계도/틀 제공  │
+└─────────────┴──────────────────┴──────────────────┘
 '''
 # 구현 구상 중 - 일반 상속만 하려고 했을 때
 
@@ -1497,8 +1727,8 @@ class Animal(ABC):
     def sleep(self):
         print(f'{self.name}이(가) 잠을 잡니다.')
 
-    def eat(self):
-        print(f'{self.name}이(가) 먹이를 먹습니다.')
+    def eat(self)
+    print(f'{self.name}이(가) 먹이를 먹습니다.')
 
     # 추상 메서드 - 각 동물마다 다르게 구현
     @abstractmethod
@@ -1536,6 +1766,168 @@ bird.sleep()    # 참새이(가) 잠을 잡니다.
 
 dog.make_sound()    # 바둑이 : 멍멍!
 bird.move()         # 참새이(가) 날아다닙니다.
+
+# 사용 예제 - 도형 추상 클래스
+
+
+class Shape(ABC):
+    """도형 추상 클래스 - 모든 도형의 설계도"""
+
+    @abstractmethod
+    def area(self):
+        """넓이 계산 - 각 도형마다 다르게 구현"""
+        pass
+
+    @abstractmethod
+    def perimeter(self):
+        """둘레 계산 - 각 도형마다 다르게 구현"""
+        pass
+
+
+class Circle(Shape):
+    """원 - Shape의 모든 추상 메서드 구현"""
+
+    def __init__(self, radius):
+        self.radius = radius
+
+    def area(self):  # 추상 메서드 구현 (필수!)
+        return 3.14 * self.radius * self.radius
+
+    def perimeter(self):  # 추상 메서드 구현 (필수!)
+        return 2 * 3.14 * self.radius
+
+
+class Rectangle(Shape):
+    """직사각형 - Shape의 모든 추상 메서드 구현"""
+
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):  # 추상 메서드 구현 (필수!)
+        return self.width * self.height
+
+    def perimeter(self):  # 추상 메서드 구현 (필수!)
+        return 2 * (self.width + self.height)
+
+
+# 테스트
+# shape = Shape()  # ❌ 에러! 추상 클래스는 직접 생성 불가
+circle = Circle(5)
+rectangle = Rectangle(4, 6)
+
+print(f"원 넓이: {circle.area():.2f}")
+print(f"원 둘레: {circle.perimeter():.2f}")
+print(f"직사각형 넓이: {rectangle.area()}")
+print(f"직사각형 둘레: {rectangle.perimeter()}")
+
+# 사용 예제 - 일반 메서드 + 추상 메서드
+
+
+class Animal(ABC):
+    """동물 추상 클래스 - 일반 메서드와 추상 메서드 혼합"""
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+        print(f"🐾 {name}({age}살) 동물 생성")
+
+    # ===== 일반 메서드 (공통 기능) =====
+    # 모든 동물이 똑같이 하는 행동
+    def sleep(self):
+        """잠자기 - 모든 동물이 같은 방식"""
+        print(f'😴 {self.name}이(가) 잠을 잡니다. Zzz...')
+
+    def eat(self):
+        """먹기 - 모든 동물이 같은 방식"""
+        print(f'🍖 {self.name}이(가) 먹이를 먹습니다.')
+
+    def info(self):
+        """정보 출력 - 공통 정보"""
+        print(f'📋 이름: {self.name}, 나이: {self.age}살')
+
+    # ===== 추상 메서드 (각자 다른 기능) =====
+    # 동물마다 다르게 구현해야 하는 행동
+    @abstractmethod
+    def make_sound(self):
+        """소리내기 - 동물마다 다른 소리!"""
+        pass
+
+    @abstractmethod
+    def move(self):
+        """움직이기 - 동물마다 다른 방식!"""
+        pass
+
+
+class Dog(Animal):
+    """개 클래스 - 추상 메서드 구현"""
+
+    def make_sound(self):  # 추상 메서드 구현
+        print(f'🐕 {self.name}: 멍멍! 왈왈!')
+
+    def move(self):  # 추상 메서드 구현
+        print(f'🏃 {self.name}이(가) 네 발로 뛰어다닙니다.')
+
+    # Dog만의 추가 메서드
+    def tail_wag(self):
+        print(f'🐕 {self.name}이(가) 꼬리를 흔듭니다.')
+
+
+class Bird(Animal):
+    """새 클래스 - 추상 메서드 구현"""
+
+    def make_sound(self):  # 추상 메서드 구현
+        print(f'🦅 {self.name}: 짹짹! 삐약삐약!')
+
+    def move(self):  # 추상 메서드 구현
+        print(f'✈️ {self.name}이(가) 날개로 날아갑니다.')
+
+    # Bird만의 추가 메서드
+    def build_nest(self):
+        print(f'🪺 {self.name}이(가) 둥지를 짓습니다.')
+
+
+class Fish(Animal):
+    """물고기 클래스 - 추상 메서드 구현"""
+
+    def make_sound(self):  # 추상 메서드 구현
+        print(f'🐠 {self.name}: ... (물고기는 소리가 없음)')
+
+    def move(self):  # 추상 메서드 구현
+        print(f'🏊 {self.name}이(가) 지느러미로 헤엄칩니다.')
+
+
+# 동물원 만들기
+print("\n🦁 동물원 시뮬레이션")
+print("="*40)
+
+# 각각의 동물 생성
+dog = Dog('바둑이', 3)
+bird = Bird('참새', 1)
+fish = Fish('금붕어', 2)
+
+# 동물들을 리스트에 담기
+animals = [dog, bird, fish]
+
+# 모든 동물의 공통 행동
+print("\n📌 공통 행동 (일반 메서드):")
+for animal in animals:
+    animal.info()  # 정보 출력
+    animal.eat()   # 먹기
+    animal.sleep()  # 자기
+    print("-"*30)
+
+# 각 동물의 고유한 행동
+print("\n📌 고유 행동 (추상 메서드):")
+for animal in animals:
+    animal.make_sound()  # 각자 다른 소리
+    animal.move()        # 각자 다른 움직임
+    print("-"*30)
+
+# 각 동물만의 특별한 기능
+print("\n📌 특별 기능:")
+dog.tail_wag()     # 개만 가능
+bird.build_nest()  # 새만 가능
 
 ######################################################################################################
 # 실습 5 추상 클래스 연습 문제
@@ -1582,3 +1974,25 @@ cash = CashPayment(30000)
 
 print(card.pay())   # 카드로 10000원을 결제합니다.
 print(cash.pay())   # 현금으로 30000원을 결제합니다.
+
+
+'''
+📌 추상 클래스 사용 시기
+  - 여러 클래스의 공통 기능 정의
+  - 특정 메서드 구현을 강제할 때
+  - 일관된 인터페이스 제공
+
+📌 장점
+  1. 구현 강제 → 빼먹는 실수 방지
+  2. 코드 일관성 → 모든 자식이 같은 구조
+  3. 유지보수 용이 → 명확한 설계도
+  4. 팀워크 향상 → 명확한 규칙
+
+📌 기억할 것
+  - from abc import ABC, abstractmethod
+  - class 클래스명(ABC):
+  - @abstractmethod 데코레이터
+  - 추상 메서드는 반드시 구현!
+
+🎯 추상 클래스는 "꼭 지켜야 할 약속"입니다!
+'''
