@@ -12,3 +12,26 @@
 def solution(array, n):
     # (차이값, 원소) 튜플을 기준으로 최소값 선택
     return min(array, key=lambda x: (abs(n - x), x))
+
+'- abs : 절대값 반환 내장 함수'
+
+'''
+예시1)
+solution=lambda a,n:sorted(a,key=lambda x:(abs(x-n),x
+
+예시2)
+def solution(array, n):
+    array.sort(key = lambda x : (abs(x-n), x-n))
+    answer = array[0]
+    return answer
+    
+예시3)
+def solution(array, n):
+    array.sort()
+    temp = []
+
+    for i in array :
+        temp.append( abs(n-i) )
+
+    return array[temp.index(min(temp))]
+'''
