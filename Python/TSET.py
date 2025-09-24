@@ -56,6 +56,4 @@ if ent == "":
 
     print(f'타자 시간 : {end_time - start_time}초')
 
-
-else:
-    print("[타자 게임] 종료")
+print("[타자 게임] 종료")
