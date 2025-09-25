@@ -27,7 +27,7 @@ def solution(s):
         if ch == '(':
             stack.append(ch)  # 여는 괄호 push
         else:  # 닫는 괄호
-            if not stack:  # 스택이 비었는데 닫는 괄호가 나오면 잘못됨
+            if not stack:  # = if stack == 0 스택이 비었는데 닫는 괄호가 나오면 잘못됨
                 return False
             stack.pop()  # 짝 맞는 여는 괄호 제거
     return len(stack) == 0  # 스택이 비어 있어야 올바른 괄호
@@ -54,4 +54,18 @@ def is_pair(s):
         if pair < 0: break
         pair = pair + 1 if x == "(" else pair - 1 if x == ")" else pair
     return pair == 0
+    
+예시4)
+def solution(s):
+    stack = 0
+    
+    for ch in s:
+        if ch == "(":
+            stack += 1
+        else:
+            if stack == 0:  # 여는 게 없는 데 닫는 괄호가 나오면
+                return False
+            else:
+                stack -= 1
+    return stack == 0
 '''

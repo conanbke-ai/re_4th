@@ -17,7 +17,7 @@ def solution(array, n):
 
 '''
 예시1)
-solution=lambda a,n:sorted(a,key=lambda x:(abs(x-n),x
+solution=lambda a,n:sorted(a,key=lambda x:(abs(x-n),x)
 
 예시2)
 def solution(array, n):

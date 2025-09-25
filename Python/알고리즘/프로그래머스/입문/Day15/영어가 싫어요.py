@@ -24,13 +24,17 @@ def solution(numbers):
 # print(solution("onetwothreefourfivesixseveneightninezero"))
 
 '- translate() 는 한 글자씩 매핑 처리만 가능하기 때문에 부정확할 수 있음'
+
 # # 정규표현식 패턴 생성 (모든 숫자 단어)'
-# pattern = re.compile("|".join(num_map.keys()))  # "zero|one|two|three|..."
+# pattern = re.compile("|".join(nums_dict.keys()))  # "zero|one|two|three|..."
 # # lambda와 group() 사용하여 치환
-# result = pattern.sub(lambda x: num_map[x.group()], numbers)
+# result = pattern.sub(lambda x: nums_dict[x.group()], numbers)
+
 '- | 는 정규표현식에서 “또는(or)” 의미'
 '- re.compil() : 객체화'
 '- sub() : 치환'
+
+
 '''
 re.compile()	정규식을 객체로 만들어 여러 번 재사용 가능, 성능 향상
 꼭 필요한가?	단순 1회 사용이면 re.sub("패턴", ...)만 써도 됨
