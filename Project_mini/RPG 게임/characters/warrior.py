@@ -35,9 +35,9 @@ class Warrior(Character):
             damage = round(self.attack_power * 2 * get_effective_multiplier(self, target))
             target.take_damage(damage)
             self.health -= 5
-            print(f"{self.name} 강력한 일격!! {damage} 데미지, 체력 5 감소 → 남은 HP: {self.health}")
+            self.logger.info(f"{self.name} 강력한 일격!! {damage} 데미지, 체력 5 감소 → 남은 HP: {self.health}")
         else:
-            print(f"{self.name} 특수 공격 실패!")
+            self.logger.info(f"{self.name} 특수 공격 실패!")
 
     def take_turn(self, target, is_player=True):
         """전사 한 턴 수행"""
@@ -49,10 +49,10 @@ class Warrior(Character):
                 try:
                     self.special_attack(target)
                 except NotEnoughHealthError as e:
-                        print(f"[예외 발생] {e} → 기본 공격으로 대체")
+                        self.logger.info(f"[예외 발생] {e} → 기본 공격으로 대체")
                         self.basic_attack(target)
             else:
-                print("잘못된 입력, 기본 공격으로 처리")
+                self.logger.info("잘못된 입력, 기본 공격으로 처리")
                 self.basic_attack(target)
         else:
             # 적(AI) 랜덤: 70% 기본, 30% 특수 공격
@@ -63,7 +63,7 @@ class Warrior(Character):
 
         # 턴 종료 후 체력 회복 10
         if self.health == self.max_health:
-             print(f"{self.name} 턴 종료 후 현재 HP: {self.health}")
+             self.logger.info(f"{self.name} 턴 종료 후 현재 HP: {self.health}")
         else:
             self.health = round(min(self.max_health, self.health + 10))
-            print(f"{self.name} 턴 종료 후 체력 10 회복 → 현재 HP: {self.health}")
+            self.logger.info(f"{self.name} 턴 종료 후 체력 10 회복 → 현재 HP: {self.health}")

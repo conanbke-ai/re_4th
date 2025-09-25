@@ -12,10 +12,12 @@
     - 예외 처리
         - 마나 부족 시 공격 불가
 '''
+from logs.logging_config import info_logger, error_logger
 from characters import Warrior, Mage, Rogue
 from utils.helpers import *
 import random
 import time
+import os
 
 class BattleManager:
     """턴제 전투를 관리하는 클래스"""
@@ -31,10 +33,10 @@ class BattleManager:
         self.player.reset_all()
         self.enemy.reset_all()
         
-        print(f"\n=== 전투 시작: 플레이어 - {self.player.name} VS 적 - {self.enemy.name} ===\n")
+        info_logger.info(f"\n=== 전투 시작: 플레이어 - {self.player.name} VS 적 - {self.enemy.name} ===\n")
         # 선공 결정: True면 플레이어 먼저, False면 적 먼저
         player_first = random.choice([True, False])
-        print(f"{'※ 플레이어' if player_first else '적'}이(가) 먼저 공격합니다!\n")
+        info_logger.info(f"{'※ 플레이어' if player_first else '적'}이(가) 먼저 공격합니다!\n")
         time.sleep(1)
 
         while self.player.is_alive() and self.enemy.is_alive():
@@ -50,7 +52,7 @@ class BattleManager:
 
         # 전투 결과
         if self.player.is_alive():
-            print(f"\n🎉 플레이어 - {self.player.name} 승리! 🎉")
+            info_logger.info(f"🎉 플레이어 - {self.player.name} 승리! 🎉")
             # 레벨업 반영
             self.player.level_up()
             # 랜덤 이벤트 발생
@@ -59,14 +61,14 @@ class BattleManager:
             self.prepare_next_round()
             return True
         else:
-            print(f"\n💀 플레이어 - {self.player.name} 패배... 💀")
+            info_logger.info(f"💀 플레이어 {self.player.name} 패배...💀")
             return False
 
     # ----------------------
     # 플레이어/적 턴 수행
     # ----------------------
     def player_turn(self):
-        print(f"--- 플레이어 - {self.player.name}의 턴 ---")
+        info_logger.info(f"--- 플레이어 - {self.player.name}의 턴 ---")
         # 마법사는 입력 선택 가능
         if isinstance(self.player, Mage):
             self.player.take_turn(self.enemy, is_player=True)
@@ -76,7 +78,7 @@ class BattleManager:
         time.sleep(0.5)
 
     def enemy_turn(self):
-        print(f"--- 적 - {self.enemy.name}의 턴 ---")
+        info_logger.info(f"--- 적 - {self.enemy.name}의 턴 ---")
         # 적은 AI 수행
         self.enemy.take_turn(self.player, is_player=False)
         self.player.show_status()
@@ -92,17 +94,17 @@ class BattleManager:
             # 체력 회복 포션 획득
             heal = 15
             self.player.heal(heal)
-            print(f"🎁 랜덤 이벤트: 체력 회복 포션 획득! HP +{heal}")
+            info_logger.info(f"🎁 랜덤 이벤트: 체력 회복 포션 획득! HP +{heal}")
         elif event_roll < 0.5:
             # 공격력 버프
             buff = 5
             self.player.attack_power += buff
-            print(f"🎁 랜덤 이벤트: 공격력 버프! ATK +{buff}")
+            info_logger.info(f"🎁 랜덤 이벤트: 공격력 버프! ATK +{buff}")
         elif event_roll < 0.7:
             # 상태 이상 회복
             if self.player.status_effects:
                 self.player.status_effects.clear()
-                print("🎁 랜덤 이벤트: 모든 상태 이상 회복!")
+                info_logger.info(f"🎁 랜덤 이벤트: 공격력 버프! ATK +{buff}")
         
         elif event_roll < 0.9:
             # 직업별 랜덤 아이템
@@ -110,7 +112,7 @@ class BattleManager:
             item.apply_to(self.player)
         
         else:
-            print("🎁 랜덤 이벤트 없음...")
+            info_logger.info("🎁 랜덤 이벤트 없음...")
             
     # ----------------------
     # 다음 라운드 초기화
@@ -119,6 +121,6 @@ class BattleManager:
         """라운드 시작 전 캐릭터 초기화"""
         self.player.reset_all()
         self.enemy.reset_all()
-        print("\n--- 다음 라운드를 위해 체력/마나/상태 초기화 완료 ---\n")
+        info_logger.info("--- 다음 라운드를 위해 체력/마나/상태 초기화 완료 ---\n")
             
     

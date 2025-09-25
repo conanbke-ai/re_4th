@@ -19,6 +19,7 @@
 import random
 from abc import ABC, abstractmethod
 from .affinity import get_effective_multiplier
+from logs.logging_config import info_logger, error_logger
 
 class Character(ABC):
     """모든 캐릭터의 공통 부모 클래스"""
@@ -35,7 +36,7 @@ class Character(ABC):
         self.status_effects = {}  # 상태 이상: {"독": 턴수, "기절": 턴수 등}
         self.items = []  # 장착 아이템 목록
         self.skills = ["basic_attack", "special_attack", "heal"] # 기본 스킬
-        
+
     # ----------------------
     # 전투 관련 메서드
     # ----------------------
@@ -49,7 +50,7 @@ class Character(ABC):
         # 각 캐릭터 상성에 따른 공격력 계산
         damage = round(self.attack_power * get_effective_multiplier(self, target))
         target.take_damage(damage)
-        print(f"{self.name} 기본 공격! {damage} 데미지")
+        info_logger.info(f"{self.name} 기본 공격! {damage} 데미지")
 
     @abstractmethod
     def special_attack(self, target):
@@ -64,7 +65,7 @@ class Character(ABC):
     def take_damage(self, damage: int):
         """피해를 입어 체력 감소, 0 이하로 떨어지지 않음"""
         self.health = max(0, self.health - damage)
-        print(f"{self.name} 체력 감소! 남은 체력: {self.health}")
+        info_logger.info(f"{self.name} 체력 감소! 남은 체력: {self.health}")
 
     def show_status(self):
         """현재 체력과 마나 상태 출력"""
@@ -73,7 +74,7 @@ class Character(ABC):
             status += f" | Mana: {self.mana}"
         if self.status_effects:
             status += f" | Status: {self.status_effects}"
-        print(status)
+        info_logger.info(status)
         print("#" * 50)
 
     def reset_all(self):
@@ -84,7 +85,9 @@ class Character(ABC):
         elif hasattr(self, "mana"):
             # 기존 마나 속성이 있을 경우
             self.mana = getattr(self, "mana")
+        # 상태 이상 초기화
         self.status_effects.clear()
+        info_logger.info(f"🔄 {self.name} 초기화 완료 → HP {self.health}, MANA {self.mana}")
 
     def get_name(self):
         """캐릭터 이름 반환"""
@@ -97,10 +100,10 @@ class Character(ABC):
     def heal(self, amount):
         """체력 회복"""
         if self.health == self.max_health:
-             print(f"{self.name} 체력 회복! 이미 최대 체력입니다. 현재 HP: {self.health}")
+            info_logger.info(f"{self.name} 체력 회복! 이미 최대 체력입니다. 현재 HP: {self.health}")
         else:
             self.health = min(self.max_health, self.health + amount)
-            print(f"{self.name} 체력 회복! +{amount} HP → 현재 HP: {self.health}")
+            info_logger.info(f"{self.name} 체력 회복! +{amount} HP → 현재 HP: {self.health}")
 
     
     # ----------------------
@@ -113,7 +116,7 @@ class Character(ABC):
         self.attack_power += item.atk_bonus
         self.max_health += item.hp_bonus
         self.health += item.hp_bonus
-        print(f"{self.name}이 {item.name} 장착! ATK+{item.atk_bonus}, HP+{item.hp_bonus}")
+        info_logger.info(f"{self.name}이 {item.name} 장착! ATK+{item.atk_bonus}, HP+{item.hp_bonus}")
         
     # ----------------------
     # 성장 관련 메서드
@@ -121,15 +124,15 @@ class Character(ABC):
     def level_up(self):
         """승리 시 레벨업"""
         self.level += 1
-        health_increase = 10
-        attack_increase = 3
-        self.max_health += health_increase    # 최대 체력 증가
-        self.attack_power += attack_increase  # 공격력 증가
+        self.max_health = round(self.max_health + (self.level - 1) * 10)  # 레벨마다 HP +10
+        self.attack_power = round(self.attack_power + (self.level - 1) * 2) # 레벨마다 공격력 +2
+        if self.mana > 0:
+            self.mana = round(self.mana + (self.level - 1) * 5)       # 레벨마다 마나 +5
         # 레벨업 직후 체력 회복
         self.health = self.max_health
         if hasattr(self, "max_mana"):
             self.mana = self.max_mana
-        print(f"🎉 {self.name} 레벨업! LV:{self.level}, HP:{self.health}, ATK:{self.attack_power}")
+        info_logger.info(f"✨ {self.name} 레벨업! LV:{self.level}, HP:{self.health}, ATK:{self.attack_power}")
 
     # ----------------------
     # 턴 처리
@@ -156,16 +159,16 @@ class Character(ABC):
         # 공격 결정
         if roll < basic_attack_prob:
             # 70% 확률: 기본 공격
-            print(f"{self.name}이(가) 기본 공격을 선택했습니다.")
+            info_logger.info(f"{self.name}이(가) 기본 공격을 선택했습니다.")
             self.basic_attack(target)
         else:
             # 30% 확률: 특수 공격
-            print(f"{self.name}이(가) 특수 공격을 선택했습니다.")
+            info_logger.info(f"{self.name}이(가) 특수 공격을 선택했습니다.")
             try:
                 self.special_attack(target)
             except ValueError as e:
                 # 예외 발생 시 기본 공격으로 대체
-                print(f"[예외 발생] {e} → 기본 공격으로 대체")
+                info_logger.info(f"[예외 발생] {e} → 기본 공격으로 대체")
                 self.basic_attack(target)
     
     # ----------------------
@@ -177,9 +180,9 @@ class Character(ABC):
         for effect, turns in self.status_effects.items():
             if effect == "독":
                 self.take_damage(5)
-                print(f"{self.name}이 독 피해 5 받음!")
+                info_logger.info(f"{self.name}이 독 피해 5 받음!")
             elif effect == "기절":
-                print(f"{self.name}은 기절 상태로 행동 불가!")
+                info_logger.info(f"{self.name}은 기절 상태로 행동 불가!")
             self.status_effects[effect] -= 1
             if self.status_effects[effect] <= 0:
                 remove_keys.append(effect)

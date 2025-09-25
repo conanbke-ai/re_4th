@@ -1,5 +1,6 @@
 from battle.battle_manager import BattleManager
 from utils.helpers import choose_character
+from logs.logging_config import info_logger, error_logger
 
 def main():
     print("=" * 25)
@@ -11,13 +12,14 @@ def main():
         battle = BattleManager(player, enemy)
         win = battle.start_battle()
         if not win:
-            print("\n💀 당신은 패배했습니다. 게임 오버...")
+            info_logger.info("💀 당신은 패배했습니다. 게임 오버...")
             break
 
         # 승리 시 계속 진행 여부
-        cont = input("\n🎉 승리했습니다! \n계속해서 다음 적과 전투하시겠습니까? (y/n): ").strip().lower()
+        cont = input("🎉 승리했습니다! 계속해서 다음 적과 전투하시겠습니까? (y/n): ").strip().lower()
+
         if cont != "y":
-            print("게임을 종료합니다. 👋")
+            info_logger.info("게임을 종료합니다. 👋")
             break
 
 if __name__ == "__main__":

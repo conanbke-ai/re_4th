@@ -3,6 +3,8 @@
 
 각 직업 별 유효한 item이 있다.
 '''
+from logs.logging_config import info_logger, error_logger
+
 class Item:
     """아이템 클래스"""
     
@@ -21,6 +23,6 @@ class Item:
             character.attack_power += self.attack_bonus
             character.max_health += self.health_bonus
             character.health += self.health_bonus
-            print(f"{character.name}이(가) {self.name} 장착! ATK+{self.attack_bonus}, HP+{self.health_bonus}")
+            info_logger.info(f"{character.name}이(가) {self.name} 장착! ATK+{self.attack_bonus}, HP+{self.health_bonus}")
         else:
-            print(f"{self.name}은(는) {character.__class__.__name__}이(가) 사용할 수 없습니다.")
+            info_logger.info(f"{self.name}은(는) {character.__class__.__name__}이(가) 사용할 수 없습니다.")

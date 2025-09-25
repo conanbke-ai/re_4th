@@ -37,10 +37,10 @@ class Mage(Character):
             # 정의한 error 발생
             raise NotEnoughManaError(self.name, self.min_mana)
         damage = round(self.attack_power * 1.5 * get_effective_multiplier(self, target))
-        print(f"{self.name}의 파이어볼! {damage} 데미지")
+        self.logger.info(f"{self.name}의 파이어볼! {damage} 데미지")
         target.take_damage(damage)
         self.mana -= 20
-        print(f"{self.name} 남은 마나: {self.mana}")
+        self.logger.info(f"{self.name} 남은 마나: {self.mana}")
         
     def choose_skill(self, target, is_player=True):
         """마법사 스킬 선택"""
@@ -69,15 +69,15 @@ class Mage(Character):
                     try:
                         self.special_attack(target)
                     except NotEnoughManaError as e:
-                        print(f"[예외 발생] {e} → 기본 공격으로 대체")
+                        self.logger.info(f"[예외 발생] {e} → 기본 공격으로 대체")
                         self.basic_attack(target)
                 elif choice == "3":
                     if self.mana >= 20:
                         self.heal(20)
                         self.mana -= 20
-                        print(f"{self.name} 마나 사용 후 남은 마나: {self.mana}")
+                        self.logger.info(f"{self.name} 마나 사용 후 남은 마나: {self.mana}")
                     else:
-                        print("마나 부족! 기본 공격으로 전환")
+                        self.logger.info("마나 부족! 기본 공격으로 전환")
                         self.basic_attack(target)
                 else:
                     self.basic_attack(target)
@@ -86,7 +86,7 @@ class Mage(Character):
             if self.health / self.max_health < 0.3 and self.mana >= 20 and random.random() < 0.5:
                 self.heal(20)
                 self.mana -= 20
-                print(f"{self.name} AI 힐 사용 → 남은 마나: {self.mana}")
+                self.logger.info(f"{self.name} AI 힐 사용 → 남은 마나: {self.mana}")
             else:
                 if random.random() < 0.7:
                     self.basic_attack(target)
