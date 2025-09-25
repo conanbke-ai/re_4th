@@ -13,7 +13,7 @@
 - 각 기능을 모듈로 분리해서 구현
 - game.py
 - battle/__init__.py, battle_manager.py
-- characters/__init__.py, character.py, mage.py, rogue.py, warrior.py
+- characters/__init__.py, character.py, mage.py, rogue.py, warrior.py, affinity.py
 - exceptions/__init__.py, errors.py
 - utils/__init__.py, helpers.py
 
@@ -40,18 +40,32 @@ from battle import BattleManager
 * Character(추상 클래스)
 1. 인스턴스 변수:
     • name : 캐릭터 이름
-    • level : 캐릭터 레벨
     • health : 체력
+    • max_health : 최대 체력
     • attack_power : 공격력
+    • mana : 마나
+    • max_mana : 최대 마나
+    • level : 캐릭터 레벨
+    • start_effects : 상태 이상 리스트
+    • items : 장착 아이템 리스트
+    • skills : 기본 스킬 리스트
+
 
 2. 인스턴스 메서드:
-    • attack(self, target) : 기본 공격(추상 메서드)
-    • special_attack(self, target) : 특수 공격(추상 메서드)
-    • take_damage(self, damage) : 피해를 입으면 체력이 감소
     • is_alive(self) : 체력이 0 이하이면 false 반환
-    • show_status(self) : 캐릭터 정보를 출력
-    • reset_health(self) : 캐릭터의 체력을 초기화
-    • get_name(self) : 캐릭터의 이름을 가져옴
+    • basic_attack(self, target) : 기본 공격
+    • special_attack(self, target) : 특수 공격(추상 메서드)
+    • take_turn(self, target, is_player=Ture) : 캐릭터 턴 수행(추상 메서드)
+    • take_damage(self, damage) : 피해를 입으면 체력이 감소(0 이하로 떨어지지 않음)
+    • show_status(self) : 캐릭터 정보(이름, 레벨, 체력/최대 체력, 마나/최대 마나, 상태이상)를 출력
+    • reset_all(self) : 캐릭터의 체력, 마나, 상태 이상 모두 초기화
+    • get_name(self) : 캐릭터의 이름 반환
+    • get_status_dic(self) : 캐릭터 상태를 딕셔너리로 반환
+    • heal(self, amount) : 체력 회복
+    • equip_item(self, item) : 아이템 장착 
+    • level_up(self) : 레벨 업
+    • take_turn(self, target) : 턴 수행
+    • apply_status(self) : 턴 시작 후, 상태 이상 처리
 
 ######################################################################################################
 
@@ -64,6 +78,11 @@ from battle import BattleManager
 
 - 실제 기본값은 생성자를 통해 초기화
 - 위 기본값은 예시이며, 임의로 기호에 맞게 설정할 것
+
+* 상성 (각 상성과 전투 시, 20% 데미지 상승)
+    전사 > 도적
+    도적 > 마법사
+    마법사 > 전사
 
 1. 전사(Warrior) 클래스
     - Character 클래스 상속
@@ -108,4 +127,5 @@ from battle import BattleManager
     - BattleManager 클래스의 start_battle 로 전투 실행
     - 플레이어가 승리하면 새로운 적을 선택하여 전투 진행 가능 (y/n 입력으로 선택 가능)
         ※ while문 이용
+    - 승리 시, 레벨업 1 증가, 최대 체력 및 공격력 증가, 일정 확률로 이벤트(아이템 드롭/상태 이상 등) 발생
     - 패배 시 게임 종료

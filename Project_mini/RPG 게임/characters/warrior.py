@@ -16,19 +16,21 @@
 '''
 from .character import Character
 from .affinity import get_effective_multiplier
+from exceptions.errors import NotEnoughHealthError
 import random
 
 class Warrior(Character):
     """전사 클래스"""
+    min_health = 5
 
     def __init__(self, name="[적] 전사"):
         super().__init__(name=name, health=100, attack_power=15)
 
     def special_attack(self, target):
         """강력한 일격: 50% 확률 성공, 체력 5 소모"""
-        if self.health <= 5:
-            print(f"{self.name} 체력 부족! 특수 공격 불가")
-            return
+        if self.health <= self.min_health:
+            raise NotEnoughHealthError(self.name, self.min_health)
+
         if random.random() < 0.5:
             damage = round(self.attack_power * 2 * get_effective_multiplier(self, target))
             target.take_damage(damage)
@@ -44,7 +46,11 @@ class Warrior(Character):
             if choice == "1":
                 self.basic_attack(target)
             elif choice == "2":
-                self.special_attack(target)
+                try:
+                    self.special_attack(target)
+                except NotEnoughHealthError as e:
+                        print(f"[예외 발생] {e} → 기본 공격으로 대체")
+                        self.basic_attack(target)
             else:
                 print("잘못된 입력, 기본 공격으로 처리")
                 self.basic_attack(target)

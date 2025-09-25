@@ -20,17 +20,22 @@
 '''
 from .character import Character
 from .affinity import get_effective_multiplier
+from exceptions.errors import NotEnoughManaError
 import random
 
 class Mage(Character):
     """마법사 클래스"""
+    min_mana = 20
 
     def __init__(self, name="[적] 마법사"):
         super().__init__(name=name, health=80, attack_power=18, mana=100)
 
     def special_attack(self, target):
-        if self.mana < 20:
-            raise ValueError(f"{self.name} 마나 부족! 특수 공격 불가")
+        
+        # 마나가 20미만일 시
+        if self.mana < self.min_mana:
+            # 정의한 error 발생
+            raise NotEnoughManaError(self.name, self.min_mana)
         damage = round(self.attack_power * 1.5 * get_effective_multiplier(self, target))
         print(f"{self.name}의 파이어볼! {damage} 데미지")
         target.take_damage(damage)
@@ -61,7 +66,11 @@ class Mage(Character):
             else:
                 choice = input("1) 기본 공격 2) 특수 공격(마나 20 소모) 3) 힐(마나 20 소모): ").strip()
                 if choice == "2":
-                    self.special_attack(target)
+                    try:
+                        self.special_attack(target)
+                    except NotEnoughManaError as e:
+                        print(f"[예외 발생] {e} → 기본 공격으로 대체")
+                        self.basic_attack(target)
                 elif choice == "3":
                     if self.mana >= 20:
                         self.heal(20)
