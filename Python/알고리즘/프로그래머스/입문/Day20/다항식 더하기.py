@@ -18,3 +18,49 @@
     - 결괏값에 상수항은 마지막에 둡니다.
     - 0 < polynomial의 길이 < 50
 '''
+
+def solution(polynomial):
+    # " + " 기준으로 정확히 분리
+    terms = polynomial.split(" + ")
+    x, num = 0, 0
+
+    for i in terms:
+        if i.isdigit():  # 정수인 경우
+            num += int(i)
+        else:  # x항인 경우
+            if i == "x":
+                x += 1
+            else:  # 계수가 붙은 경우 (예: "3x")
+                x += int(i[:-1])
+
+    # 결과 문자열 조합
+    if x != 0 and num != 0:
+        if x == 1:
+            return "x + " + str(num)
+        else:
+            return str(x) + "x + " + str(num)
+    elif x != 0:
+        if x == 1:
+            return "x"
+        else:
+            return str(x) + "x"
+    else:
+        return str(num)
+    
+'''
+예시1)
+def solution(polynomial):
+    xnum = 0
+    const = 0
+    for c in polynomial.split(' + '):
+        if c.isdigit():
+            const+=int(c)
+        else:
+            xnum = xnum+1 if c=='x' else xnum+int(c[:-1])
+    if xnum == 0:
+        return str(const)
+    elif xnum==1:
+        return 'x + '+str(const) if const!=0 else 'x'
+    else:
+        return f'{xnum}x + {const}' if const!=0 else f'{xnum}x'
+'''
