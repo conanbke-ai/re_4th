@@ -5,8 +5,10 @@ import os
 # --------------------
 # 로그 디렉토리 생성
 # --------------------
-log_dir = "./Project_mini/RPG 게임/logs/log"
-os.makedirs(log_dir, exist_ok=True)
+log_dir = "./logs/log"
+os.makedirs(log_dir + "/battle", exist_ok=True) # 폴더가 없으면 생성
+os.makedirs(log_dir + "/error", exist_ok=True) # 폴더가 없으면 생성
+
 
 # --------------------
 # 파일명: 날짜 및 시간 단위

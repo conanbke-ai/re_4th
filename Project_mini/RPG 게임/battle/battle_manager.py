@@ -33,10 +33,10 @@ class BattleManager:
         self.player.reset_all()
         self.enemy.reset_all()
         
-        info_logger.info(f"\n=== 전투 시작: 플레이어 - {self.player.name} VS 적 - {self.enemy.name} ===\n")
+        info_logger.info(f"=== 전투 시작: 플레이어 - {self.player.name} VS 적 - {self.enemy.name} ===")
         # 선공 결정: True면 플레이어 먼저, False면 적 먼저
         player_first = random.choice([True, False])
-        info_logger.info(f"{'※ 플레이어' if player_first else '적'}이(가) 먼저 공격합니다!\n")
+        info_logger.info(f"{'※ 플레이어' if player_first else '※ 적'}이(가) 먼저 공격합니다!")
         time.sleep(1)
 
         while self.player.is_alive() and self.enemy.is_alive():
@@ -91,10 +91,10 @@ class BattleManager:
         """승리 후 랜덤 이벤트 발생"""
         event_roll = random.random()
         if event_roll < 0.3:
-            # 체력 회복 포션 획득
-            heal = 15
-            self.player.heal(heal)
-            info_logger.info(f"🎁 랜덤 이벤트: 체력 회복 포션 획득! HP +{heal}")
+            # 체력 증가 포션 획득
+            potion = 15
+            self.player.max_health += potion
+            info_logger.info(f"🎁 랜덤 이벤트: 체력 회복 포션 획득! 최대 HP +{potion}")
         elif event_roll < 0.5:
             # 공격력 버프
             buff = 5
@@ -104,7 +104,7 @@ class BattleManager:
             # 상태 이상 회복
             if self.player.status_effects:
                 self.player.status_effects.clear()
-                info_logger.info(f"🎁 랜덤 이벤트: 공격력 버프! ATK +{buff}")
+                info_logger.info(f"🎁 랜덤 이벤트: 상태 이상 회복!")
         
         elif event_roll < 0.9:
             # 직업별 랜덤 아이템
@@ -121,6 +121,6 @@ class BattleManager:
         """라운드 시작 전 캐릭터 초기화"""
         self.player.reset_all()
         self.enemy.reset_all()
-        info_logger.info("--- 다음 라운드를 위해 체력/마나/상태 초기화 완료 ---\n")
+        info_logger.info("--- 다음 라운드를 위해 체력/마나/상태 초기화 완료 ---")
             
     

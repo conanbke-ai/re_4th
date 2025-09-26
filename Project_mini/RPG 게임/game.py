@@ -3,9 +3,9 @@ from utils.helpers import choose_character
 from logs.logging_config import info_logger, error_logger
 
 def main():
-    print("=" * 25)
+    print("=" * 26)
     print("=== 턴제 RPG 게임 시작 ===")
-    print("=" * 25)
+    print("=" * 26)
     player = choose_character("플레이어 캐릭터 선택", is_player=True)
     while True:
         enemy = choose_character("적 캐릭터 선택", is_player=False)
@@ -26,5 +26,4 @@ if __name__ == "__main__":
     main()
         
         
-
 

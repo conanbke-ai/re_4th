@@ -19,6 +19,7 @@
 '''
 from .character import Character
 from .affinity import get_effective_multiplier
+from logs.logging_config import info_logger, error_logger
 import random
 
 class Rogue(Character):
@@ -39,9 +40,9 @@ class Rogue(Character):
         if random.random() < self.attack_chance:
             damage = round(self.attack_power * 3 * get_effective_multiplier(self, target))
             target.take_damage(damage)
-            self.logger.info(f"{self.name} 급습 성공! {damage} 데미지")
+            info_logger.info(f"{self.name} 급습 성공! {damage} 데미지")
         else:
-            self.logger.info(f"{self.name} 급습 실패! 공격하지 못함")
+            info_logger.info(f"{self.name} 급습 실패! 공격하지 못함")
 
     
     def take_turn(self, target, is_player=True):
@@ -57,7 +58,7 @@ class Rogue(Character):
                 self.special_attack(target)
             else:
                 if random.random() < self.dodge_chance:
-                    self.logger.info(f"{target.name}이(가) 공격을 회피하였습니다!")
+                    info_logger.info(f"{target.name}이(가) 공격을 회피하였습니다!")
                 else:
                     self.basic_attack(target)
         else:
@@ -65,6 +66,6 @@ class Rogue(Character):
                 self.special_attack(target)
             else:
                 if random.random() < self.dodge_chance:
-                    self.logger.info(f"{target.name}이(가) 공격을 회피하였습니다!")
+                    info_logger.info(f"{target.name}이(가) 공격을 회피하였습니다!")
                 else:
                     self.basic_attack(target)

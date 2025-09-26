@@ -11,12 +11,14 @@
 
 전사(Warrior) 클래스
     - Character 클래스 상속
+    - 턴 종료 시, 2 체력 회복
     - 특수 공격 : "강력한 일격" (power_strike)
                 2배의 공격력을 가하지만, 본인도 5의 체력을 잃음
 '''
 from .character import Character
 from .affinity import get_effective_multiplier
 from exceptions.errors import NotEnoughHealthError
+from logs.logging_config import info_logger, error_logger
 import random
 
 class Warrior(Character):
@@ -35,9 +37,9 @@ class Warrior(Character):
             damage = round(self.attack_power * 2 * get_effective_multiplier(self, target))
             target.take_damage(damage)
             self.health -= 5
-            self.logger.info(f"{self.name} 강력한 일격!! {damage} 데미지, 체력 5 감소 → 남은 HP: {self.health}")
+            info_logger.info(f"{self.name} 강력한 일격!! {damage} 데미지, 체력 5 감소 → 남은 HP: {self.health}")
         else:
-            self.logger.info(f"{self.name} 특수 공격 실패!")
+            info_logger.info(f"{self.name} 특수 공격 실패!")
 
     def take_turn(self, target, is_player=True):
         """전사 한 턴 수행"""
@@ -49,10 +51,10 @@ class Warrior(Character):
                 try:
                     self.special_attack(target)
                 except NotEnoughHealthError as e:
-                        self.logger.info(f"[예외 발생] {e} → 기본 공격으로 대체")
+                        info_logger.info(f"[예외 발생] {e} → 기본 공격으로 대체")
                         self.basic_attack(target)
             else:
-                self.logger.info("잘못된 입력, 기본 공격으로 처리")
+                info_logger.info("잘못된 입력, 기본 공격으로 처리")
                 self.basic_attack(target)
         else:
             # 적(AI) 랜덤: 70% 기본, 30% 특수 공격
@@ -61,9 +63,9 @@ class Warrior(Character):
             else:
                 self.basic_attack(target)
 
-        # 턴 종료 후 체력 회복 10
+        # 턴 종료 후 체력 회복 2
         if self.health == self.max_health:
-             self.logger.info(f"{self.name} 턴 종료 후 현재 HP: {self.health}")
+            info_logger.info(f"{self.name} 턴 종료 후 현재 HP: {self.health}")
         else:
-            self.health = round(min(self.max_health, self.health + 10))
-            self.logger.info(f"{self.name} 턴 종료 후 체력 10 회복 → 현재 HP: {self.health}")
+            self.health = round(min(self.max_health, self.health + 2))
+            info_logger.info(f"{self.name} 턴 종료 후 체력 2 회복 → 현재 HP: {self.health}")

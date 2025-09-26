@@ -75,7 +75,7 @@ class Character(ABC):
         if self.status_effects:
             status += f" | Status: {self.status_effects}"
         info_logger.info(status)
-        print("#" * 50)
+        print("#" * 80)
 
     def reset_all(self):
         """체력, 마나, 상태 이상 모두 초기화 (레벨업 반영)"""
@@ -87,7 +87,7 @@ class Character(ABC):
             self.mana = getattr(self, "mana")
         # 상태 이상 초기화
         self.status_effects.clear()
-        info_logger.info(f"🔄 {self.name} 초기화 완료 → HP {self.health}, MANA {self.mana}")
+        info_logger.info(f"🔄 {self.name} 초기화 완료 → HP {self.health}, MANA {self.mana}, ATK {self.attack_power}")
 
     def get_name(self):
         """캐릭터 이름 반환"""
