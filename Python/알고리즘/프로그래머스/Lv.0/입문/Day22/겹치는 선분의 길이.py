@@ -36,5 +36,48 @@ def solution(lines):
 
 '''
 예시1)
+def solution(lines):
+    sets = [set(range(min(l), max(l))) for l in lines]
+    return len(sets[0] & sets[1] | sets[0] & sets[2] | sets[1] & sets[2])
 
+예시2)
+def solution(lines):
+    sets = [set(range(min(l), max(l))) for l in lines]
+    return len(sets[0] & sets[1] | sets[0] & sets[2] | sets[1] & sets[2])
+
+예시3)
+def solution(lines):
+    import collections
+    return sum(1 for k, v in collections.Counter((i, i + 1) for x, y in lines for i in range(min(x, y), max(x, y))).items() if v > 1)
+
+예시4)
+def solution(lines):
+    starts = [min(a) for a in lines]
+    ends = [max(a) for a in lines]
+    starts.sort()
+    ends.sort()
+    answer = 0
+    answer += max(0,ends[0] - starts[1])
+    answer += max(0, ends[1] - starts[2])
+    answer -= max(0, ends[0] - starts[2])
+    return answer
+
+예시5)
+from collections import defaultdict
+def solution(lines):
+    answer = 0
+    for cc in lines:
+        cc.sort()
+    a = max(lines[:][1])
+    b = min(lines[:][0])
+    dics = defaultdict(int)
+    for i in lines:
+        c, d = i[0],i[1]
+        for k in range(c,d):
+            dics[k] +=1
+    print(dics)
+    for i in dics.keys():
+        if dics[i] > 1:
+            answer +=1
+    return answer
 '''
