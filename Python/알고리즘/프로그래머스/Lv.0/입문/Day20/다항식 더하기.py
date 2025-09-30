@@ -19,6 +19,11 @@
     - 0 < polynomial의 길이 < 50
 '''
 
+'- 시간 복잡도: O(n), n은 항의 개수'
+'- 공간 복잡도: O(n), 분리된 항을 저장'
+
+'알고리즘 패턴 : 누적 (accumulation): 연속된 값 모으기'
+
 def solution(polynomial):
     # " + " 기준으로 정확히 분리
     terms = polynomial.split(" + ")
