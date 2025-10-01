@@ -1932,6 +1932,7 @@ print(np.cumsum(arr, axis=1), np.cumprod(arr, axis=0))
 '''
 논리 연산자(&, |, ~)와 조건 연산 함수(np.where)를 사용해 배열 요소를 조건에 따라 선택하거나 값을 변경할 수 있음
     파이썬의 and, or 대신 Numpy의 논리 연산자를 사용해야 함
+    - 각 조건은 반드시 괄호로 묶어야 함
 '''
 '''
 조건 기반 선택 함수
@@ -1941,6 +1942,7 @@ print(np.cumsum(arr, axis=1), np.cumprod(arr, axis=0))
     
     * 기본 문법
         np.where(condition, [x, y])
+        - 조건에 따라 다른 값을 가지는 새 배열 생성
         - condition : 배열에서 조건(불리언 배열 또는 조건식)
         - x : 조건이 True일 때 선택할 값
         - y : 조건이 False일 때 선택할 값
@@ -1979,6 +1981,11 @@ np.logical_not(x)       NOT 연산
 np.logical_xor(x, y)    XOR(배타적 OR)
 
 - 논리 연산자를 대체하거나 복잡한 조건에서 가독성을 높이기 위해 사용
+
+* np.select(conditions, arr, default=)
+    - 여러 조건을 명확하게 표현
+    - 중첩 np.where보다 가독성이 좋음
+    - 조건 리스트와 값 리스트를 분리하여 관리
 '''
 # 사용 예제 - &(and) 연산
 arr = np.array([10, 20, 30, 40, 50])
@@ -1987,12 +1994,52 @@ mask_and = (arr > 20) & (arr < 50)
 print(mask_and)     # [False False True True False]
 print(arr[mask_and])    # [30 40]
 
+'''
+문제: 10보다 크고 20보다 작은 값 찾기
+해결 과정:
+    1. arr1 > 10 → [False, True, True, False, False, False]
+    2. arr1 < 20 → [True, True, True, True, False, False]
+    3. 두 조건 AND → [False, True, True, False, False, False]
+    4. True인 위치의 값만 선택 → [12, 18]
+'''
+
+arr1 = np.array([5, 12, 18, 7, 30, 25])
+print('원본 배열:', arr1)
+
+# 조건별 결과 확인
+print('10보다 큰가?', arr1 > 10)
+print('20보다 작은가?', arr1 < 20)
+
+# AND 조건: 두 조건을 모두 만족
+result = arr1[(arr1 > 10) & (arr1 < 20)]
+print('1. 결과 (10 < x < 20):', result)  # [12, 18]
+
 # 사용 예제 - |(or) 연산
 arr = np.array([10, 20 , 30, 40, 50])
 # OR : x < 20 or X > 40
 mask_or = (arr < 20) | (arr > 40)
 print(mask_or)      # [True False Fasle False True]
 print(arr[mask_or]) # [10 50]
+
+'''
+문제: 15 이하이거나 30 이상인 값 찾기
+해결 과정:
+    1. arr2 <= 15 → [True, True, False, False, False, False]
+    2. arr2 >= 30 → [False, False, False, False, True, True]
+    3. 두 조건 OR → [True, True, False, False, True, True]
+    4. True인 위치의 값만 선택 → [10, 15, 30, 35]
+'''
+
+arr2 = np.array([10, 15, 20, 25, 30, 35])
+print('원본 배열:', arr2)
+
+# 조건별 결과 확인
+print('15 이하인가?', arr2 <= 15)
+print('30 이상인가?', arr2 >= 30)
+
+# OR 조건: 두 조건 중 하나라도 만족
+result = arr2[(arr2 <= 15) | (arr2 >= 30)]
+print('2. 결과 (x ≤ 15 또는 x ≥ 30):', result)  # [10, 15, 30, 35]
 
 # 사용 예제 - ~(not) 연산
 arr = np.array([10, 20, 30, 40, 50])
@@ -2010,6 +2057,79 @@ print(mask)
 #  [True False True],
 #  [False True True]]
 print(arr2d[mask])  # [2 4 6 8 9]
+
+'''
+개념 설명:
+    - 불린 인덱싱으로 값을 직접 수정 가능
+    - 조건을 만족하는 모든 요소를 한 번에 변경
+    
+문제: 10 이상인 값을 모두 0으로 변경
+해결 과정:
+    1. arr3 >= 10 → [False, False, True, False, False, True]
+    2. True인 위치의 값을 0으로 변경
+    3. [3, 8, 0, 6, 2, 0]
+'''
+
+arr3 = np.array([3, 8, 15, 6, 2, 20])
+print('원본 배열:', arr3)
+print('10 이상인가?', arr3 >= 10)
+
+# 조건을 만족하는 요소를 0으로 변경
+arr3[arr3 >= 10] = 0
+print('3. 결과 (10 이상 → 0):', arr3)  # [3, 8, 0, 6, 2, 0]
+
+# 조건 리스트 정의
+conditions = [
+    arr9 >= 70,        # 첫 번째 조건
+    arr9 >= 30,        # 두 번째 조건
+    # 세 번째는 default로 처리
+]
+
+# 각 조건에 대응하는 값 리스트
+choices = [
+    "A",  # 70 이상
+    "B",  # 30 이상 70 미만
+]
+
+# np.select 사용 (default는 조건을 모두 만족하지 않을 때)
+result_select = np.select(conditions, choices, default="C")
+print('np.select 결과:')
+print(result_select)
+
+# ============================================================================
+# 보너스: 실전 예제 - 학생 성적 처리
+# ============================================================================
+print('=== 보너스: 실전 예제 ===')
+
+# 학생 성적 데이터
+scores = np.array([45, 78, 92, 35, 88, 67, 55, 98, 42, 73])
+print('학생 성적:', scores)
+print()
+
+# 1. 낙제자(60점 미만) 찾기
+fail = scores[scores < 60]
+print('낙제자 점수:', fail)
+print('낙제자 수:', len(fail), '명')
+print()
+
+# 2. 등급 부여
+grades = np.where(scores >= 90, 'A',
+                  np.where(scores >= 80, 'B',
+                           np.where(scores >= 70, 'C',
+                                    np.where(scores >= 60, 'D', 'F'))))
+print('등급:', grades)
+print()
+
+# 3. 보정 (60점 미만은 60점으로 상향)
+adjusted = np.where(scores < 60, 60, scores)
+print('보정 후 점수:', adjusted)
+print()
+
+# 4. 통계
+print(f'평균: {scores.mean():.2f}점')
+print(f'최고점: {scores.max()}점')
+print(f'최저점: {scores.min()}점')
+print(f'합격률: {(scores >= 60).sum() / len(scores) * 100:.1f}%')
 
 ######################################################################################################
 # 실습 3 논리 연산과 조건 연산
@@ -2065,6 +2185,10 @@ print(arr[~(arr % 3 == 0)]) # [1 2 4 5]
 8. 랜덤 정수(0 ~ 100) 10개 배열에서 아래와 같이 새로운 배열을 만드세요.
     - 50 이상인 값은 그대로
     - 50 미만인 값은 50으로 변경
+
+    - 클리핑(Clipping): 특정 범위로 값을 제한
+    - 50 미만인 값을 모두 50으로 올림 (최솟값 보장)
+    - 데이터 전처리에서 자주 사용
 '''
 arr = np.random.randint(0, 101, size=10)
 print(arr)  # [  4  32  42  46  67  46  94  65 100 100]
@@ -2251,41 +2375,125 @@ print(np.dot(C, D).shape, np.dot(C, D))
                 (12, ) → (2, 5) 는 불가능(12 ≠ 10)
     - array.ravel()
         - 다차원 배열을 1차원 배열로 펼친 view(원본과 연결된 뷰) 반환
+        - 빠르지만 원본이 변경될 수 있어 주의 필요
         -   기준은 order 인자로 결정됨:
             'C': row-major (기본값, 행 기준 → 가로로 먼저 읽음)
             'F': column-major (열 기준 → 세로로 먼저 읽음)
             'K': 메모리에 저장된 순서 그대로
     - array.flatten()
         - 배열을 1차원으로 펴서 복사본을 반환(원본과 독립적)
+        - 메모리를 더 사용하지만 안전함
 
+        * 선택 기준
+            - 원본 보호 필요 → flatten() 사용
+            - 성능 중요 → ravel() 사용 (단, 의도치 않은 변경 주의)
+        
+    - np.newaxis : 차원 확장
+        - 배열에 새로운 차원(축) 추가
+        - 1차원 배열을 2차원으로 변환할 때 주로 사용
+        - 브로드캐스팅이나 행렬 연산을 위해 차원을 맞출 때 필요
+            - 행 벡터 생성: (5,) → (1, 5)
+            - 열 벡터 생성: (5,) → (5, 1)
+            - 차원 호환을 위한 shape 조정
     - np.expand_dims(a, axis) : 차원 확장
         - 지정한 위치에 차원 추가
         - 원본에 영향 없음
+        - axis 매개변수로 어디에 차원을 추가할지 지정
+        - np.newaxis보다 명시적이고 가독성이 좋음
+            - axis=0: 맨 앞에 차원 추가 (행 추가)
+            - axis=1: 두 번째 위치에 차원 추가 (열 추가)
+            - axis=-1: 맨 뒤에 차원 추가
+
     - np.squeeze(a, axis=None)
         - 배열에서 크기가 1인 차원(즉, 길이가 1인 축)을 제거해주는 함수
             rlatten/ravel과 달리 데이터의 전체 구조를 1차원으로 펴는 것이 아니라 차원 수만 줄임
         - a : 입력 배열
         - axis : 특정 축만 1인 경우에 한해 제거하고 싶을 때 사용
                 지정하지 않으면 shape이 1인 모든 차원이 제거됨
+            - 신경망 출력에서 배치 차원 제거
+            - 불필요하게 추가된 차원 정리
+            - 차원 단순화로 연산 효율 개선
     - np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)
         - 배열의 중복된 요소 제거
+        - 자동으로 정렬된 결과 반환
+        - 다양한 옵션으로 추가 정보 제공
         - a : 입력 배열
         - return_index : True이면, 원본에서 고유값이 처음 나타난 위치 인덱스 반환
         - return_inverse : True이면, 원본 배열을 재구성할 수 있는 인덱스 배열 반환
+                        arr[inv] 하면 원본 배열을 복원할 수 있음
         - return_counts : True이면, 각 고유값의 등장 횟수 반환
         - axis : 다차원 배열에서 축별 중복제거(1.13버전 이상)
     
 '''
+arr = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+print('원본 2차원 배열:')
+print(arr)
+
 # 사용 예제 - array.ravel()
 arr = np.array([1, 2], [3, 4])
 flat = arr.ravel()
 print(flat) # [1 2 3 4]
 '- 반환된 배열 수정 시, 원본에도 영향이 있을 수 있음'
 
+# ravel: 뷰 반환 (원본 메모리 공유)
+raveled = arr.ravel()
+print('ravel 결과:', raveled)
+
+# ravel로 만든 배열 수정 → 원본도 변경됨!
+raveled[0] = 999
+print()
+print('원본 배열 (변경됨!):')
+print(arr)  # 원본도 999로 변경됨
+print('ravel 배열:', raveled)
+print()
+
+# ravel을 사용하되 복사본이 필요한 경우
+raveled_copy = arr.ravel().copy()
+raveled_copy[1] = 888
+
+print('원본 배열:')
+print(arr)  # 999는 유지, 888은 영향 없음
+print('ravel().copy() 배열:', raveled_copy)
+
 # 사용 예제 - array.flatten()
 arr = np.array([1, 2], [3, 4])
 flat = arr.flatten()
 print(flat) # [1 2 3 4]
+
+# flatten: 복사본 반환
+flattened = arr.flatten()
+print('flatten 결과:', flattened)  # [1 2 3 4 5 6 7 8 9]
+
+# flatten으로 만든 배열 수정 → 원본 영향 없음
+flattened[0] = 999
+print()
+print('원본 배열 (변경 없음):')
+print(arr)  # 원본은 그대로 1
+print('flatten 배열:', flattened)  # 999로 변경됨
+
+# 사용 예제 - np.newaxis
+arr = np.array([1, 2, 3, 4, 5])
+print('원본 배열:', arr)
+print('원본 shape:', arr.shape)  # (5,) - 1차원 배열
+print()
+
+# 행 벡터로 변환: 앞에 차원 추가
+# [1, 2, 3, 4, 5] → [[1, 2, 3, 4, 5]]
+row_vec = arr[np.newaxis, :]
+print('행 벡터:\n', row_vec)
+print('행 벡터 shape:', row_vec.shape)  # (1, 5) - 1행 5열
+print()
+
+# 열 벡터로 변환: 뒤에 차원 추가
+# [1, 2, 3, 4, 5] → [[1], [2], [3], [4], [5]]
+col_vec = arr[:, np.newaxis]
+print('열 벡터:\n', col_vec)
+print('열 벡터 shape:', col_vec.shape)  # (5, 1) - 5행 1열
 
 # 사용 예제 - np.expand_dims(a, axis)
 a = np.array([1, 2, 3]) # (3,)
@@ -2322,6 +2530,23 @@ print(arr2)
 #   [5]
 #   [6]]]
 
+arr = np.array([1, 2, 3, 4, 5])
+print('원본:', arr, '- shape:', arr.shape)  # (5,)
+print()
+
+# axis=0: 첫 번째 축에 차원 추가
+# (5,) → (1, 5)
+arr_expanded0 = np.expand_dims(arr, axis=0)
+print('axis=0:\n', arr_expanded0)
+print('shape:', arr_expanded0.shape)  # (1, 5)
+print()
+
+# axis=1: 두 번째 축에 차원 추가
+# (5,) → (5, 1)
+arr_expanded1 = np.expand_dims(arr, axis=1)
+print('axis=1:\n', arr_expanded1)
+print('shape:', arr_expanded1.shape)  # (5, 1)
+
 # 사용 예제 - np.squeeze(a, axis) - shape 이 1인 모든 차원 제거
 arr = np.array([[[1], [2], [3]]])
 print("원본 shape : ", arr.shape) # (1, 3, 1)
@@ -2338,6 +2563,28 @@ print(s1.shape)
 s2 = np.squeeze(arr2, axis=2) # 2번째 축만 제거 → (1, 4, 2)
 print(s2.shape)
 '- 크기가 1이 아닌 축을 지정해 squeeze 하려 하면 ValueError 발생'
+
+arr = np.array([[[1, 2, 3]]])  # 3차원 배열
+print('원본:\n', arr)
+print('원본 shape:', arr.shape)  # (1, 1, 3)
+print()
+
+# 모든 크기 1인 차원 제거
+# (1, 1, 3) → (3,)
+squeezed = np.squeeze(arr)
+print('squeeze 후:\n', squeezed)
+print('shape:', squeezed.shape)  # (3,)
+print()
+
+# 특정 축만 제거: axis=0
+# (1, 1, 3) → (1, 3)
+squeezed0 = np.squeeze(arr, axis=0)
+print('axis=0 squeeze:\n', squeezed0)
+print('shape:', squeezed0.shape)  # (1, 3)
+print()
+
+# 주의: 크기가 1이 아닌 차원을 squeeze하면 에러
+# squeezed2 = np.squeeze(arr, axis=2)  # ValueError: 크기가 1이 아님
 
 # 사용 예제 - np.unique()
 arr = np.array([1, 2, 3, 2, 4, 1, 2])
@@ -2456,10 +2703,33 @@ print(np.unique(arr.flatten()).reshape(len(np.unique(arr.flatten())), 1))
 배열 결합 : concatenate
     - np.concatenate((a1, a2, ...), axis=0, out=None)
         - 기존 축을 따라 배열 시퀀스를 결합
+        - 같은 차원의 배열들을 특정 축(axis)를 따라 이어붙임
+        - 결합할 배열들은 결합 축을 제외한 나머지 차원이 일치해야 함
         - a1, a2, ... : 결합할 배열 시퀀스
         - axis : 결합할 축(기본값 = 0, 즉 행 방향으로 결합)
             - axis = 0 : 행(세로)로 이어붙임
             - axis = 1 : 열(가로)로 이어붙임
+        - 결합하는 axis를 제외한 나머지 차원이 같아야 함
+            ex) (2, 2)와 (2, 2)는 axis=0/1 모두 결합 가능
+                (2, 2)와 (1, 2)는 axis=0만 가능
+    - np.stack((a1, a2, ...), axis=0)
+        - 새로운 축을 따라 배열 시퀀스를 결합
+        - 배열의 차원이 1 증가
+        - axis : 새로 생성할 축의 위치
+            기본값 : 0, 즉 맨 앞에 새로운 차원 추가
+    - np.hstack((a1, a2, ...)) : 수평 스택 (axis=1과 동일)
+        - 배열을 수평(열 방향)으로 순서대로 쌓음
+    - np.vstack((a1, a2, ...)) : 수직 스택 (axis=0과 동일)
+        - 배열을 세로로(행 방향)으로 순서대로 쌓음
+    - np.split(a, indices_or_sections, axis=0)
+        - 배열을 여러 개의 하위 배열로 분할
+        - 데이터를 배치로 나누거나 훈련/검증 세트로 분리할 때 사용
+            *분할 방법:
+                1. 균등 분할: 정수로 개수 지정
+                2. 인덱스 분할: 특정 위치에서 자르기
+        - a : 분할할 배열
+        - indices_or_sections : 정수(N등분) 또는 분할 인덱스 리스트
+        - axis : 분할 축(기본값=0, 즉 행 기준)
 '''
 # 사용 예제 - np,concatenate()
 a = np.array([[1, 2], [3, 4]])
@@ -2479,6 +2749,436 @@ print(result2)
 # [[1 2 7]
 #  [3 4 8]
 #  [5 6 9]]
+
+# 1차원 배열 결합
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+c = np.array([7, 8, 9])
+
+concat_1d = np.concatenate([a, b, c])
+print('1차원 배열 결합:', concat_1d)  # [1 2 3 4 5 6 7 8 9]
+print()
+
+# 2차원 배열 결합
+A = np.array([
+    [1, 2, 3],
+    [3, 4, 5]
+])
+B = np.array([
+    [5, 3, 5]
+])
+
+print('A shape:', A.shape)  # (2, 3)
+print('B shape:', B.shape)  # (1, 3)
+print()
+
+# axis=0: 세로 방향 결합 (행 추가)
+# A의 밑에 B를 붙임
+concat_v = np.concatenate([A, B], axis=0)
+print('axis=0 (수직 결합):')
+print(concat_v)
+print('결과 shape:', concat_v.shape)  # (3, 3)
+print()
+
+# axis=1: 가로 방향 결합 (열 추가)
+# 주의: A는 (2, 3), B는 (1, 3)이므로 axis=1로 결합 불가
+# 행의 개수가 일치하지 않아 에러 발생
+# concat_h = np.concatenate([A, B], axis=1)  # ValueError
+
+# 사용 예제 - np.stack()
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+# axis=0
+stacked = np.stack((a, b), axis=0)
+print(stacked)  # shape(2, 3)
+# [[1 2 3]
+#  [4 5 6]]
+
+# axis=1
+stacked2 = np.stack((a, b), axis=1)
+print(stacked2) # shape(3, 2)
+# [[1 4]
+#  [2 5]
+#  [3 6]]
+
+# 사용 예제 - np.hstack(), vstack()
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+# hstack() : 열 방향(가로)로 결합
+h = np.hstack((a, b))
+print(h)    # [1 2 3 4 5 6]
+
+# vstack() : 행 방향(세로)로 결합
+a2 = np.array([[1], [2], [3]])
+b2 = np.array([[4], [5], [6]])
+v = np.vstack((a2, b2))
+print(v)
+# [[1]
+#  [2]
+#  [3]
+#  [4]
+#  [5]
+#  [6]]
+
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+# vstack: 위아래로 쌓기
+# [[1, 2, 3],
+#  [4, 5, 6]]
+vstacked = np.vstack([a, b])
+print('vstack (수직):')
+print(vstacked)
+print('shape:', vstacked.shape)  # (2, 3)
+print()
+
+# hstack: 좌우로 이어붙이기
+# [1, 2, 3, 4, 5, 6]
+hstacked = np.hstack([a, b])
+print('hstack (수평):')
+print(hstacked)
+print('shape:', hstacked.shape)  # (6,)
+
+# 사용 예제 - np.split() - 1차원 배열
+a = np.arange(9)    # [0 1 2 3 4 5 6 7 8]
+split_arr = np.split(a, 3)  # 3등분
+print(split_arr)    # [array([0, 1, 2]), array([3, 4, 5]), array([6, 7, 8])]
+
+# 사용 예제 - np.split() - 2차원 배열
+arr = np.arange(16).reshape(4, 4)
+print("원본 배열:\n", arr)
+# 원본 배열:
+#  [[ 0  1  2  3]
+#  [ 4  5  6  7]
+#  [ 8  9 10 11]
+#  [12 13 14 15]]
+
+# 행 기준(axis=0) 분할
+parts1 = np.split(arr, 2, axis=0)
+print("첫 번째 부분:\n", parts1[0])
+# 첫 번째 부분:
+#  [[0 1 2 3]
+#  [4 5 6 7]]
+print("두 번째 부분:\n", parts1[1])
+# 두 번째 부분:
+#  [[ 8  9 10 11]
+#  [12 13 14 15]]
+
+# 인덱스 [1, 3]에서 분할 → 0~0행, 1~2행, 3~끝까지
+split_arr = np.split(arr, [1, 3], axis=0)
+for i, part in enumerate(split_arr) :
+    print(f'part {i}:\n', part)
+# part 0:
+#  [[0 1 2 3]]
+# part 1:
+#  [[ 4  5  6  7]
+#  [ 8  9 10 11]]
+# part 2:
+#  [[12 13 14 15]]
+
+# 열 기준(axis=1) 분할
+parts2 = np.split(arr, 2, axis=1)
+print("좌측 부분:\n", parts2[0])
+# 좌측 부분:
+#  [[ 0  1]
+#  [ 4  5]
+#  [ 8  9]
+#  [12 13]]
+print("우측 부분:\n", parts2[1])
+# 우측 부분:
+#  [[ 2  3]
+#  [ 6  7]
+#  [10 11]
+#  [14 15]]
+
+arr = np.arange(12)  # [0 1 2 3 4 5 6 7 8 9 10 11]
+print('원본 배열:', arr)
+print()
+
+# 균등 분할: 3개의 동일한 크기로 분할
+# 12개 요소를 3개로 나누면 각 4개씩
+splits_equal = np.split(arr, 3)
+print('3개로 균등 분할:', splits_equal)
+for idx, sub in enumerate(splits_equal, 1):
+    print(f'{idx}번째 조각:', sub)
+print()
+
+# 인덱스 분할: [0:3], [3:7], [7:]
+# 인덱스 3과 7에서 자르기
+splits_idx = np.split(arr, [3, 7])
+for idx, sub in enumerate(splits_idx, 1):
+    print(f'{idx}번째 조각:', sub)
+print()
+
+# 2차원 배열 분할
+arr = np.arange(24).reshape(4, 6)
+print('2차원 배열 (4×6):')
+print(arr)
+print()
+
+# axis=0: 행 방향 분할 (가로로 자르기)
+# 4행을 2개로 나누면 각 2행씩
+row_splits = np.split(arr, 2, axis=0)
+print('행 방향 분할 (axis=0):')
+for i, sub in enumerate(row_splits, 1):
+    print(f'{i}번째 조각:\n', sub)
+print()
+
+# axis=1: 열 방향 분할 (세로로 자르기)
+# 6열을 2개로 나누면 각 3열씩
+col_splits = np.split(arr, 2, axis=1)
+print('열 방향 분할 (axis=1):')
+for i, sub in enumerate(col_splits, 1):
+    print(f'{i}번째 조각:\n', sub)
+
+######################################################################################################
+# 실습 2 배열의 결합과 분리
+
+'''
+1. 다음 두 배열을 행 방향으로 이어붙이세요.
+    a = np.array([[1, 2], [3, 4]])
+    b = np.array([[5, 6]])
+'''
+a = np.array([[1, 2], [3, 4]])
+b = np.array([[5, 6]])
+print(np.vstack((a, b)))
+# [[1 2]
+#  [3 4]
+#  [5 6]]
+
+'''
+2. 아래 배열을 3개로 같은 크기로 분할하세요.
+    a = np.arange(12)
+'''
+a = np.arange(12)
+print(np.split(a, 3))   # [array([0, 1, 2, 3]), array([4, 5, 6, 7]), array([ 8,  9, 10, 11])] 
+
+'''
+3. 다음 배열들을 새로운 축에 쌓아 shape이 (3, 2)인 배열을 만드세요.
+    a = np.array([1, 2])
+    b = np.array([3, 4])
+    c = np.array([5, 6])
+'''
+a = np.array([1, 2])
+b = np.array([3, 4])
+c = np.array([5, 6])
+
+print(np.stack([a, b, c], axis=0))
+# [[1 2]
+#  [3 4]
+#  [5 6]]
+
+'''
+4. shape가 (2, 3)인 아래 두 배열을 shape(2, 2, 3)인 3차원 배열을 만드세요.
+    a = np.array([[1, 2, 3], [4, 5, 6]])
+    b = np.array([[7, 8, 9], [10, 11, 12]])
+'''
+a = np.array([[1, 2, 3], [4, 5, 6]])
+b = np.array([[7, 8, 9], [10, 11, 12]])
+
+print(np.stack((a, b), axis=0))
+# [[[ 1  2  3]
+#   [ 4  5  6]]
+
+#  [[ 7  8  9]
+#   [10 11 12]]]
+
+'''
+5. 아래의 2차원 배열을 2:3:3 비율(총 3개)로 분할하세요.
+    arr = np.arange(8)
+'''
+arr = np.arange(8)
+
+print(np.split(arr, [2, 5]))    # [array([0, 1]), array([2, 3, 4]), array([5, 6, 7])]
+
+'''
+6. 아래 두 배열을 axis=0, axis=1로 각각 stack하여 두 경우의 결과 shape을 모두 구하세요.
+    a = np.ones((2, 3))
+    b = np.zeros((2, 3))
+'''
+a = np.ones((2, 3))
+b = np.zeros((2, 3))
+
+print(np.stack((a, b), axis=0))
+# [[[1. 1. 1.]
+#   [1. 1. 1.]]
+
+#  [[0. 0. 0.]
+#   [0. 0. 0.]]]
+
+print(np.stack((a, b), axis=1))
+# [[[1. 1. 1.]
+#   [0. 0. 0.]]
+
+#  [[1. 1. 1.]
+#   [0. 0. 0.]]]
+
+######################################################################################################
+# 배열의 정렬
+
+'''
+    - np.sort(a, axis=-1, kind='quicksort', order=None)
+        - 정렬된 복사본 반환(오름차순만 지원)
+        - 원본 유지됨
+        - a : 입력 배열
+        - axis : 정렬 축(기본 : 마지막 축)
+            * axis 매개변수:
+                - axis=0: 각 열을 독립적으로 정렬
+                - axis=1: 각 행을 독립적으로 정렬
+                - axis=None: 평탄화 후 전체 정렬
+        - kind : 정렬 알고리즘 (보통 quicksort/mergesort/heapsort)
+    - a.sort(axis=-1, kind='quicksort', order=None)
+        - 원본 배열 직접 정렬
+    - np.argsort(a, axis=-1, kind='quicksort', order=None)
+        - 정렬 인덱스 반환
+        - 원본 배열의 어떤 요소가 정렬 후 어디로 가는지 알려줌
+        - 간접 정렬에 유용 (다른 배열을 같은 순서로 정렬할 때)
+'''
+# 사용 예제 - np.sort()
+arr = np.array([3, 1, 2])
+sorted_arr = np.sort(arr)
+print(sorted_arr)   # [1 2 3]
+
+# 원본 배열 직접 정렬
+arr.sort()
+print(arr)  # [1 2 3]
+
+# 2차원 배열 행 기준 정렬
+arr2d = np.array([[3, 2, 1], [6, 5, 4]])
+print(np.sort(arr2d,axis=1))
+# [[1 2 3]
+#  [4 5 6]]
+
+arr = np.array([3, 1, 2])
+idx = np.argsort(arr)
+print(idx)      # [1 2 0]
+print(arr[idx]) # [1 2 3]
+
+arr = np.array([3, 1, 2])
+# 내림차순 정렬
+print(np.sort(arr)[::-1])   # [3 2 1]
+'- 정렬 후 반전해주어야 함'
+
+arr = np.array([3, 1, 2, 5, 4, 2])
+print('원본:', arr)
+
+# 복사본 정렬 (원본 유지)
+sorted_copy = np.sort(arr)
+print('정렬된 복사본:', sorted_copy)
+print('원본 (변경 없음):', arr)
+print()
+
+# 원본 직접 정렬
+arr.sort()
+print('원본 정렬 후:', arr)
+print()
+
+# 2차원 배열 정렬
+arr2 = np.array([
+    [2, 1, 5],
+    [3, 2, 1]
+])
+print('원본 2차원 배열:')
+print(arr2)
+print()
+
+# axis=0: 각 열을 독립적으로 정렬
+# 첫 번째 열 [2, 3] → [2, 3]
+# 두 번째 열 [1, 2] → [1, 2]
+# 세 번째 열 [5, 1] → [1, 5]
+sorted_axis0 = np.sort(arr2, axis=0)
+print('axis=0 정렬 (열 방향):')
+print(sorted_axis0)
+print()
+
+# axis=1: 각 행을 독립적으로 정렬
+# 첫 번째 행 [2, 1, 5] → [1, 2, 5]
+# 두 번째 행 [3, 2, 1] → [1, 2, 3]
+sorted_axis1 = np.sort(arr2, axis=1)
+print('axis=1 정렬 (행 방향):')
+print(sorted_axis1)
+print()
+
+# axis=None: 평탄화 후 전체 정렬
+sorted_None = np.sort(arr2, axis=None)
+print('axis=None 정렬 (전체):')
+print(sorted_None)  # [1 1 2 2 3 5]
+
+# 사용 예제 - np.argsort
+# - 점수로 정렬하되 이름도 함께 정렬
+# - 여러 배열을 하나의 기준으로 동시 정렬
+
+names = np.array(['김철수', '이영희', '박민수', '정수진', '최동욱'])
+scores = np.array([85, 92, 78, 95, 88])
+
+print('원본 데이터:')
+for name, score in zip(names, scores):
+    print(f'{name}: {score}점')
+print()
+
+# 점수 기준으로 정렬 인덱스 구하기
+# argsort는 기본적으로 오름차순이므로 [::-1]로 내림차순 변환
+sorted_idx = np.argsort(scores)[::-1]
+print('정렬 인덱스 (점수 높은 순):', sorted_idx)
+print()
+
+# 인덱스를 사용하여 이름과 점수를 함께 정렬
+print('점수 순위:')
+for rank, idx in enumerate(sorted_idx, 1):
+    print(f'{rank}위: {names[idx]} - {scores[idx]}점')
+
+# 출력 예시:
+# 1위: 정수진 - 95점
+# 2위: 이영희 - 92점
+# 3위: 최동욱 - 88점
+# 4위: 김철수 - 85점
+# 5위: 박민수 - 78점
+
+
+######################################################################################################
+# 실습 3 배열의 정렬
+
+'''
+1. 아래의 1차원 배열을 오름차순과 내림차순으로 각각 정렬하는 코드를 작성하세요.
+    arr = np.array([7, 2, 9, 4, 5])
+'''
+arr = np.array([7, 2, 9, 4, 5])
+print(np.sort(arr))     # [2 4 5 7 9]
+print(np.sort(arr)[::-1])   # [9 7 5 4 2]
+
+'''
+2. 아래의 2차원 배열에서 각 행(row) 별로 오름차순 정렬된 배열을 구하세요.
+    arr = np.array([[9, 2, 5],
+                    [3, 8, 1]])
+'''
+arr = np.array([[9, 2, 5],
+                    [3, 8, 1]])
+print(np.sort(arr, axis=0))
+# [[3 2 1]
+#  [9 8 5]]
+
+'''
+3. 아래의 1차원 배열에서 정렬 결과(오름차순)가 되는 인덱스 배열을 구하고, 
+    그 인덱스를 이용해 원본 배열을 직접 재정렬하는 코드를 작성하세요.
+    arr = np.array([10, 3, 7, 1, 9]) 
+'''
+arr = np.array([10, 3, 7, 1, 9])
+idx = np.argsort(arr)
+print(arr[idx]) # [ 1  3  7  9 10]
+
+'''
+4. 아래 2차원 배열을 열(column) 기준(axis=0)으로 오름차순 정렬된 배열을 구하세요.
+    arr = np.array([[4, 7, 2],
+                    [9, 1, 5],
+                    [6, 8, 3]])
+'''
+arr = np.array([[4, 7, 2],
+                    [9, 1, 5],
+                    [6, 8, 3]])
+
+print(np.sort(arr, axis=0))
 
 '''
 NumPy 핵심 개념 요약:
@@ -2511,6 +3211,34 @@ reshape() 핵심:
 - normal()은 충분히 큰 샘플에서 평균/표준편차가 정확함
 '''
 '''
+1. 불린 인덱싱:
+   - 조건식으로 배열 필터링
+   - & (AND), | (OR), ~ (NOT) 사용
+   - 각 조건은 괄호로 묶기
+   
+2. np.where:
+   - 조건부 값 할당
+   - np.where(조건, 참일_때, 거짓일_때)
+   - 중첩 사용으로 다중 조건 처리
+   
+3. 연산자:
+   - 비교: ==, !=, <, >, <=, >=
+   - 논리: & (AND), | (OR), ~ (NOT)
+   - 산술: %, //, *, + 등
+   
+4. 실전 활용:
+   - 데이터 필터링
+   - 이상치 제거/처리
+   - 조건부 변환
+   - 등급/카테고리 분류
+   - 클리핑 (범위 제한)
+   
+5. 성능 팁:
+   - 불린 인덱싱은 벡터화 연산 (빠름)
+   - 반복문보다 효율적
+   - 대용량 데이터 처리에 적합
+'''
+'''
 1. 배열 속성:
    - shape: 각 차원의 크기
    - ndim: 차원 수
@@ -2532,4 +3260,27 @@ reshape() 핵심:
    - axis=0: 열 방향 (세로)
    - axis=1: 행 방향 (가로)
    - axis=None: 전체 배열
+'''
+'''
+1. 차원 조작:
+   - 추가: np.newaxis, np.expand_dims
+   - 제거: np.squeeze
+   - 평탄화: flatten (복사본), ravel (뷰)
+   
+2. 배열 결합:
+   - concatenate: axis 지정하여 결합
+   - vstack: 수직 결합 (행 추가)
+   - hstack: 수평 결합 (열 추가)
+   
+3. 배열 분할:
+   - split: 균등 분할 또는 인덱스 분할
+   - axis로 분할 방향 지정
+   
+4. 정렬:
+   - sort: 값 정렬
+   - argsort: 인덱스 정렬 (간접 정렬)
+   
+5. 기타:
+   - unique: 고유값 추출
+   - 다양한 옵션으로 추가 정보 획득
 '''
