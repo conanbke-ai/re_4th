@@ -2197,7 +2197,7 @@ print(np.where(arr >= 50, arr, 50)) # 원본을 변경하지 않음
 # arr[arr<50] = 50
 # print(arr)  # [ 50  50  50  50  67  50  94  65 100 100]
 
-print(np.where arr >= 50, arr, 50)
+print(np.where(arr >= 50, arr, 50))
 '''
 9. 2차원 배열에서 아래와 같이 분류된 문자열 배열을 생성하세요.
     - 70 이상 : "A"
