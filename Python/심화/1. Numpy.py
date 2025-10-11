@@ -2612,12 +2612,15 @@ print("등장 횟수 : ", cnt)          # 등장 횟수 :  [2 3 1 1]
         - arr의 첫 번째 원소(arr[0,0])를 999로 바꾼 뒤 ravel 결과와 flatten 결과에 어떤 변화가 있는지 확인하세요.
 '''
 arr = np.array([[10, 20], [30, 40], [50, 60]])
-print(f'ravel : {arr.ravel()}')         # ravel : [10 20 30 40 50 60]
-print(f'flatten : {arr.flatten()}')     # flatten : [10 20 30 40 50 60]  
+# 1차원 변환
+r1 = arr.ravel()
+f1 = arr.flatten()
+print(f'ravel :', r1)         # ravel : [10 20 30 40 50 60]
+print(f'flatten :', f1)     # flatten : [10 20 30 40 50 60]  
 arr[0,0] = 999
 print(f'변경된 arr : {arr}')            # 변경된 arr : [[999  20] [ 30  40] [ 50  60]]
-print(f'ravel : {arr.ravel()}')        # ravel : [999  20  30  40  50  60] 
-print(f'flatten : {arr.flatten()}')     # flatten : [999  20  30  40  50  60]
+print(f'ravel :', r1)        # ravel : [999  20  30  40  50  60] 
+print(f'flatten :', f1)      # flatten : [10  20  30  40  50  60]
 
 
 '''
@@ -2647,14 +2650,14 @@ print(expand_img)
 #   [0.88758006 0.67408006 0.33067988 ... 0.33560394 0.44636252 0.70882825]]]
 
 print(np.shape(expand_img)) # (1, 32, 32)
-
+print('img_expanded', expand_img.shape) # (1, 32, 32)
 
 '''
 3. 아래 배열에서 불필요한 1차원을 모두 제거하여 shape이 (28, 28)이 되도록 만드세요.
     img = np.random.randint(0, 255, (1, 28, 28, 1))
 '''
 img = np.random.randint(0, 255, (1, 28, 28, 1))
-print(np.shape(np.squeeze(img)))    # (28, 28)
+print(np.shape(np.squeeze(img, axis=None)))    # (28, 28)
 
 '''
 4. 아래 2차원 배열을 1차원 배열로 만든 후 중복값을 제거한 뒤 shape(1, n)으로 재구성하세요.
