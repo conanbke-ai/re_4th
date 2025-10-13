@@ -1,0 +1,20 @@
+[
+  {
+    "name":"kim",
+    "age":21,
+    "city":"Seoul",
+    "salary":3000
+  },
+  {
+    "name":"lee",
+    "age":30,
+    "city":"Busan",
+    "salary":5000
+  },
+  {
+    "name":"park",
+    "age":27,
+    "city":"Daegu",
+    "salary":4500
+  }
+]

@@ -1189,7 +1189,9 @@ print(df.get('국가'))
 # 데이터 입출력
 '''
 데이터 분석은 다양한 데이터 소스에서 데이터를 불러오고, 가공한 데이터를 다시 파일로 저장하는 과정을 거침
-    - Pandas는 CSV, Excel, JSON 등 여러 포맷의 입출력 기능을 지원
+    - Pandas는 CSV, Excel, JSON, Google sheet 등 여러 포맷의 입출력 기능을 지원
+    - 쉼표(,)로 구분 가능한 파일 처리
+    - 가볍고 빠름
 
 * csv 파일 불러오기
     pd.read_csv('파일경로/파일명.csv', 옵션...)
@@ -1208,3 +1210,498 @@ print(df.get('국가'))
         - encoding : 문자 인코딩
         - sep : 구분자 지정
 '''
+# csv 파일 불러오기
+df = pd.read_csv('sample.csv')
+print(df.head())
+'- read_csv() : 파일에서 DataFrame 생성'
+
+# csv 파일로 저장 예시
+# 인덱스 포함 저장
+df.to_csv('result_csv')
+
+# 인덱스없이 저장
+df.to_csv('result_noindex.csv', index=False)
+
+# 한글 포함 파일 저장(인코딩 저장)
+df.to_csv('result_kor.csv', encoding='cp949')
+
+# 사용 예제
+sample_data = pd.DataFrame(
+    {
+        'name': ['kim', 'lee', 'park'],
+        'age': [21, 30, 27],
+        'city': ['Seoul', 'Busan', 'Daegu'],
+        'salary': [3000, 5000, 4500]
+    }
+)
+
+sample_data.to_csv('sample_data.csv', index=False)
+sample_data.to_csv('sample_data_index.csv', index=True)
+
+df = pd.read_csv('sample_data.csv')
+print(df)
+print(f'데이터 타입:\n{df.dtypes}')
+print(f'데이터 배열 크기: {df.shape}')
+
+# 데이터 타입:
+# name      object
+# age        int64
+# city      object
+# salary     int64
+# dtype: object
+# 데이터 배열 크기: (3, 4)
+
+sample_data_kor = pd.DataFrame(
+    {
+        'name': ['kim', 'lee', 'park'],
+        'age': [21, 30, 27],
+        'city': ['서울', '부산', '대구'],
+        'salary': [3000, 5000, 4500]
+    }
+)
+
+sample_data_kor.to_csv('sample_data_kor.csv', index=False, encoding='utf-8-sig')
+
+df_kor = pd.read_csv('sample_data_kor.csv')
+print(df_kor)
+
+# seq 구분자 설정
+sample_data.to_csv('sample_data_seq.txt', sep='\t', index=False)
+
+df_tab = pd.read_csv('sample_data_seq.txt', sep='\t', index=False)
+print(df_tab)
+
+'''
+* Excel 파일 불러오기
+    df = pd.read_excel('파일경로/파일명.xlsx', 옵션...)
+
+    * 주요 옵션
+        - sheet_name : 불러올 시트 이름 또는 번호(기본값 0)
+        - header, index_col, usecols 등
+    
+    * 특징
+        - 마이크로소프트의 스프레드시트 프로그램
+        - 여러 시트(sheet) 지원
+        - 서식, 수식 포함 가능
+        - 확장자 : 최신(.xlsx)/구버전(.xls)
+
+    * openpyxl 설치
+        # pip로 설치
+        pip install openpyxl
+
+        # conda 환경에서 설치
+        # 가상환경 진입 후
+        conda install openpyxl
+    
+    * 기본 문법
+    # Excel 파일의 첫 번째 시트 불러오기
+    df = pd.read_excel('sample.xlsx')
+
+    # 특정 시트 불러오기
+    df_sheet = pd.read_excel('sample.xlsx', sheet_name='매출데이터')
+
+    # 여러 시트 불러오기(딕셔너리 형태로 반환)
+    df_dict = pd.read_excel('sample.xlsx', sheet_name=['Sheet1', 'Sheet2'])
+
+    - sheet_name= : 해당 시트만 불러옴
+    - 여러 시트를 동시에 불러오면 딕셔너리로 반환됨
+
+* Excel 파일로 저장
+    df.to_excel('저장경로/파일명.xlsx', 옵션...)
+
+    * 주요 옵션
+        - index : 인덱스 포함 여부
+        - sheet_name : 저장할 시트 이름
+    
+    * 기본 문법
+    # 기본 사용법
+    df.to_excel('result.xlsx')
+
+    # 인덱스 없이 시트명 지정
+    df.to_excel('result_sheet.xlsx', index=False, sheet_name='분석결과')
+'''
+# 엑셀 데이터 생성
+sample_data.to_excel('sample_data.xlsx', index=False, sheet_name='sample')
+
+excel_data = pd.read_excel('sample_data.xlsx')
+print(excel_data)
+
+# 엑셀 데이터 생성 - with 사용하여 여러 sheet 생성하기
+with pd.ExcelWriter('multi_sheet.xlsx') as writer:
+    sample_data.to_excel(writer, sheet_name='Defalut', index=Fasle)
+    sample_data['name'].to_excel(writer, sheet_name='Name', index=False)
+
+'''
+JSON 파일 입출력
+
+    * 특징
+        - JavaScript Object Notation
+        - 웹에서 주로 사용
+
+    - 불러오기 : pd.read_json()
+
+    - 저장하기 : df.to_json('result.json', orient='records', force_ascii=False)
+        - orient: JSON 구조 지정(예: 'records', 'split', 'index')
+        - force_ascii=False: 한글 등 비ASCII 문자 유지
+'''
+sample_data.to_json('sampe_json', orient='records', indent=2)
+print('JSON 파일 저장')
+
+df_json = pd.read_json('sampe_json.json')
+print(df_json)
+
+######################################################################################################
+# 데이터 탐색과 요약
+'''
+데이터 미리보기(head, tail)
+    - DataFrame.head(n=5)
+        - 첫 번째 n개 행을 반환(기본값: n=5)
+        - 데이터의 전체적인 구조, 컬럼명, 값의 분포를 빠르게 확일할 때 사용
+        - 데이터가 정상적으로 로드되었는지, 컬럼 타입이 예상과 맞는지 등을 체크하는 첫 단계
+    - DataFrame.tail(n=5)
+        - 마지막 n개 행을 반환(기본값: n=5)
+        - 데이터의 마지막 부분을 확인할 때 유용
+        - 인덱스가 제대로 매겨졌는지, 결측값이나 잘못된 데이터가 뒤에 섞여 있는지 확인 가능
+
+
+    * 기본 문법
+    df = pd.read_csb("example.csv")
+    
+    print(df.head())    # 앞에서 5개 행을 출력(기본값)
+    print(df.head(10))  # 앞에서 10개 행을 출력
+
+    print(df.tail())    # 뒤에서 5개 행을 출력(기본값)
+    print(df.tail(3))   # 뒤에서 3개 행을 출력
+'''
+# 사용 예제
+data = {
+    "이름": ["홍길동", "이순신", "김유신", "강감찬", "장보고", "이방원"],
+    "나이": [23, 35, 31, 40, 28, 34],
+    "직업": ["학생", "군인", "장군", "장군", "상인", "왕자"]
+}
+
+df = pd.DataFrame(data)
+
+# 데이터 앞부분 미리보기
+print(df.head(3))
+
+# 데이터 뒷부분 미리보기
+print(df.tail(2))
+
+'''
+데이터 요약정보
+
+* info
+    DataFrame.info(verbose=None, buf=None, max_cols=None, memory_usage=None, show_counts=None)
+
+    - 전체 데이터의 행/열 개수
+    - 각 컬럼의 데이터 타입(dtype)
+    - 결측값(non-null)의 개수
+    - 메모리 사용량 등
+
+* describe
+    DataFrame.describe(percentiles=None, include=None, exclude=None, datetime_is_numeric=False)
+ 
+    - 수치형 데이터: 평균, 표준편차, 최솟값/최댓값, 사분위수등 요약 통계값 제공
+    - 문자열/범주형 데이터: 고유값 개수, 최빈값 등
+'''
+# 수치형 데이터 퉁계 요약
+print(df.describe())
+
+# 범주형(문자열) 데이터 통계 요약
+print(df.describe(include="object"))
+
+######################################################################################################
+# 데이터 선택
+'''
+인덱싱/슬라이싱
+'''
+# 사용 예제 - 인덱싱
+df["이름"]  # '이름' 컬럼 전체 선택
+df[["이름", "나이"]]    # 여러 컬럼을 리스트로 선택
+
+# 사용 예제 - 슬라이싱
+# 1~3번 인덱스의 행 선택(1이상 4미만 즉 1,2,3 번)
+print(df[1:4])
+# 인덱스 -3부터 끝까지
+print(df[-3:])
+
+# 1~4번 인덱스 행에서 '이름' 컬럼만 선택
+print(df[1:5]["이름"])
+
+'- DataFrame의 슬라이싱은 행(row)기준으로 동작하며, 열 단위 슬라이싱은 명시적으로 지정해야 함'
+
+######################################################################################################
+# iloc/loc
+'''
+iloc
+    df.iloc[행, 열]
+    
+    - integer location의 줄임말로, 정수 위치 기반 인덱싱/슬라이싱
+    - 행, 열의 순서(0, 1, 2, ...)를 사용하여 데이터 선택
+    - Numpy 슬라이싱과 유사하게 동작
+'''
+# 단일 행/열 선택
+print(df.iloc[0])       # 0번(첫 번째) 행 전체 출력
+print(df.iloc[:, 1])    # 모든 행의 1번(두 번째) 출력
+
+# 여러 행/열 동시에 선택(슬라이싱, 리스트)
+print(df.iloc[1:4])     # 1~3번 행 전체 출력(슬라이싱, 끝 인덱스 제외)
+print(df.iloc[:, 0:2])  # 모든 행, 0~1번 컬럼 출력 ('이름', '나이')
+print(df.iloc[[0, 2, 4], [1, 2]])   # 0, 2, 4번 행의 1, 2번 컬럼 출력 ('나이', '직업')
+
+# 행/열 모두 슬라이싱
+print(df.iloc[1:5, 0:2])    # 1~4번 행, 0~1번 컬럼 ('이름', '나이')
+
+# 음수 인덱스 사용
+print(df.iloc[-1])      # 마지막 행
+print(df.iloc[:, -2:])  # 모든 행, 뒤에서 2개 컬럼 ('나이', '직업')
+
+'''
+loc
+    df.loc[행, 열]
+
+    - location의 줄임말로, 라벨명(인덱스. 컬럼명)을 이용한 인덱싱/슬라이싱
+    - 행/열의 이름(라벨)을 기준으로 데이터 선택
+    - 시작과 끝을 모두 포함
+    - 음수 인덱스 사용은 불가
+'''
+# 단일 행/열 선택
+print(df.loc[0])            # 인덱스 0번 행 전체
+print(df.loc[:, "이름"])    # 모든 행의 '이름' 컬럼
+
+# 여러 행/열 동시에 선택(슬라이싱, 리스트)
+print(df.loc[2:4])                 # 2~3번 행 전체 출력(슬라이싱, 끝 인덱스 포함)
+print(df.loc[:, ["이름", "직업"]])  # 모든 행, ('이름', '나이') 컬럼만
+print(df.loc[[1, 3, 5], ["이름", "나이"]])  # 1, 3, 5번 행, ('이름', '나이') 컬럼만
+
+# 행/열 모두 슬라이싱
+print(df.loc[1:3, "이름":"직업"])   # 1~3번 행, '이름'부터 '직업'까지 연속 컬럼
+
+######################################################################################################
+# 실습 3 iloc/loc 연습
+
+data = {
+"이름": ["홍길동", "이순신", "김유신", "강감찬", "장보고", "이방원", "최무선", "정도전"],
+"나이": [23, 35, 31, 40, 28, 34, 42, 29],
+"직업": ["학생", "군인", "장군", "장군", "상인", "왕자", "과학자", "정치가"],
+"점수": [85, 90, 75, 88, 92, 95, 87, 83]
+}
+df = pd.DataFrame(data)
+
+'''
+1. iloc을 사용해 인덱스 2~5(포함 안함) 행, 1~3(포함 안함) 열만 선택해 출력하세요.
+'''
+print(df.iloc[2:5, 1:3])
+
+'''
+2. loc을 사용해 인덱스 3~6(포함!) 행, '이름'과 '점수' 컬럼만 출력하세요.
+'''
+print(df.loc[3:6, ["이름", "점수"]])
+
+'''
+3. iloc을 사용해, 마지막 3개 행의 '직업'과 '점수' 컬럼만 선택해 출력하세요.
+'''
+print(df.iloc[-1:-4, ["직업", "점수"]])
+
+'''
+4. iloc을 사용해, 홀수번째(1, 3, 5, 7번 인덱스) 행, 모든 열을 선택하세요.
+'''
+print(df.iloc[[1, 3, 5, 7], :])
+
+'''
+5. loc을 사용해, 인덱스 4~7번 행, '나이', '점수' 컬럼만 출력하세요.
+'''
+print(df.loc[4:8, ["나이", "점수"]])
+
+'''
+6. iloc을 사용해, 짝수번째(0,2,4,6) 행과 짝수번째(0,2) 열만 선택하세요.
+'''
+print(df.iloc[[0, 2, 4, 6], [0, 2]])
+
+######################################################################################################
+# 통계 함수
+'''
+* 주요 통계 함수
+함수            의미/역할
+mean()          평균(산술평균)
+median()        중앙값(중위수)
+std()           표준편차(산포도 측정)
+var()           분산(산포도 측정)
+count()         결측값을 제외한 데이터 개수
+min()/max()     최솟값/최댓값
+sum()           합계
+'''
+# 통계 데이터
+data = {
+    "상품명": ["무선 이어폰", "스마트 워치", "텀블러", "노트북", "블루투스 스피커", "무드등"],
+    "가격": [129000, 250000, 15000, 1200000, 85000, 22000],
+    "재고": [23, 12, 54, 5, 17, 31]
+}
+df = pd.DataFrame(data)
+
+# 주요 통계 함수
+print("평균(가격):", df["가격"].mean())
+print("평균(재고):", df["재고"].mean())
+
+print("중앙값(가격):", df["가격"].median())
+print("중앙값(재고):", df["재고"].median())
+
+print("가격 값 개수:", df["가격"].count())
+print("재고 값 개수:", df["재고"].count())
+
+print("표준편차(가격):", df["가격"].std())
+print("표준편차(재고):", df["재고"].std())
+
+print("분산(가격):", df["가격"].var())
+print("분산(재고):", df["재고"].var())
+
+print("최솟값(가격):", df["가격"].min())
+print("최댓값(재고):", df["재고"].max())
+print("합계(재고):", df["재고"].sum())
+
+######################################################################################################
+# 결측값 처리
+'''
+결측값(Missing Value, NA, Null) : 데이터에 값이 기록되지 않은 상태
+    - Pandas에서는 보통 NaN(Not a Number, float), None(object), NA 등으로 처리
+
+    * 결측값이 있는 데이터의 문제점
+        - 통계/분석/모델링 시 오류 또는 왜곡이 발생할 수 있음
+        - 따라서, 탐색 및 전처리 단계에서 반드시 결측값 처리 필요
+        - 결측값 처리
+            - 삭제 : 결측값이 있는 행/열 제거
+            - 대체 : 다른 값으로 채우기
+            - 예측 : 앞 뒤 값이나 패턴으로 추정
+
+    * 결측값 탐지 : isnull(), notnull()
+
+        df.isnull()
+            - 각 요소가 결측값이면 True, 아니면 False 반환
+        df.notnull()
+            - 각 요소가 결측값이 아니면 True, 결측값은 False 반환
+
+    * 결측값 제거 : dropna()
+
+        df.dropna(axis=0, how='any', inplace=False)
+            - axis=0 : 결측값이 있는 행 삭제(기본값)
+            - axis=1 : 결측값이 있는 열 삭제
+            - how='any' : 하나라도 결측값 있으면 삭제
+            - how='all' : 모두 결측값인 행(열) 삭제
+            - inplace=True : 원본 데이터프레임에서 바로 삭제(반환값 없음)
+    
+    * 결측값 대체(채우기) : fillna()
+
+        df.fillna(value, method=None, inplace=False)
+            - value : 특정 값(예:0, 평균, 문자열 등)으로 결측값 대체
+            - method='ffill' : 이전 값으로 채움(forward fill)
+            - method='bfill' : 다음 값으로 채움(backward fill)
+            - inplace=True : 원본에 적용
+'''
+# 결측값 데이터
+data = {
+    "이름": ["서준", np.nan, "민준", "서연", "하은", "지민"],
+    "나이": [22, 28, np.nan, 31, np.nan, 24],
+    "점수": [89, np.nan, 83, 90, 88, np.nan],
+    "성별": ["남", "여", "남", np.nan, "여", "여"]
+}
+df = pd.DataFrame(data)
+
+# 결측값 개수 계산
+df.isnull().sum()       # 각 컬럼별 결측값 개수
+df.isnull().sum().sum() # 전체 결측값 개수
+
+# 결측값 제거
+# 결측값있는 행 전체 삭제
+df2 = df.dropna()
+
+# 결측값있는 열 삭제
+df3 = df.dropna(asix=1)
+
+# 모두 결측값인 행만 삭제
+df4 = df.dropna(how='all')
+
+# 결측값 채우기
+# 모든 결측값을 0으로 채움
+df_filled = df.fillna(0)
+
+# 각 컬럼별 평균값으로 결측값 대체
+df_mean = df.fillna(df.mean(numeric_only=True))
+
+# 이전 값으로 채움
+df_fill = df.fillna(method='ffill')
+
+# 사용 예제
+missing_types = pd.DataFrame({
+    'none_type': [1, 2, None, 4],           # Python None
+    'nan_type': [1, 2, np.nan, 4],         # NumPy NaN
+    'empty_string': ['A', 'B', '', 'D'],   # 빈 문자열
+    'whitespace': ['A', 'B', ' ', 'D'],    # 공백
+    'special_value': [1, 2, -999, 4]       # -999를 결측값으로 사용하는 경우
+})
+
+
+# 결측값이 있는 샘플 데이터
+sales_data = pd.DataFrame({
+    'date': pd.date_range('2024-01-01', periods=7),
+    'sales': [100, 120, np.nan, 150, np.nan, 180, 200],
+    'customers': [20, 25, 22, np.nan, 30, 35, 40],
+    'region': ['Seoul', 'Busan', np.nan, 'Daegu', 'Seoul', np.nan, 'Busan']
+})
+
+######################################################################################################
+# 실습 4 통계함수/결측값 처리 연습
+
+data = {
+"도시": ["서울", "부산", "광주", "대구", np.nan, "춘천"],
+"미세먼지": [45, 51, np.nan, 38, 49, np.nan],
+"초미세먼지": [20, np.nan, 17, 18, 22, 19],
+"강수량": [0.0, 2.5, 1.0, np.nan, 3.1, 0.0]
+}
+df = pd.DataFrame(data)
+
+
+'''
+1. ‘미세먼지’ 컬럼의 평균과 중앙값을 구하세요.
+'''
+print("미세먼지 평균:", df["미세먼지"].mean())      # 미세먼지 평균: 45.75
+print("미세먼지 중앙값:", df["미세먼지"].median())  # 미세먼지 중앙값: 47.0
+
+'''
+2. ‘초미세먼지’ 컬럼의 최댓값과 최솟값을 구하세요.
+'''
+print("초미세먼지 최댓값:", df["초미세먼지"].max()) # 초미세먼지 최댓값: 22.0
+print("초미세먼지 최솟값:", df["초미세먼지"].min()) # 초미세먼지 최솟값: 17.0
+
+'''
+3. 각 컬럼별 결측값 개수를 구하세요.
+'''
+print("결측값 개수:\n", df.isnull().sum())
+# 결측값 개수:
+#  도시       1
+# 미세먼지     2
+# 초미세먼지    1        
+# 강수량      1
+# dtype: int64
+
+'''
+4. 결측값이 하나라도 있는 행을 모두 삭제한 뒤, 남은 데이터의 ‘초미세먼지’ 평균을 구하세요.
+'''
+drop_null = df.dropna(how='any')
+# print("결측값 삭제:\n", drop_null)
+# 결측값 삭제:
+#     도시  미세먼지  초미세먼지  강수량
+# 0  서울  45.0   20.0  0.0
+print("초미세먼지 평균:", drop_null["초미세먼지"].mean())   # 초미세먼지 평균: 20.0
+
+'''
+5. 결측값을 모두 0으로 채운 뒤, ‘미세먼지’와 ‘초미세먼지’의 합계를 각각 구하세요.
+'''
+zero_filled = df.fillna(0)
+print("미세먼지 합계:", zero_filled["미세먼지"].sum())  # 미세먼지 합계: 183.0
+print("초미세먼지 합계:", zero_filled["초미세먼지"].sum())  # 초미세먼지 합계: 96.0
+
+'''
+6. ‘미세먼지’ 컬럼의 결측값을 평균값으로 채운 뒤, 그 표준편차를 구하세요.
+'''
+print("표준편차:", df["미세먼지"].fillna(df["미세먼지"].mean()).std())  # 표준편차: 4.444097208657794

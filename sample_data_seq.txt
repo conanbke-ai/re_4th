@@ -1,0 +1,4 @@
+name	age	city	salary
+kim	21	Seoul	3000
+lee	30	Busan	5000
+park	27	Daegu	4500
