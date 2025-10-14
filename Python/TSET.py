@@ -1,48 +1,61 @@
 import pandas as pd
 import numpy as np
 
-# 실습 4 통계함수/결측값 처리 연습
-
-data = {
-"도시": ["서울", "부산", "광주", "대구", np.nan, "춘천"],
-"미세먼지": [45, 51, np.nan, 38, 49, np.nan],
-"초미세먼지": [20, np.nan, 17, 18, 22, 19],
-"강수량": [0.0, 2.5, 1.0, np.nan, 3.1, 0.0]
-}
-df = pd.DataFrame(data)
-
 '''
-1. ‘미세먼지’ 컬럼의 평균과 중앙값을 구하세요.
+1. 각 학년(grade)별 평균 국어 점수(kor)를 구하세요.
 '''
-print("미세먼지 평균:", df["미세먼지"].mean())
-print("미세먼지 중앙값:", df["미세먼지"].median())
+df = pd.DataFrame({
+'grade': [1, 2, 1, 2, 1, 3],
+'name': ['Kim', 'Lee', 'Park', 'Choi', 'Jung', 'Han'],
+'kor': [85, 78, 90, 92, 80, 75]
+})
+
+print(df.groupby('grade')['kor'].mean())
 
 '''
-2. ‘초미세먼지’ 컬럼의 최댓값과 최솟값을 구하세요.
+2. 아래 DataFrame에서 반(class)별, 과목(subject)별로 시험에 응시한 학생 수(count)와 평균 점수(avg)를 구하세요.
 '''
-print("초미세먼지 최댓값:", df["초미세먼지"].max())
-print("초미세먼지 최솟값:", df["초미세먼지"].min())
+df = pd.DataFrame({
+'class': [1, 1, 1, 2, 2, 2],
+'subject': ['Math', 'Math', 'Eng', 'Math', 'Eng', 'Eng'],
+'score': [80, 90, 85, 70, 95, 90]
+})
+
+print(df.groupby(['class', 'subject']).count())
+print(df.groupby(['class', 'subject']).mean())
 
 '''
-3. 각 컬럼별 결측값 개수를 구하세요.
+3. 아래 DataFrame에서 지역(region)별 판매자(seller)별로 판매액(sales)의 합계와 최대값을 구하세요.
 '''
-print("결측값 개수:\n", df.isnull().sum())
+df = pd.DataFrame({
+'region': ['Seoul', 'Seoul', 'Busan', 'Busan', 'Daegu'],
+'seller': ['A', 'B', 'A', 'B', 'A'],
+'sales': [100, 200, 150, 120, 130]
+})
+
+print(df.groupby(['region', 'seller'])['sales'].agg(['sum', 'max']))
 
 '''
-4. 결측값이 하나라도 있는 행을 모두 삭제한 뒤, 남은 데이터의 ‘초미세먼지’ 평균을 구하세요.
+4. 아래 DataFrame에서 팀(team)별, 포지션(position)별로 결측치(NaN)를 포함한 점수(score)의 평균을 구하세요.
 '''
-drop_null = df.dropna(how='any')
-print("결측값 삭제:\n", drop_null)
-print("초미세먼지 평균:", drop_null["초미세먼지"].mean())
+df = pd.DataFrame({
+'team': ['A', 'A', 'B', 'B', 'A', 'B'],
+'position': ['FW', 'DF', 'FW', 'DF', 'DF', 'FW'],
+'score': [3, 2, None, 1, 4, 2]
+})
+
+print(df.groupby(['team', 'position'])['score'].apply(lambda x: x.mean(skipna=False)))
 
 '''
-5. 결측값을 모두 0으로 채운 뒤, ‘미세먼지’와 ‘초미세먼지’의 합계를 각각 구하세요.
+5. 아래 DataFrame에서 부서(dept)별로 성별(gender)별 인원 수와, 총 연봉(salary) 합계를 구하세요.
 '''
-zero_filled = df.fillna(0)
-print("미세먼지 합계:", zero_filled["미세먼지"].sum())
-print("초미세먼지 합계:", zero_filled["초미세먼지"].sum())
+df = pd.DataFrame({
+'dept': ['HR', 'HR', 'IT', 'IT', 'Sales', 'Sales'],
+'gender': ['M', 'F', 'F', 'M', 'F', 'F'],
+'salary': [3500, 3200, 4000, 4200, 3000, 3100]
+})
 
-'''
-6. ‘미세먼지’ 컬럼의 결측값을 평균값으로 채운 뒤, 그 표준편차를 구하세요.
-'''
-print("표준편차:", df["미세먼지"].fillna(df["미세먼지"].mean()).std())
+print(df.groupby(['dept', 'gender']).agg(
+    count = ('salary', 'count'),
+    total_salary = ('salary', 'sum')
+))
