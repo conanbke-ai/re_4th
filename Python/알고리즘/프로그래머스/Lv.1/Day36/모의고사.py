@@ -14,3 +14,9 @@
     - 문제의 정답은 1, 2, 3, 4, 5중 하나입니다.
     - 가장 높은 점수를 받은 사람이 여럿일 경우, return하는 값을 오름차순 정렬해주세요.
 '''
+import datetime
+def solution(a, b):
+    year = 2016  # 올해 기준
+    weekday_list = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+    date = datetime.date(year, a, b)
+    return weekday_list[date.weekday()]
