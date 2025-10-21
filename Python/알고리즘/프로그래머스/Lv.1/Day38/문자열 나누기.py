@@ -94,16 +94,19 @@ def solution(s):
 예시3)
 def solution(s):
     answer = 0
-    sav1=0
-    sav2=0
-    for i in s:
-        if sav1==sav2:
-            answer+=1
-            a=i
-        if i==a:
-            sav1+=1
+    same = 0
+    diff = 0
+
+    for ch in s:
+        if same == diff:
+            answer += 1
+            target = ch
+
+        if ch == target:
+            same += 1
         else:
-            sav2+=1
+            diff += 1
+
     return answer
 
 예시4)
