@@ -29,3 +29,32 @@ eg1-2.png
     - 드래그 시작점 (lux, luy)와 끝점 (rdx, rdy)는 lux < rdx, luy < rdy를 만족해야 합니다.
 
 '''
+def solution(wallpaper):
+    rows = len(wallpaper)
+    cols = len(wallpaper[0])
+    
+    lux, luy = rows, cols
+    rdx, rdy = 0, 0
+    
+    for i in range(rows):
+        for j in range(cols):
+            if wallpaper[i][j] == "#":
+                lux = min(lux, i)
+                luy = min(luy, j)
+                rdx = max(rdx, i + 1)  # exclusive 끝 좌표
+                rdy = max(rdy, j + 1)  # exclusive 끝 좌표
+                
+    return [lux, luy, rdx, rdy]
+
+'''
+예시1)
+def solution(wallpaper):
+    x = []
+    y = []
+    for i, row in enumerate(wallpaper):
+        for j, col in enumerate(row):
+            if col == '#':
+                x.append(i)
+                y.append(j)
+    return [min(x), min(y), max(x)+1, max(y)+1]
+'''
