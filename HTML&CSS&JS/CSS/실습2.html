@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>무지개 막대</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+
+  .title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 24px;
+  }
+
+  .bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* 막대 사이 간격 */
+  }
+
+  .bar {
+    height: 40px;
+    display: flex;
+    justify-content: center; /* 가로 중앙 */
+    align-items: center;     /* 세로 중앙 */
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0 2px;
+    color: white;
+    border-radius: 3px;
+  }
+
+  /* 막대 색상과 폭 */
+  .red    { background-color: red; width: 40px; }
+  .orange { background-color: orange; width: 80px; color:black; }
+  .yellow { background-color: yellow; width: 120px; color:black; }
+  .green  { background-color: green; width: 160px; }
+  .blue   { background-color: blue; width: 200px; }
+  .navy   { background-color: navy; width: 240px; }
+  .purple { background-color: purple; width: 280px; }
+</style>
+</head>
+<body>
+
+<div class="title">무지개 막대</div>
+
+<div class="bar-container">
+  <div class="bar red">RED</div>
+  <div class="bar orange">ORANGE</div>
+  <div class="bar yellow">YELLOW</div>
+  <div class="bar green">GREEN</div>
+  <div class="bar blue">BLUE</div>
+  <div class="bar navy">NAVY</div>
+  <div class="bar purple">PURPLE</div>
+</div>
+
+<script>
+function resizeBars() {
+  const bars = document.querySelectorAll('.bar');
+
+  // 막대 폭과 높이의 최대값
+  const maxBarWidth = Math.max(...Array.from(bars).map(b => b.clientWidth));
+  const maxBarHeight = Math.max(...Array.from(bars).map(b => b.clientHeight));
+
+  bars.forEach(bar => {
+    const text = bar.innerText;
+    const containerWidth = bar.clientWidth - 4; // padding 고려
+    const containerHeight = bar.clientHeight * 0.8; // 높이 80% 기준
+
+    // 폭과 높이에 대한 비율 계산 (막대 길이 순서 반영)
+    const widthRatio = bar.clientWidth / maxBarWidth;
+    const heightRatio = bar.clientHeight / maxBarHeight;
+    const sizeRatio = Math.min(widthRatio, heightRatio);
+
+    // 글자 측정용 임시 span
+    const temp = document.createElement('span');
+    temp.style.visibility = 'hidden';
+    temp.style.whiteSpace = 'nowrap';
+    temp.style.fontWeight = 'bold';
+    temp.innerText = text;
+    document.body.appendChild(temp);
+
+    // 최대 font-size 계산
+    let fontSize = containerHeight * sizeRatio;
+    temp.style.fontSize = fontSize + 'px';
+
+    // 폭 제한 적용
+    if(temp.offsetWidth > containerWidth){
+      fontSize = fontSize * (containerWidth / temp.offsetWidth);
+      temp.style.fontSize = fontSize + 'px';
+    }
+
+    bar.style.fontSize = fontSize + 'px';
+    document.body.removeChild(temp);
+  });
+}
+
+// 초기 실행
+window.addEventListener('load', resizeBars);
+// 창 크기 변경 시 재조정
+window.addEventListener('resize', resizeBars);
+</script>
+
+</body>
+</html>

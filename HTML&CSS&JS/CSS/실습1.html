@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            background-color: black;
+            color:white;
+            font-weight: bold;
+        }
+
+        .orange {
+            background-color: orange;
+            width: 200px;
+            height: 200px;
+            font-size: 20px;
+        }
+        /* 하위 */
+        .orange p {
+            color: red;
+        }
+        /* 자식 */
+        .orange > p {
+            color: red;
+        }
+
+        #yellow{
+            background-color: yellow;
+            width: 300px;
+            height: 300px;
+            font-size: 35px;
+        }
+
+        div .blue {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div>무지개</div>
+    <div style="background-color:red; width:30px; height:30px;">red</div>  <!-- 빨강 -->
+    <div style="background-color:orange; width:60px; height:30px;" class="orange"><p>orange</p></div>  <!-- 주황 -->
+    <div style="background-color:yellow; width:90px; height:30px;" id="yellow">yellow</div>  <!-- 노랑 -->
+    <div style="background-color:green; width:120px; height:30px;" class="orange"><div><p>green</p></div></div>  <!-- 초록 -->
+    <div style="background-color:blue; width:150px; height:30px;" class="blue">blue</div>  <!-- 파랑 -->
+    <div style="background-color:navy; width:180px; height:30px;">navy</div>  <!-- 남색 -->
+    <div style="background-color:purple; width:210px; height:30px;">purple</div>  <!-- 보라 -->
+
+    <div>
+        <ul>
+            <li>사과</li>
+            <li>딸기</li>
+            <li class="skyblue">바나나</li>
+        </ul>
+    </div>
+</body>
+</html>

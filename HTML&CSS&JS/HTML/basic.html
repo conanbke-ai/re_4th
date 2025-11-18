@@ -15,7 +15,7 @@
     <!-- 브라우저와 검색엔진에서 사용됨 -->
     <!-- 내용이 없고 속성만 있는 빈 요소이기 때문에 /처리 가능 -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- HTML 문서의 제목 -->
     <!-- 북마크 시 기본 이름으로 -->
@@ -65,6 +65,198 @@
     />
     <a href="http://www.naver.com" target="_blank">링크이동입니다.</a>
 
-    <a href="http://www.naver.com" target="./Strawberry.jpg"><img src="./Strawberry.jpg" width="150" height="150" /></a>
+    <a href="http://www.naver.com" target="./Strawberry.jpg"
+      ><img src="./Strawberry.jpg" width="150" height="150"
+    /></a>
+
+    <!-- 사용자에게 입력을 받는 태그 -->
+    <!-- 빈 요소(닫는 태그 없음) -->
+    <!-- type 속성으로 다양한 입력 형태 구현 -->
+    <!-- 인라인 요소 -->
+
+    <!-- 주요 속성 -->
+    <!-- type : 입력 형태 지정 -->
+    <!-- name : 입력 필드의 이름()데이터 전송 시 사용 -->
+    <!-- value : 초기값 또는 입력값 -->
+    <!-- placeholder : 힌트 텍스트 -->
+    <!-- requried : 필수 입력 필드 -->
+    <!-- disabled : 비활성화 -->
+    <!-- readonly : 읽기 전용 -->
+    <input type="text" placeholder="입력해주세요" />
+    <input type="password" />
+    <input type="button" value="버튼" />
+    <input type="checkbox" name="check" value="1" checked />
+    <input type="checkbox" name="check" value="2" checked />
+    <input type="checkbox" name="check" value="3" checked />
+    <select></select>
+
+    <!-- 표 전체를 감싸는 태그 -->
+    <!-- border : 테두리 두께 -->
+    <!-- cellpadding : 셀 내부 간격, 셀 내용과 테두리 사이의 공백 -->
+    <!-- cellspacing : 테두리 간격 사이의 너비 -->
+    <!-- align : 정렬 -->
+    <table border="2" width="200" height="200" align="center" bgcolor="red">
+      <!-- 테이블 Header, 굵게 중앙정렬 -->
+      <th>테이블</th>
+      <!-- Table Row의 행 -->
+      <tr>
+        <!-- Table Col의 열 -->
+        <!-- Table Data 일반 데이터 칸 -->
+        <!-- colspan : 가로 방향 셀 병합 -->
+        <td colspan="2">1</td>
+        <!-- rowspan : 세로 방향 셀 병합 -->
+        <td rowspan="2">2</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>4</td>
+      </tr>
+    </table>
+    <!-- 먼저 행(tr)을 쓰고 행의 자식 요소로 칸(th, td)을 넣음  -->
+
+    <!-- 전체 폭: 300 + 5 + 300 = 605px -->
+    <table
+      border="0"
+      width="605"
+      align="center"
+      cellspacing="0"
+      cellpadding="0"
+    >
+      <tr>
+        <!-- 왼쪽 테이블 -->
+        <td width="300" align="center" valign="top">
+          <table
+            border="2"
+            width="100%"
+            height="250"
+            cellpadding="5"
+            cellspacing="0"
+          >
+            <tr>
+              <th colspan="4" align="center">학생성적표</th>
+            </tr>
+            <tr align="center">
+              <td>번호</td>
+              <td>이름</td>
+              <td>과목</td>
+              <td>점수</td>
+            </tr>
+            <tr align="center">
+              <td>1</td>
+              <td>김민수</td>
+              <td>수학</td>
+              <td>90</td>
+            </tr>
+            <tr align="center">
+              <td>2</td>
+              <td>이영희</td>
+              <td>영어</td>
+              <td>85</td>
+            </tr>
+            <tr align="center">
+              <td>3</td>
+              <td>박철수</td>
+              <td>과학</td>
+              <td>78</td>
+            </tr>
+          </table>
+        </td>
+
+        <!-- 두 테이블 사이 간격: 5px -->
+        <td width="5"></td>
+
+        <!-- 오른쪽 테이블 -->
+        <td width="300" align="center" valign="top">
+          <table
+            border="2"
+            width="100%"
+            height="250"
+            cellpadding="5"
+            cellspacing="0"
+          >
+            <tr>
+              <th colspan="5" align="center">학생성적표2</th>
+            </tr>
+            <tr align="center">
+              <td rowspan="2">번호</td>
+              <td rowspan="2">이름</td>
+              <td colspan="2">성적</td>
+              <td rowspan="2">비고</td>
+            </tr>
+            <tr align="center">
+              <td>국어</td>
+              <td>영어</td>
+            </tr>
+            <tr align="center">
+              <td>1</td>
+              <td>김민수</td>
+              <td>90</td>
+              <td>85</td>
+              <td>우수</td>
+            </tr>
+            <tr align="center">
+              <td>2</td>
+              <td>이영희</td>
+              <td>90</td>
+              <td>85</td>
+              <td>우수</td>
+            </tr>
+            <tr align="center">
+              <td>3</td>
+              <td>박철수</td>
+              <td colspan="2">결석</td>
+              <td>우수</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+    <!-- 시맨틱 태그 -->
+    <!-- Semantic = 의미론적인 -->
+    <!-- 태그에 의미를 부여 -->
+    <!-- 웹 페이지를 이루는 모든 요소에 의미에 맞는 태그 사용 -->
+
+    <!-- SEO 검색 엔진 최적화 -->
+    <!-- 검색엔진은 html 코드를 분석해 사이트 노출 -->
+    <!-- 크롤러가 페이지의 구성 요소 이해 -->
+    <!-- 시맨틱 태그 사용 시, 검색 순위 상승 -->
+    <!-- 유지 보수성 -->
+    <!-- <div> 태그만 가득하면 요소 찾기 어려운 시맨틱 태그로 컨텐츠 적절히 구분 -->
+    <!-- 코드 가독성 향상 -->
+    <!-- 접근성 -->
+    <!-- 스크린 리더가 페이지 구조 이해 장애인 사용자 경험 개선 -->
+
+    <!-- 주요 시맨틱 태그 -->
+    <!-- <header> -->
+    <!-- 헤더 영역
+        로고 네비게이션, 검색바 등
+        페이지 또는 섹션의 상단 영역 -->
+
+    <!-- <nav>
+        네비게이션 영역
+        주요 링크 모음
+        메뉴, 목차 등 -->
+    <!-- main
+        주요 콘텐츠 영역
+        한 페이지에 하나만 사용
+        다른 main 태그 중첩 불가 -->
+    <!-- section
+        콘텐츠 그룹화
+        주제별로 콘텐츠 구분
+        여러 article을 포함 가능 -->
+    <!-- article
+        독립적인 컨텐츠
+        그 자체로 의미있음
+        예 : 블로그 글, 뉴스 기사, 포럼 게시글 등 -->
+    <!-- aside
+    부가 정보 영역
+    메인 콘텐츠와 직접 관련없음
+    예 : 사이드바, 광고, 관련 링크-->
+    <!-- footer
+    푸터 영역
+    저작권 정보, 연락처, 사이트맵 등
+    페이지 또는 섹션의 하단 영역
+    -->
   </body>
 </html>
