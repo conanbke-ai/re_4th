@@ -1,0 +1,43 @@
+/* 전체 배경, 중앙 정렬 */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #ffffff;
+}
+
+/* SVG 크기 */
+.caterpillar-svg {
+    width: 720px;
+    height: 250px;
+}
+
+/* 몸통 원 채움 색상 */
+.red-fill { fill: #e40000; }
+.yellow-fill { fill: #ffee00; }
+.orange-fill { fill: #ff8e00; }
+.green-fill { fill: #008000; }
+.blue-fill { fill: #0000ff; }
+
+/* 몸통 원 테두리 */
+.segment-border {
+    fill: transparent;
+    stroke: black;
+    stroke-width: 3;
+}
+
+/* 눈 바깥 원 (선만) */
+.eye-outer {
+    fill: transparent;
+    stroke: black;
+    stroke-width: 2;
+}
+
+/* 눈 안쪽 검은자 */
+.eye-inner {
+    fill: black;
+    stroke: black;
+    stroke-width: 1;
+}

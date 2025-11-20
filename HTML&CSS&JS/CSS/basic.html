@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cyberpunk Full UI</title>
+  <link rel="stylesheet" href="basic.css" />
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="scanline"></div>
+    <p>BOOTING SYSTEM...</p>
+  </div>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <h2>MENU</h2>
+    <ul>
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">Profile</a></li>
+      <li><a href="#">System</a></li>
+      <li><a href="#">Settings</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <button id="alertBtn" class="micro-btn">ALERT</button>
+      <button id="toggleConsole" class="micro-btn">HACK CONSOLE</button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+
+    <!-- HUD TOP BAR -->
+    <div class="hud">
+      <div class="hud-left">
+        <div class="hud-feed">
+          <div class="feed-title">STATUS</div>
+          <div class="feed-line">NET: <span class="green">ONLINE</span></div>
+          <div class="feed-line">CPU: <span class="yellow">48%</span></div>
+          <div class="feed-line">TEMP: <span class="red">72°C</span></div>
+        </div>
+
+        <!-- RADAR / MINIMAP -->
+        <div class="radar" aria-hidden="true">
+          <canvas id="radarCanvas" width="140" height="140"></canvas>
+        </div>
+      </div>
+
+      <div class="hud-right">
+        <div class="time">20:17</div>
+        <div class="user">OPERATOR</div>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <header id="main-header">
+      <h1 class="glitch" data-text="CYBERPUNK 2077">CYBERPUNK 2077</h1>
+    </header>
+
+    <!-- MAIN SECTIONS -->
+    <main>
+      <section class="neon-frame selectable">
+        <h2>환영합니다</h2>
+        <p>사이버펑크 테마의 확장 UI. 미니맵, 네온 프레임, 버튼 3D/글리치, HUD, 콘솔이 포함됨.</p>
+        <a href="#" class="btn-cyber">START SYSTEM</a>
+      </section>
+
+      <section class="neon-frame selectable">
+        <h2>기능 목록</h2>
+        <ul>
+          <li>네온 프레임</li>
+          <li>3D 버튼 + 글리치</li>
+          <li>네온 경고 팝업</li>
+          <li>HUD 반투명 피드박스</li>
+          <li>미니맵 레이더</li>
+          <li>콘솔 해킹 UI</li>
+        </ul>
+        <a href="#" class="btn-cyber">MORE INFO</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2077 CYBER SYSTEM</p>
+    </footer>
+  </div>
+
+  <!-- NEON ALERT POPUP -->
+  <div id="neonAlert" class="neon-alert">
+    <div class="alert-inner">
+      <div class="alert-title">!! INTRUSION DETECTED !!</div>
+      <p>Unrecognized access pattern. Initiate countermeasures?</p>
+      <div class="alert-actions">
+        <button id="alertConfirm" class="btn-small">LOCKDOWN</button>
+        <button id="alertCancel" class="btn-small ghost">IGNORE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HACK CONSOLE -->
+  <div id="hackConsole" class="hack-console" aria-hidden="true">
+    <div class="console-toolbar">
+      <span>HACK-TERMINAL</span>
+      <button id="closeConsole" class="micro-btn">CLOSE</button>
+    </div>
+    <pre id="consoleOutput" class="console-output">
+> CONNECTING...
+> INITIATE HANDSHAKE...
+    </pre>
+    <div class="console-input">
+      <input id="consoleCmd" placeholder="type command (e.g. scan --all)" />
+      <button id="consoleSend" class="micro-btn">RUN</button>
+    </div>
+  </div>
+
+<script>
+  // remove loader
+  window.addEventListener('load', ()=> {
+    const L = document.getElementById('loader');
+    L.classList.add('hide');
+    setTimeout(()=> L.remove(), 800);
+  });
+
+  // ALERT popup
+  const alertBtn = document.getElementById('alertBtn');
+  const neonAlert = document.getElementById('neonAlert');
+  const alertCancel = document.getElementById('alertCancel');
+  const alertConfirm = document.getElementById('alertConfirm');
+
+  alertBtn.addEventListener('click', ()=> {
+    neonAlert.classList.add('show');
+  });
+  alertCancel.addEventListener('click', ()=> neonAlert.classList.remove('show'));
+  alertConfirm.addEventListener('click', ()=> {
+    neonAlert.classList.remove('show');
+    // small demo feedback
+    alert('LOCKDOWN INITIATED');
+  });
+
+  // HACK CONSOLE toggle
+  const toggleConsole = document.getElementById('toggleConsole');
+  const hackConsole = document.getElementById('hackConsole');
+  const closeConsole = document.getElementById('closeConsole');
+  const consoleOutput = document.getElementById('consoleOutput');
+  const consoleCmd = document.getElementById('consoleCmd');
+  const consoleSend = document.getElementById('consoleSend');
+
+  toggleConsole.addEventListener('click', ()=> {
+    hackConsole.classList.toggle('open');
+    hackConsole.setAttribute('aria-hidden', hackConsole.classList.contains('open') ? 'false' : 'true');
+    if(hackConsole.classList.contains('open')) startConsoleDemo();
+  });
+  closeConsole.addEventListener('click', ()=> hackConsole.classList.remove('open'));
+
+  // simple console typing demo
+  function startConsoleDemo(){
+    const lines = [
+      "> ACCESS GRANTED: /network/alpha",
+      "> SCANNING NODES...",
+      "> NODE-17: SECURE",
+      "> NODE-42: SUSPECT",
+      "> DOWNLOADING LOGS (3.2MB)...",
+      "> HACK COMPLETE."
+    ];
+    consoleOutput.textContent = "> CONNECTING...\n> INITIATE HANDSHAKE...\n\n";
+    let i=0;
+    const t = setInterval(()=>{
+      if(i>=lines.length) { clearInterval(t); return; }
+      consoleOutput.textContent += lines[i] + "\\n";
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+      i++;
+    }, 700);
+  }
+
+  consoleSend.addEventListener('click', ()=> {
+    const cmd = consoleCmd.value.trim();
+    if(!cmd) return;
+    consoleOutput.textContent += "> " + cmd + "\\n";
+    consoleCmd.value = "";
+    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+  });
+
+  // RADAR canvas animation
+  const canvas = document.getElementById('radarCanvas');
+  if(canvas && canvas.getContext){
+    const ctx = canvas.getContext('2d');
+    const w=canvas.width, h=canvas.height, cx=w/2, cy=h/2;
+    let angle=0;
+    function drawRadar(){
+      ctx.clearRect(0,0,w,h);
+      // bg circle
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.beginPath(); ctx.arc(cx,cy,68,0,Math.PI*2); ctx.fill();
+      // rings
+      ctx.strokeStyle = 'rgba(0,234,255,0.08)';
+      for(let r=20;r<=64;r+=20){ ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke(); }
+      // sweep
+      const grd = ctx.createLinearGradient(cx,cy, cx+80*Math.cos(angle), cy+80*Math.sin(angle));
+      grd.addColorStop(0, 'rgba(0,234,255,0.45)');
+      grd.addColorStop(1, 'rgba(0,234,255,0)');
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,68, angle-0.25, angle);
+      ctx.closePath();
+      ctx.fill();
+      // blip
+      if(Math.random()<0.05){
+        const bx = cx + (Math.random()*60-30);
+        const by = cy + (Math.random()*60-30);
+        ctx.fillStyle = 'rgba(255,50,180,0.9)';
+        ctx.beginPath(); ctx.arc(bx,by,3,0,Math.PI*2); ctx.fill();
+      }
+      angle += 0.03;
+      requestAnimationFrame(drawRadar);
+    }
+    drawRadar();
+  }
+
+  // selectable hover glitch -> add click selection toggle
+  document.querySelectorAll('.selectable').forEach(sec=>{
+    sec.addEventListener('click', ()=> sec.classList.toggle('active'));
+  });
+</script>
+
+</body>
+</html>

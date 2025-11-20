@@ -1,0 +1,469 @@
+/* CSS(Cascading Style Sheets)
+    : HTML 요소의 스타일을 정의하는 언어
+
+    HTML    CSS
+    구조    디자인
+    내용    스타일
+    뼈대    외관
+ */
+
+/* 인라인 스타일(Inline Style)
+    : html tag 안에 삽입
+    ex) <p style="color: blue; font-size: 20px">파란색</p>
+
+    - 단점
+        - 재사용 불가
+        - 유지보수 어려움
+        - HTML과 CSS 혼재
+        - 권장하지 않음
+*/
+/* 내부 스타일 시트(Internal Style Sheet)
+    : html head 안에 style 삽입
+    ex) <head>
+            <style>
+                div {
+                    color: yellow;
+                    font-size: 20px;
+                }
+            </style>
+        </head>
+        <body>
+            <div>노란색 글씨</div>
+        </body>
+
+    - 장점
+        - 한 페이지에서 쉽게 관리 가능
+    - 단점
+        - 여러 페이지에 적용 불가능
+*/
+/* 외부 스타일 시트(External Style Sheet)
+    : css 파일 저장 후, 링크 연결
+    ex) <link rel="stylesheet.css" href="basic.css" />
+
+    - 장점
+        - 여러 페이지에서 재사용 가능
+        - HTML과 CSS 분리
+        - 유지보수 용이
+        - 브라우저 캐싱 가능
+
+*/
+
+/* CSS 기본 문법
+
+    선택자 {
+        속성: 값;
+        속성: 값;
+    }
+
+    - 선택자(Selector) : 스타일을 적용할 요소
+        - 기본 선택자
+        - 요소 선택자(Type Selector)
+
+            ex) <p>하이라이트</p>
+
+            p {
+                color: blue;
+            }
+
+        - 클래스 선택자(Class Selector)
+            - .으로 시작
+            - 여러 요소에 재사용 가능
+            - 한 요소에 여러 클래스 적용 가능
+            
+            ex) <p class="highlight box">하이라이트</p>
+
+            .highlight {
+                font-weight: bold;
+            }
+            .box {
+                colof: white;
+            }
+        
+        - ID 선택자(ID Selector)
+            - #으로 시작
+            - 페이지에서 한 번만 사용
+            - 클래스보다 우선순위가 높음
+            - 사용 예:
+                - 페이지의 고유한 영역 (header, footer, main)
+                - JavaScript로 특정 요소를 선택할 때
+            
+            - 주의사항:
+                - 재사용이 불가하므로 남발하지 말 것
+                - 스타일링은 주로 class 사용, ID는 JS나 앵커 링크에 활용
+
+            ex) <div id="header">헤더</div>
+
+            #header {
+                font-size: 30px;
+            }
+
+        - 그룹 선택자(Group Selector)
+            : 쉼표(,)로 여러 선택자를 묶어 동일한 스타일 적용
+            
+            - 장점
+                - 코드 중복 제거
+                - 유지보수 편리
+
+            ex) h1, h2, h3 {
+                color: navy;
+            }
+
+        - 자손/자식 선택자
+            - 자손 선택자(Descendant - 공백)
+                : 모든 하위 요소 선택
+                ex) .container p {
+                    color: darkcyan;
+                }
+
+            - 자식 선택자(Child Selectors)
+                : 직계 자식만 선택
+                ex) .container > p {
+                    color: red;
+                }
+        
+        - 형제 선택자(Sibling Selectors)
+            - 인접 형제 선택자(Adjacent Sibling +)
+                : 바로 다음 형제 요소만 선택
+                ex) h2 + p {
+                    font-weight: bold;
+                    color: darkgreen;
+                }
+                --  h2 이후의 첫번째 p 태그 문단만 선택됨 --
+            
+            - 일반 형제 선택자(General Sibling ~)
+                : 이후의 모든 형제 요소 선택
+                ex) h2 ~ p {
+                    font-weight: bold;
+                    color: purple;
+                }
+                -- h2 이후의 모든 p 태그 문단 선택됨 --
+
+        - 속성 선택자(Attribute Selector)
+            : [속성="값"] 형태로 특정 속성을 가진 요소 선택
+                폼 요소 스타일링에 유용
+            ex) input[type=text] {
+                border: 1px dashed gray;
+            }
+
+        - 가상 클래스 선택자(Pseudo-class)
+            : 순서 중요
+                Link → Visited → Hover → Active
+
+            - 링크 가상 클래스 (Link Pseudo-classes)
+
+                - 방문하지 않은 링크
+                ex) a:link {
+                    color: blue;
+                }
+
+                - 방문한 링크
+                ex) a:visited {
+                    color: orange;
+                }
+
+                - 마우스 올렸을 때
+                ex) a:hover {
+                    color: red;
+                }
+
+                - 클릭하는 순간
+                ex) a:active {
+                    color: white-gray;
+                }
+
+            - 입력 요소 상태(폼 요소 가상 클래스)
+                ex) input:focus {
+                    border-color: blue;
+                    outline: 2px solid lightblue;
+                }
+                -- outline 없고, border-color만 있을 시, 표현이 안됨
+                
+                input:checked {
+                    transform: scale(2);
+                }
+
+            - 구조적 가상 클래스 (Structural Pseudo-classes)
+                : nth-child() - n번째 자식 선택
+                    - 숫자: nth-child(3) -> 3번째
+                    - odd: 홀수 번째 (1, 3, 5, ...)
+                    - even: 짝수 번째 (2, 4, 6, ...)
+                    - 수식: nth-child(3n) -> 3의 배수 (3, 6, 9, ...)
+                
+                ex) li:first-child {
+                    font-weight: bold;
+                }
+
+                li:last-child {
+                    background-color: skyblue;
+                }
+                
+                li:nth-child(2) {
+                    color: gary;
+                }
+
+                -- 짝수 배수의 자식 요소 -- 
+                li:nth-child(even) {
+                    color: yellow;
+                }
+
+                -- 3의 배수의 자식 요소 --
+                li-nth-child(3n) {
+                    color: aqua;
+                }
+
+        - 가상 요소 선택자(Pseudo-element)
+            : ::before, ::after
+            - 실제 HTML에 없는 가상 요소 생성
+            - content 속성 필수
+            - 장식, 아이콘, 인용 부호 등에 활용
+
+            ex) .quote::before{
+                content: ":-)"
+                font-size: 2em;
+                color: gray;
+            }
+
+            - 실무 활용:
+                - ::before -> 아이콘, 번호, 장식 추가
+                - ::after -> 말풍선 꼬리, 클리어픽스 등
+                - HTML을 수정하지 않고 시각적 요소 추가 가능
+        
+
+    - 속성(Property) : 변경할 스타일
+    - 값(Value) : 적용할 값
+    - 선언(Declaration) : 속성과 값의 쌍
+*/
+/* ========================================
+   선택자 우선순위 (Specificity)
+   ======================================== */
+
+/* 
+  우선순위 (높음 -> 낮음):
+  1. !important (가장 높음, 남용 금지!)
+  2. 인라인 스타일 (HTML 태그 내 style 속성)
+  3. ID 선택자 (#header)
+  4. 클래스 선택자 (.highlight)
+  5. 요소 선택자 (h1, p)
+  
+  같은 우선순위면 나중에 선언된 스타일이 적용됨
+  
+  실무 팁:
+  - 대부분 클래스 선택자 사용
+  - ID는 JavaScript나 앵커용으로만
+  - !important는 최후의 수단 (디버깅 어려움)
+*/
+
+/* ------------------------------------------------
+   폰트 & 컬러 변수
+-------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Michroma&display=swap');
+
+:root{
+  --bg:#05050a;
+  --neon-blue:#00eaff;
+  --neon-pink:#ff00a6;
+  --neon-yellow:#ffd400;
+  --glass: rgba(255,255,255,0.03);
+}
+
+/* 기본 바디 & 페이드인 */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--bg); color:#e8eef6;
+  font-family: 'Orbitron', 'Michroma', sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  opacity:0; animation:fadeIn 0.9s ease forwards 1s;
+}
+@keyframes fadeIn{ to{opacity:1} }
+
+/* -----------------------------
+   LOADER
+------------------------------*/
+#loader{
+  position:fixed; inset:0; display:flex; flex-direction:column;
+  justify-content:center; align-items:center; background:#000; z-index:9999;
+  color:var(--neon-blue); font-family:Orbitron;
+}
+.scanline{ width:100%; height:3px; background:rgba(0,234,255,0.5);
+  animation:scan 1.2s linear infinite; }
+@keyframes scan{ from{transform:translateY(-120vh)} to{transform:translateY(120vh)} }
+#loader.hide{ animation:loaderOut .5s ease forwards }
+@keyframes loaderOut{ to{opacity:0; visibility:hidden} }
+
+/* -----------------------------
+   SIDEBAR
+------------------------------*/
+.sidebar{
+  position:fixed; left:0; top:0; height:100%; width:220px;
+  background:linear-gradient(180deg, rgba(10,10,12,0.6), rgba(0,0,0,0.55));
+  border-right:1px solid rgba(0,234,255,0.12);
+  box-shadow:0 0 30px rgba(0,234,255,0.06);
+  padding:18px; backdrop-filter: blur(6px);
+}
+.sidebar h2{ color:var(--neon-blue); margin:0 0 12px; text-shadow:0 0 6px rgba(0,234,255,0.2) }
+.sidebar ul{ padding:0; margin: 0; list-style:none }
+.sidebar ul li{ margin:12px 0 }
+.sidebar a{ color:#cfeffb; text-decoration:none; font-size:0.95rem }
+.sidebar a:hover{ color:var(--neon-pink); text-shadow:0 0 8px var(--neon-pink) }
+
+.sidebar-footer{ position:absolute; bottom:18px; left:18px; right:18px; display:flex; gap:8px }
+.micro-btn{
+  background:transparent; border:1px solid rgba(255,255,255,0.06);
+  color:var(--neon-blue); padding:6px 8px; border-radius:6px; cursor:pointer;
+  text-transform:uppercase; font-size:0.75rem;
+  box-shadow:0 0 8px rgba(0,234,255,0.08);
+}
+.micro-btn:hover{ transform:translateY(-3px); box-shadow:0 0 16px rgba(0,234,255,0.18) }
+
+/* -----------------------------
+   CONTENT
+------------------------------*/
+.content{ margin-left:240px; padding:24px; min-height:100vh }
+
+/* HUD */
+.hud{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:14px }
+.hud-left{ display:flex; gap:12px; align-items:center }
+.hud-feed{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(0,234,255,0.06);
+  padding:10px 12px; border-radius:8px; width:210px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+}
+.feed-title{ color:var(--neon-pink); font-size:0.78rem; margin-bottom:6px }
+.feed-line{ font-size:0.85rem; color:#cfeffb; margin:3px 0 }
+.green{ color:#7bf58b } .yellow{ color:var(--neon-yellow) } .red{ color:#ff6b6b }
+
+/* RADAR */
+.radar{ width:140px; height:140px; border-radius:8px; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid rgba(0,234,255,0.06); box-shadow:0 0 10px rgba(0,234,255,0.03);
+  background: radial-gradient(circle at 50% 40%, rgba(0,0,0,0.2), transparent 40%);
+}
+
+/* HUD RIGHT */
+.hud-right{ text-align:right; color: #9fdcff; font-size:0.9rem }
+.hud-right .user{ font-weight:700; color:var(--neon-pink) }
+
+/* -----------------------------
+   HEADER & GLITCH
+------------------------------*/
+#main-header{ text-align:center; padding:6px 0 18px 0 }
+.glitch{
+  position:relative; color:var(--neon-blue); font-size:2.6rem; letter-spacing:2px;
+  text-shadow:0 0 8px rgba(0,234,255,0.3);
+}
+.glitch::before, .glitch::after{
+  content: attr(data-text); position:absolute; left:0; top:0; width:100%;
+  overflow:hidden; clip-path: inset(0 0 0 0);
+}
+.glitch::before{ color:var(--neon-pink); left:2px; text-shadow:-2px 0 rgba(255,0,180,0.8); animation:gl1 2s linear infinite }
+.glitch::after{ color:var(--neon-yellow); left:-2px; text-shadow:2px 0 rgba(255,212,0,0.7); animation:gl2 1.8s linear infinite }
+@keyframes gl1{
+  0%{ clip-path: inset(0 0 90% 0) } 10%{ clip-path: inset(10% 0 20% 0) } 20%{ clip-path: inset(60% 0 5% 0) } 30%{ clip-path: inset(20% 0 40% 0) } 100%{ clip-path: inset(0 0 0 0) }
+}
+@keyframes gl2{
+  0%{ clip-path: inset(80% 0 0 0) } 15%{ clip-path: inset(30% 0 50% 0) } 50%{ clip-path: inset(10% 0 20% 0) } 100%{ clip-path: inset(0 0 0 0) }
+}
+
+/* -----------------------------
+   NEON FRAME
+------------------------------*/
+.neon-frame{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  padding:20px; border-radius:12px; margin-bottom:28px;
+  border: 2px solid rgba(255,0,157,0.12);
+  box-shadow: 0 6px 30px rgba(255,0,157,0.03), inset 0 0 14px rgba(255,0,157,0.02);
+  position:relative; transition: transform .22s ease, box-shadow .22s ease;
+}
+/* laser corner accents */
+.neon-frame::before, .neon-frame::after{
+  content:""; position:absolute; width:64px; height:4px; background:var(--neon-blue);
+  box-shadow:0 0 12px var(--neon-blue); opacity:.95;
+}
+.neon-frame::before{ top:-3px; left:16px }
+.neon-frame::after{ bottom:-3px; right:16px }
+
+/* selectable effect (클릭 선택 시 강조) */
+.selectable{ cursor:pointer }
+.selectable:hover{ transform: translateY(-4px); box-shadow:0 12px 40px rgba(0,0,0,0.6) }
+.selectable.active{ border-color: rgba(0,234,255,0.35); box-shadow:0 0 40px rgba(0,234,255,0.12) }
+
+/* selectable 클릭 시 레이저 라인 애니메이션 */
+.selectable.active::after{ animation:selectFlash .8s ease both }
+@keyframes selectFlash{ from{ box-shadow:0 0 0 rgba(0,234,255,0) } 50%{ box-shadow:0 0 40px rgba(0,234,255,0.35) } to{ box-shadow:0 0 0 rgba(0,234,255,0) } }
+
+/* -----------------------------
+   3D + GLITCH BUTTON
+------------------------------*/
+.btn-cyber{
+  display:inline-block; padding:12px 22px; margin-top:12px; border-radius:8px;
+  border:2px solid var(--neon-blue); color:var(--neon-blue); text-decoration:none;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4));
+  box-shadow: 0 6px 18px rgba(0,234,255,0.06), 0 1px 0 rgba(255,255,255,0.02);
+  position:relative; overflow:hidden; transition: transform .18s ease, box-shadow .18s;
+  transform: translateZ(0);
+}
+.btn-cyber:hover{ transform: translateY(-6px) scale(1.01); box-shadow: 0 18px 40px rgba(0,234,255,0.12), 0 0 30px rgba(255,0,180,0.06) }
+/* scan / glitch */
+.btn-cyber::before{
+  content:""; position:absolute; top:0; left:-110%; width:60%; height:100%;
+  background: linear-gradient(120deg, transparent, rgba(255,0,180,0.4), transparent);
+  transform: skewX(-20deg);
+}
+.btn-cyber:hover::before{ animation:btnScan .7s linear }
+@keyframes btnScan{ 0%{ left:-110% } 100%{ left:220% } }
+
+/* -----------------------------
+   NEON ALERT POPUP
+------------------------------*/
+.neon-alert{
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background: rgba(2,2,4,0.45); backdrop-filter: blur(4px);
+  visibility:hidden; opacity:0; transition: .25s ease; z-index:9998;
+}
+.neon-alert.show{ visibility:visible; opacity:1 }
+.alert-inner{
+  width:420px; padding:18px; border-radius:10px;
+  border:2px solid rgba(255,0,157,0.9); background: linear-gradient(180deg, rgba(0,0,0,0.75), rgba(255,255,255,0.02));
+  box-shadow:0 12px 60px rgba(255,0,157,0.06), 0 2px 0 rgba(255,255,255,0.02);
+  text-align:center; color:#fff;
+}
+.alert-title{ color:var(--neon-pink); font-weight:700; font-size:1.05rem; margin-bottom:8px; text-shadow:0 0 10px rgba(255,0,180,0.2) }
+.alert-actions{ display:flex; gap:10px; justify-content:center; margin-top:12px }
+.btn-small{
+  padding:10px 14px; border-radius:8px; border:2px solid var(--neon-pink); background:transparent; color:var(--neon-pink);
+}
+.btn-small.ghost{ border-color:rgba(255,255,255,0.08); color:#d9d9d9 }
+
+/* -----------------------------
+   HACK CONSOLE
+------------------------------*/
+.hack-console{
+  position:fixed; right:26px; bottom:26px; width:520px; max-width:calc(100% - 32px);
+  background: linear-gradient(180deg, rgba(3,6,10,0.95), rgba(0,0,0,0.85));
+  border:2px solid rgba(0,234,255,0.08); color:#bfefff; border-radius:10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(0,234,255,0.03);
+  transform: translateY(40px) scale(.98); opacity:0; visibility:hidden; transition: .25s ease;
+  z-index:9997; overflow:hidden;
+}
+.hack-console.open{ transform:none; opacity:1; visibility:visible }
+.console-toolbar{ display:flex; justify-content:space-between; align-items:center; padding:8px 12px; border-bottom:1px dashed rgba(255,255,255,0.02) }
+.console-output{ height:180px; overflow:auto; padding:12px; margin:0; background:linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.05)); font-family:monospace; font-size:0.9rem; line-height:1.3; color:#9fffe8 }
+.console-input{ display:flex; gap:8px; padding:10px }
+.console-input input{ flex:1; padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:rgba(0,0,0,0.4); color:#cfeffb }
+
+/* -----------------------------
+   FOOTER
+------------------------------*/
+footer{ color:var(--neon-blue); text-align:center; margin-top:40px; text-shadow:0 0 6px rgba(0,234,255,0.08) }
+
+/* responsive small screens */
+@media (max-width:780px){
+  .sidebar{ width:72px; padding:12px }
+  .sidebar h2{ display:none }
+  .content{ margin-left:92px; padding:12px }
+  .hud-left .hud-feed{ display:none }
+  .radar{ display:none }
+}
