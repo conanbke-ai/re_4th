@@ -1,0 +1,74 @@
+/* 전체 레이아웃 컨테이너 */
+.magazine-layout {
+    display: grid;
+    /* 1. 3x3 그리드: 각 열(column)과 행(row)을 1fr(Fraction)로 동일하게 나눕니다. */
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    
+    /* 3. 간격 15px */
+    gap: 15px;
+    
+    /* 레이아웃의 전체 크기 (예시: 너비 800px, 높이 500px. 필요에 따라 조정 가능) */
+    width: 800px;
+    height: 500px;
+    margin: 30px auto; /* 중앙 정렬 */
+    border: 1px solid #ccc; /* 그리드 경계를 보여주기 위한 임시 선 */
+}
+
+/* 모든 그리드 아이템 공통 스타일 */
+.grid-item {
+    display: flex; /* 텍스트 중앙 정렬을 위해 Flexbox 사용 */
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: 1px solid #ddd; /* 아이템 경계를 보여주기 위한 임시 선 */
+    
+    /* 4. 각 아이템에 배경 이미지: 실제 이미지 URL로 변경해야 합니다. */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 개별 아이템 설정 및 Image1 spanning */
+
+/* Image 1 (2행 2열 차지) */
+.item-1 {
+    /* 2. Image1은 2행 2열 차지: 1번 행/열부터 시작하여 2칸씩 차지합니다. */
+    grid-column: span 2;
+    grid-row: span 2;
+    background-color: #f44336; /* 임시 배경색 */
+    background-image: url('placeholder-image-1.jpg'); /* 실제 이미지 경로로 변경하세요 */
+}
+
+/* Image 2: 1행 3열에 위치 (자동 배치되지만 명시적으로 설정 가능) */
+.item-2 {
+    /* grid-column: 3 / 4; grid-row: 1 / 2; */
+    background-color: #2196f3; /* 임시 배경색 */
+    background-image: url('placeholder-image-2.jpg'); /* 실제 이미지 경로로 변경하세요 */
+}
+
+/* Image 3: 2행 3열에 위치 (자동 배치되지만 명시적으로 설정 가능) */
+.item-3 {
+    /* grid-column: 3 / 4; grid-row: 2 / 3; */
+    background-color: #4caf50; /* 임시 배경색 */
+    background-image: url('placeholder-image-3.jpg'); /* 실제 이미지 경로로 변경하세요 */
+}
+
+/* Image 4: 3행 1열에 위치 (자동 배치되지만 명시적으로 설정 가능) */
+.item-4 {
+    /* grid-column: 1 / 2; grid-row: 3 / 4; */
+    background-color: #ff9800; /* 임시 배경색 */
+    background-image: url('placeholder-image-4.jpg'); /* 실제 이미지 경로로 변경하세요 */
+    grid-column: span 2;
+}
+
+/* Image 5: 3행 2열부터 끝까지 차지 (2칸 차지) */
+.item-5 {
+    /* 3행 2열부터 시작하여 끝까지 (2칸) 차지합니다. */
+    grid-column: 3 / 4; /* 또는 grid-column: span 2; grid-row: 3 / 4; */
+    grid-row: 3 / 4;
+    background-color: #9c27b0; /* 임시 배경색 */
+    background-image: url('placeholder-image-5.jpg'); /* 실제 이미지 경로로 변경하세요 */
+}
