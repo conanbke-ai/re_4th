@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p class="highlight">첫 번째</p>
+    <p>두 번째</p>
+    <p class="highlight">세 번째</p>
+
+    <script>
+
+        console.log("모든 p 태그 개수: ", document.getElementsByTagName("p").length)
+        console.log("highlight 클래스 요소 개수: ", document.getElementsByClassName("highlight").length)
+        console.log("첫 번째 p 태그의 텍스트: ", document.getElementsByTagName("p")[0].textContent)
+    </script>
+</body>
+</html>

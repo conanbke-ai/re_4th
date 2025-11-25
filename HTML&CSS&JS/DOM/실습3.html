@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <ul>
+            <li>항목 1</li>
+            <li>항목 2</li>
+            <li>항목 3</li>
+        </ul>
+    </div>
+
+    <script>
+        // container 안의 모든 li 선택
+        const lis = document.querySelectorAll(".container li");
+        console.log("container 안의 모든 li 태그 선택: ", lis);
+
+        // 두 번째 li
+        console.log("두번째 li 선택 : ", lis[1]);
+
+        // 마지막 li
+        console.log("마지막 li 선택 : ", lis[lis.length - 1]);
+    </script>
+
+</body>
+</html>
