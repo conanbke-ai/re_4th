@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>할 일 목록</title>
+</head>
+<body>
+    <h1>할 일 목록</h1>
+
+    <!-- 할 일 입력 폼 -->
+    <input id="todo-input" type="text" placeholder="할 일을 입력하세요">
+    <button id="add-btn">추가</button>
+
+    <!-- 할 일 리스트 -->
+    <ul id="todo-list"></ul>
+
+    <script>
+        const input = document.getElementById('todo-input');
+        const button = document.getElementById('add-btn');
+        const list = document.getElementById('todo-list');
+
+        button.addEventListener('click', function () {
+            // 입력 값이 비었으면 추가 안 함
+            if (input.value.trim() === '') return;
+
+            // li 요소 만들기 (힌트 그대로)
+            let li = document.createElement('li');
+            li.textContent = input.value;
+
+            // 리스트에 li 추가
+            list.append(li);
+
+            // 입력창 비우고 포커스 주기
+            input.value = '';
+            input.focus();
+        });
+    </script>
+</body>
+</html>

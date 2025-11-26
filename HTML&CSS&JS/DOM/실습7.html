@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>실시간 검색</title>
+</head>
+<body>
+    <h2>실시간 검색 ⭐⭐</h2>
+
+    <input id="search-input" type="text" placeholder="검색어를 입력하세요">
+
+    <ul id="item-list">
+        <li>사과</li>
+        <li>바나나</li>
+        <li>포도</li>
+        <li>오렌지</li>
+        <li>수박</li>
+        <li>딸기</li>
+    </ul>
+
+    <script>
+        const input = document.getElementById('search-input');
+        const items = document.querySelectorAll('#item-list li');
+
+        // 힌트 그대로 활용
+        input.addEventListener('input', (e) => {
+            let searchText = e.target.value.toLowerCase();
+
+            items.forEach(item => {
+                if (item.textContent.toLowerCase().includes(searchText)) {
+                    item.style.display = 'list-item';   // 보이기
+                } else {
+                    item.style.display = 'none';        // 숨기기
+                }
+            });
+        });
+    </script>
+</body>
+</html>

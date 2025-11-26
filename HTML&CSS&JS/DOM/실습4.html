@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>이미지 갤러리</title>
+</head>
+<body>
+    <h1>이미지 갤러리</h1>
+
+    <!-- 처음에 보여줄 이미지 -->
+    <img id="gallery-img" src="../HTML/Strawberry.jpg" alt="첫 이미지" width="300">
+
+    <!-- 버튼 -->
+    <br><br>
+    <button onclick="changeImage()">이미지 바꾸기</button>
+
+    <script>
+        function changeImage() {
+            // img 태그 가져오기
+            let img = document.getElementById("gallery-img");
+
+            // 이미지 파일과 alt 글자 바꾸기
+            img.src = "sample.png";
+            img.alt = "새 이미지";
+        }
+    </script>
+</body>
+</html>

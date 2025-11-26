@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>클릭 카운터 & 키보드 이벤트</title>
+</head>
+<body>
+    <h2>과제 1: 클릭 카운터 ⭐</h2>
+    <button id="click-btn">클릭하세요</button>
+    <p>클릭 횟수: <span id="count">0</span></p>
+
+    <hr>
+
+    <h2>과제 2: 키보드 이벤트 ⭐⭐</h2>
+    <input id="key-input" type="text" placeholder="여기에 입력해 보세요">
+    <p>입력한 키: <span id="key-view"></span></p>
+
+    <script>
+        // ===== 과제 1: 클릭 카운터 =====
+        const btn = document.getElementById('click-btn');
+        const countSpan = document.getElementById('count');
+        let count = 0;
+
+        btn.addEventListener('click', () => {
+            count++;
+            countSpan.textContent = count;
+        });
+
+        // ===== 과제 2: 키보드 이벤트 =====
+        const input = document.getElementById('key-input');
+        const keyView = document.getElementById('key-view');
+
+        input.addEventListener('keydown', (e) => {
+            console.log(e.key);       // 힌트에 나온 부분
+            keyView.textContent = e.key; // 화면에 실시간 표시
+        });
+    </script>
+</body>
+</html>
