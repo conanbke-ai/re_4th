@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>투두 리스트</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #222831;
+      color: #eeeeee;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 40px 16px;
+    }
+    .todo-app {
+      width: 100%;
+      max-width: 480px;
+      background: #31363f;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .todo-app h1 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+    .todo-input-area {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .todo-input-area input {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+    .todo-input-area button {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #00adb5;
+      color: #fff;
+      font-weight: 600;
+    }
+    .todo-input-area button:hover {
+      opacity: 0.9;
+    }
+    .filters {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .filter-buttons button {
+      border: none;
+      background: #222831;
+      color: #eeeeee;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 4px;
+    }
+    .filter-buttons button.active {
+      background: #00adb5;
+    }
+    .todo-list {
+      list-style: none;
+      max-height: 360px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
+    .todo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #222831;
+      padding: 8px 10px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    .todo-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .todo-text.completed {
+      text-decoration: line-through;
+      color: #9ca3af;
+    }
+    .todo-item button.delete-btn {
+      border: none;
+      background: transparent;
+      color: #f97373;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .footer button {
+      border: none;
+      background: #ef4444;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .footer button:disabled {
+      background: #4b5563;
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+  <div class="todo-app">
+    <h1>할 일 목록</h1>
+
+    <!-- 입력 영역 -->
+    <div class="todo-input-area">
+      <input id="todo-input" type="text" placeholder="할 일을 입력하세요" />
+      <button id="add-btn">추가</button>
+    </div>
+
+    <!-- 필터 & 남은 개수 -->
+    <div class="filters">
+      <span id="left-count">0개 남음</span>
+      <div class="filter-buttons">
+        <button data-filter="all" class="active">전체</button>
+        <button data-filter="active">미완료</button>
+        <button data-filter="completed">완료</button>
+      </div>
+    </div>
+
+    <!-- 투두 리스트 -->
+    <ul id="todo-list" class="todo-list"></ul>
+
+    <!-- 하단: 완료 항목 전체 삭제 -->
+    <div class="footer">
+      <span id="total-count"></span>
+      <button id="clear-completed-btn" disabled>완료 항목 삭제</button>
+    </div>
+  </div>
+
+  <script>
+    // ======================
+    // 전역 상태
+    // ======================
+    let todos = [];               // { id, text, completed }
+    let currentFilter = 'all';    // 'all' | 'active' | 'completed'
+    const STORAGE_KEY = 'todos-v1';
+
+    // ======================
+    // DOM 참조
+    // ======================
+    const inputEl = document.getElementById('todo-input');
+    const addBtn = document.getElementById('add-btn');
+    const listEl = document.getElementById('todo-list');
+    const leftCountEl = document.getElementById('left-count');
+    const totalCountEl = document.getElementById('total-count');
+    const clearCompletedBtn = document.getElementById('clear-completed-btn');
+    const filterButtons = document.querySelectorAll('.filter-buttons button');
+
+    // ======================
+    // 초기 로드
+    // ======================
+    loadTodos();
+    renderTodos();
+
+    // ======================
+    // 이벤트 등록
+    // ======================
+
+    // 할 일 추가 버튼
+    addBtn.addEventListener('click', () => {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      addTodo(text);
+      inputEl.value = '';
+      inputEl.focus();
+    });
+
+    // Enter 키로 추가
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        addBtn.click();
+      }
+    });
+
+    // 필터 버튼 클릭
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        setFilter(btn.dataset.filter);
+      });
+    });
+
+    // 완료된 항목 전체 삭제
+    clearCompletedBtn.addEventListener('click', () => {
+      clearCompleted();
+    });
+
+    // 리스트 영역 이벤트 위임 (체크박스/삭제 버튼)
+    listEl.addEventListener('click', (e) => {
+      const target = e.target;
+      const li = target.closest('.todo-item');
+      if (!li) return;
+      const id = li.dataset.id;
+
+      // 체크박스 토글
+      if (target.matches('input[type="checkbox"]')) {
+        toggleTodo(id);
+      }
+
+      // 삭제 버튼
+      if (target.matches('.delete-btn')) {
+        deleteTodo(id);
+      }
+    });
+
+    // ======================
+    // 핵심 함수들
+    // ======================
+
+    // 할 일 추가
+    function addTodo(text) {
+      const newTodo = {
+        id: Date.now().toString(),   // 간단한 고유 ID
+        text,
+        completed: false,
+      };
+      todos.push(newTodo);
+      saveTodos();      // -> localStorage 저장 + 화면 렌더링
+    }
+
+    // 완료/미완료 토글
+    function toggleTodo(id) {
+      todos = todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      );
+      saveTodos();
+    }
+
+    // 개별 삭제
+    function deleteTodo(id) {
+      todos = todos.filter((todo) => todo.id !== id);
+      saveTodos();
+    }
+
+    // 완료 항목 전체 삭제
+    function clearCompleted() {
+      todos = todos.filter((todo) => !todo.completed);
+      saveTodos();
+    }
+
+    // 필터 변경
+    function setFilter(filter) {
+      currentFilter = filter;
+
+      // 버튼 스타일 업데이트
+      filterButtons.forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+      });
+
+      renderTodos();
+    }
+
+    // ======================
+    // 저장 & 로드 & 렌더링
+    // ======================
+
+    // localStorage에서 불러오기
+    function loadTodos() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          todos = JSON.parse(saved);
+        } catch (e) {
+          todos = [];
+        }
+      }
+    }
+
+    // todos 배열 → localStorage 저장 + 렌더링
+    function saveTodos() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+      renderTodos();
+    }
+
+    // 화면 렌더링
+    function renderTodos() {
+      // 현재 필터 적용
+      const filtered = todos.filter((todo) => {
+        if (currentFilter === 'active') return !todo.completed;
+        if (currentFilter === 'completed') return todo.completed;
+        return true; // all
+      });
+
+      // 리스트 비우고 다시 생성
+      listEl.innerHTML = '';
+      filtered.forEach((todo) => {
+        const li = document.createElement('li');
+        li.className = 'todo-item';
+        li.dataset.id = todo.id;
+
+        li.innerHTML = `
+          <div class="todo-left">
+            <input type="checkbox" ${todo.completed ? 'checked' : ''} />
+            <span class="todo-text ${todo.completed ? 'completed' : ''}">
+              ${escapeHtml(todo.text)}
+            </span>
+          </div>
+          <button class="delete-btn">삭제</button>
+        `;
+
+        listEl.appendChild(li);
+      });
+
+      // 남은 할 일 / 전체 개수 갱신
+      const leftCount = todos.filter((t) => !t.completed).length;
+      const completedCount = todos.filter((t) => t.completed).length;
+
+      leftCountEl.textContent = `${leftCount}개 남음`;
+      totalCountEl.textContent = `총 ${todos.length}개 (완료 ${completedCount}개)`;
+
+      // 완료 항목 없으면 버튼 비활성화
+      clearCompletedBtn.disabled = completedCount === 0;
+    }
+
+    // 간단한 XSS 방지용 이스케이프
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+  </script>
+</body>
+</html>
