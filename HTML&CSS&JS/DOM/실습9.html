@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>JS 타이머 실습</title>
+  <style>
+    body {
+      background:#2d2f36;
+      color:#f5f5f5;
+      font-family: Arial, sans-serif;
+      padding:20px;
+    }
+    h1,h2 {
+      margin-bottom:10px;
+    }
+    .box {
+      border:1px solid #555;
+      padding:15px;
+      margin-bottom:20px;
+      border-radius:8px;
+    }
+    .time-display {
+      font-size: 40px;
+      font-weight:bold;
+      margin:10px 0;
+    }
+    button {
+      margin-right:8px;
+      margin-top:5px;
+      padding:5px 10px;
+      cursor:pointer;
+    }
+    input {
+      padding:4px 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>실습 과제 모음</h1>
+
+  <!-- 과제 1: 디지털 시계 -->
+  <div class="box">
+    <h2>과제 1. 디지털 시계 ⏰</h2>
+    <div id="clock" class="time-display">00:00:00</div>
+  </div>
+
+  <!-- 과제 2: 스톱워치 -->
+  <div class="box">
+    <h2>과제 2. 스톱워치 ⏱</h2>
+    <div id="stopwatch" class="time-display">00:00.0</div>
+    <button onclick="startStopwatch()">시작</button>
+    <button onclick="pauseStopwatch()">일시정지</button>
+    <button onclick="resetStopwatch()">초기화</button>
+  </div>
+
+  <!-- 과제 3: 알림 시스템 -->
+  <div class="box">
+    <h2>과제 3. 알림 시스템 🔔</h2>
+    <p>N초 후에 알림 띄우기</p>
+    <input type="number" id="alarmSeconds" placeholder="초 입력" min="1">
+    <button onclick="setAlarm()">알림 설정</button>
+    <button onclick="cancelAlarm()">알림 취소</button>
+    <p id="alarmStatus"></p>
+  </div>
+
+  <script>
+    /* ============================
+       1. 디지털 시계
+       ============================ */
+    function updateClock() {
+      const now = new Date();          // 현재 시간 객체
+      let h = String(now.getHours()).padStart(2, "0");   // 시
+      let m = String(now.getMinutes()).padStart(2, "0"); // 분
+      let s = String(now.getSeconds()).padStart(2, "0"); // 초
+
+      document.getElementById("clock").textContent = `${h}:${m}:${s}`;
+    }
+    // 처음 한 번 바로 실행하고, 1초마다 업데이트
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    /* ============================
+       2. 스톱워치 (시작/정지/초기화)
+       ============================ */
+    let swInterval = null;   // setInterval ID
+    let swStartTime = 0;     // 시작 시점 (Timestamp)
+    let swElapsed = 0;       // 지금까지 지난 시간(ms)
+    let swRunning = false;
+
+    function renderStopwatch() {
+      // 전체 경과 시간을 기준으로 분/초/0.1초 계산
+      const totalMs = swElapsed;
+      const totalSec = Math.floor(totalMs / 1000);
+      const minutes = String(Math.floor(totalSec / 60)).padStart(2, "0");
+      const seconds = String(totalSec % 60).padStart(2, "0");
+      const tenth = Math.floor((totalMs % 1000) / 100); // 0.1초 단위
+
+      document.getElementById("stopwatch").textContent =
+        `${minutes}:${seconds}.${tenth}`;
+    }
+
+    function startStopwatch() {
+      if (swRunning) return;  // 이미 동작 중이면 무시
+      swRunning = true;
+      // 지금까지 지난 시간을 보정해서 다시 시작
+      swStartTime = Date.now() - swElapsed;
+
+      swInterval = setInterval(() => {
+        swElapsed = Date.now() - swStartTime;
+        renderStopwatch();
+      }, 100); // 0.1초마다 화면 업데이트
+    }
+
+    function pauseStopwatch() {
+      if (!swRunning) return;
+      clearInterval(swInterval);
+      swRunning = false;
+    }
+
+    function resetStopwatch() {
+      clearInterval(swInterval);
+      swRunning = false;
+      swElapsed = 0;
+      renderStopwatch();
+    }
+
+    /* ============================
+       3. 알림 시스템 (N초 후 알림)
+       ============================ */
+    let alarmTimeoutId = null;
+
+    function setAlarm() {
+      const secInput = document.getElementById("alarmSeconds");
+      const status = document.getElementById("alarmStatus");
+      const seconds = Number(secInput.value);
+
+      if (!seconds || seconds <= 0) {
+        alert("1 이상의 초를 입력해 주세요.");
+        return;
+      }
+
+      // 기존 알림 있으면 취소
+      if (alarmTimeoutId !== null) {
+        clearTimeout(alarmTimeoutId);
+      }
+
+      status.textContent = `${seconds}초 후에 알림이 울립니다.`;
+
+      alarmTimeoutId = setTimeout(() => {
+        alert("🔔 알림 시간입니다!");
+        status.textContent = "알림이 울렸습니다.";
+        alarmTimeoutId = null;
+      }, seconds * 1000);
+    }
+
+    function cancelAlarm() {
+      const status = document.getElementById("alarmStatus");
+      if (alarmTimeoutId !== null) {
+        clearTimeout(alarmTimeoutId);
+        alarmTimeoutId = null;
+        status.textContent = "알림이 취소되었습니다.";
+      } else {
+        status.textContent = "설정된 알림이 없습니다.";
+      }
+    }
+  </script>
+</body>
+</html>
