@@ -564,27 +564,21 @@
     "lon": 174.7633
   },
   {
-    "name": "Chase",
-    "country": "CA",
-    "lat": 50.8193356,
-    "lon": -119.6861773
+    "name": "Gartenstadt",
+    "country": "DE",
+    "lat": 49.960381600000005,
+    "lon": 11.563906817281975
   },
   {
-    "name": "Cesta",
-    "country": "SI",
-    "lat": 45.9729453,
-    "lon": 15.465162
+    "name": "G",
+    "country": "VN",
+    "lat": 10.753616099999999,
+    "lon": 106.62863620314383
   },
   {
-    "name": "Centre",
-    "country": "CA",
-    "lat": 44.3791465,
-    "lon": -64.3652059
-  },
-  {
-    "name": "Ville-Haute",
-    "country": "LU",
-    "lat": 49.6123988,
-    "lon": 6.1286101
+    "name": "Gasse",
+    "country": "IT",
+    "lat": 46.9038185,
+    "lon": 11.316898
   }
 ]

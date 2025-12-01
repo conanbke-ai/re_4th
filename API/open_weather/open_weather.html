@@ -20,36 +20,40 @@
 
         <!-- 검색 영역 -->
         <section class="search-section">
-        <label for="city-input" class="search-label">
-          도시 이름으로 전국 날씨 검색
-        </label>
+          <label for="city-input" class="search-label">
+            도시 이름으로 전국 날씨 검색
+          </label>
 
-        <!-- 검색 바 -->
-        <!-- 검색 -->
-        <div class="search-wrapper">
-          <form id="search-form">
-            <input
-              id="city-input"
-              type="text"
-              placeholder="도시 이름을 입력하세요 (예: Seoul, Tokyo)"
-            />
-            <button id="search-btn" type="button">검색</button>
-          </form>
+          <!-- 검색 바 + 추천 리스트 -->
+          <div class="search-wrapper">
+            <!-- 🔸 form 제거, div로 교체 -->
+            <div id="search-area">
+              <input
+                id="city-input"
+                type="text"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="도시 이름을 입력하세요 (예: Seoul, Tokyo)"
+              />
+              <button id="search-btn" type="button">검색</button>
+            </div>
 
-          <!-- 추천 도시 리스트 -->
-          <ul id="city-suggestions" class="suggestions-list"></ul>
-        </div>
+            <!-- 추천 도시 리스트 -->
+            <ul id="city-suggestions" class="suggestions-list"></ul>
+          </div>
 
-        <!-- 추가 버튼들 -->
-        <div class="search-actions">
-          <button id="current-btn" class="secondary-btn">현재 위치 날씨</button>
-          <button id="unit-toggle" class="secondary-btn">단위: °C</button>
-        </div>
+          <!-- 추가 버튼들 -->
+          <div class="search-actions">
+            <button id="current-btn" class="secondary-btn">
+              현재 위치 날씨
+            </button>
+            <button id="unit-toggle" class="secondary-btn">단위: °C</button>
+          </div>
 
-        <p class="search-hint">
-          영어 도시 이름으로 검색하거나, 현재 위치 버튼을 눌러보세요.
-        </p>
-      </section>
+          <p class="search-hint">
+            영어 도시 이름으로 검색하거나, 현재 위치 버튼을 눌러보세요.
+          </p>
+        </section>
 
         <!-- 로딩 표시 -->
         <div id="loading" class="loading hidden">
@@ -97,21 +101,24 @@
               <div class="detail-item">
                 <span class="detail-label">습도</span>
                 <span class="detail-value">
-                  <span id="humidity">0</span><span class="detail-unit">%</span>
+                  <span id="humidity">0</span>
+                  <span class="detail-unit">%</span>
                 </span>
               </div>
 
               <div class="detail-item">
                 <span class="detail-label">풍속</span>
                 <span class="detail-value">
-                  <span id="wind">0</span><span class="detail-unit">m/s</span>
+                  <span id="wind">0</span>
+                  <span class="detail-unit">m/s</span>
                 </span>
               </div>
 
               <div class="detail-item">
                 <span class="detail-label">기압</span>
                 <span class="detail-value">
-                  <span id="pressure">0</span><span class="detail-unit">hPa</span>
+                  <span id="pressure">0</span>
+                  <span class="detail-unit">hPa</span>
                 </span>
               </div>
             </div>

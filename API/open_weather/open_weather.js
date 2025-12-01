@@ -708,8 +708,6 @@ async function searchByCityName(query) {
   }
 
   showError("");
-  showWeather(false);
-  showLoading(true);
   clearSuggestions();
 
   try {
@@ -744,8 +742,6 @@ async function searchByCityName(query) {
   } catch (err) {
     console.error(err);
     showError(err.message || "도시를 찾는 중 오류가 발생했습니다.");
-  } finally {
-    showLoading(false);
   }
 }
 
