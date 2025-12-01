@@ -1,0 +1,422 @@
+/* 전체 배경 - 전국 날씨 앱 느낌 나는 그라디언트 */
+:root {
+  --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4fc3f7 100%);
+  --card-bg: rgba(15, 23, 42, 0.82);
+  --accent: #4fc3f7;
+  --accent-soft: rgba(79, 195, 247, 0.2);
+  --text-main: #f9fafb;
+  --text-sub: #9ca3af;
+  --danger: #f97373;
+  --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.6);
+  --radius-lg: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+/* 기본 배경은 그대로 두고, 조건별로 오버라이드 */
+body.theme-clear {
+  background: linear-gradient(135deg, #1e3a8a 0%, #22c55e 40%, #facc15 100%);
+}
+
+body.theme-clouds {
+  background: linear-gradient(135deg, #0f172a 0%, #64748b 40%, #cbd5f5 100%);
+}
+
+body.theme-rain {
+  background: linear-gradient(135deg, #020617 0%, #1d4ed8 40%, #38bdf8 100%);
+}
+
+body.theme-snow {
+  background: linear-gradient(135deg, #0f172a 0%, #38bdf8 40%, #f9fafb 100%);
+}
+
+body.theme-thunder {
+  background: linear-gradient(135deg, #020617 0%, #4f46e5 40%, #facc15 100%);
+}
+
+/* 앱 카드 전체 래퍼 */
+.app-wrapper {
+  width: 100%;
+  max-width: 430px;
+}
+
+.app-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 20px 20px 18px;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+/* 헤더 */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.app-title {
+  margin: 4px 0 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.app-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-sub);
+}
+
+.app-badge {
+  padding: 4px 10px;
+  font-size: 11px;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.1);
+  border: 1px solid rgba(248, 250, 252, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* 검색 섹션 */
+.search-section {
+  margin-bottom: 16px;
+}
+
+.search-label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: var(--text-sub);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 6px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.8);
+}
+
+.search-icon {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.search-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* 검색 영역 */
+.search-wrapper {
+  position: relative;      /* ★ 기준점이 되는 부모 */
+  max-width: 400px;
+  margin: 0 auto 16px;
+}
+
+/* 자동완성 리스트 (떠 있는 드롭다운) */
+.suggestions-list {
+  position: absolute;      /* ★ 흐름에서 분리 → 레이아웃 안 밀림 */
+  top: calc(100% + 4px);   /* 인풋 바로 아래에 4px 띄워서 */
+  left: 0;
+  right: 0;
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+
+  background: #ffffff;
+  color: #222;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+
+  display: none;           /* JS가 block/none 토글 */
+  z-index: 1000;           /* 다른 카드들 위로 뜨게 */
+}
+
+.suggestions-list li {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.suggestions-list li:hover {
+  background: #f0f4ff;
+}
+
+.suggestion-highlight {
+  font-weight: 700;
+  color: #1976D2;  /* 너 앱 메인 색상으로 바꿔도 됨 */
+}
+
+.secondary-btn {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-main);
+  font-size: 12px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease,
+    box-shadow 0.15s ease;
+}
+
+.secondary-btn:hover {
+  background: rgba(30, 64, 175, 0.9);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+  transform: translateY(-1px);
+}
+
+.secondary-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+#city-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-size: 14px;
+}
+
+#city-input::placeholder {
+  color: #6b7280;
+}
+
+#search-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--accent);
+  color: #0f172a;
+  box-shadow: 0 0 0 rgba(79, 195, 247, 0.6);
+  transition: background 0.18s ease, transform 0.1s ease,
+    box-shadow 0.18s ease;
+}
+
+#search-btn:hover {
+  background: #81d4fa;
+  box-shadow: 0 0 16px rgba(79, 195, 247, 0.85);
+  transform: translateY(-1px);
+}
+
+#search-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.search-hint {
+  margin: 4px 4px 0;
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+/* 로딩 표시 */
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 8px 10px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid rgba(148, 163, 184, 0.6);
+  border-top-color: var(--accent);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 에러 메시지 */
+.error {
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--danger);
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 13px;
+  border: 1px solid rgba(248, 113, 113, 0.5);
+  margin-bottom: 10px;
+}
+
+/* 날씨 메인 카드 */
+.weather {
+  background: radial-gradient(
+      circle at top right,
+      rgba(79, 195, 247, 0.24),
+      transparent 55%
+    ),
+    radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.2), transparent
+          55%);
+  border-radius: 18px;
+  padding: 14px 14px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+}
+
+/* 상단 현재 날씨 영역 */
+.weather-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.location-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.location-city {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.location-country {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-sub);
+}
+
+.weather-now {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weather-icon {
+  width: 54px;
+  height: 54px;
+  filter: drop-shadow(0 10px 12px rgba(15, 23, 42, 0.7));
+}
+
+.weather-temp-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.temp-now {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.temp-desc {
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+/* 상세 정보 */
+.weather-details {
+  margin-top: 4px;
+}
+
+.details-title {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.detail-item {
+  background: rgba(15, 23, 42, 0.85);
+  border-radius: 14px;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.5);
+}
+
+.detail-label {
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+.detail-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.detail-unit {
+  font-size: 11px;
+  margin-left: 2px;
+  color: var(--text-sub);
+}
+
+/* 푸터 */
+.app-footer {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-sub);
+}
+
+/* 공통 hidden 처리 */
+.hidden {
+  display: none !important;
+}
+
+/* 반응형 - 아주 작은 화면에서 패딩 조정 */
+@media (max-width: 400px) {
+  .app-card {
+    padding: 16px 14px 14px;
+  }
+
+  .weather-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .weather-temp-box {
+    align-items: flex-start;
+  }
+}

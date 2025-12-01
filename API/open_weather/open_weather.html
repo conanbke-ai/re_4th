@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>날씨 앱</title>
+    <link rel="stylesheet" href="open_weather.css" />
+  </head>
+  <body>
+    <div class="app-wrapper">
+      <div class="app-card">
+        <!-- 상단 헤더 -->
+        <header class="app-header">
+          <div>
+            <p class="app-subtitle">Global Weather Search</p>
+            <h1 class="app-title">오늘의 날씨</h1>
+          </div>
+          <div class="app-badge">LIVE</div>
+        </header>
+
+        <!-- 검색 영역 -->
+        <section class="search-section">
+        <label for="city-input" class="search-label">
+          도시 이름으로 전국 날씨 검색
+        </label>
+
+        <!-- 검색 바 -->
+        <!-- 검색 -->
+        <div class="search-wrapper">
+          <form id="search-form">
+            <input
+              id="city-input"
+              type="text"
+              placeholder="도시 이름을 입력하세요 (예: Seoul, Tokyo)"
+            />
+            <button id="search-btn" type="button">검색</button>
+          </form>
+
+          <!-- 추천 도시 리스트 -->
+          <ul id="city-suggestions" class="suggestions-list"></ul>
+        </div>
+
+        <!-- 추가 버튼들 -->
+        <div class="search-actions">
+          <button id="current-btn" class="secondary-btn">현재 위치 날씨</button>
+          <button id="unit-toggle" class="secondary-btn">단위: °C</button>
+        </div>
+
+        <p class="search-hint">
+          영어 도시 이름으로 검색하거나, 현재 위치 버튼을 눌러보세요.
+        </p>
+      </section>
+
+        <!-- 로딩 표시 -->
+        <div id="loading" class="loading hidden">
+          <div class="spinner"></div>
+          <p>날씨 정보를 불러오는 중입니다...</p>
+        </div>
+
+        <!-- 에러 메시지 -->
+        <div id="error" class="error hidden"></div>
+
+        <!-- 날씨 카드 -->
+        <main id="weather" class="weather hidden">
+          <!-- 상단 현재 날씨 -->
+          <div class="weather-main">
+            <div class="location-box">
+              <h2 id="city-name" class="location-city">도시 이름</h2>
+              <p id="region-name" class="location-country">지역 이름</p>
+            </div>
+
+            <div class="weather-now">
+              <img
+                id="weather-icon"
+                src=""
+                alt="날씨 아이콘"
+                class="weather-icon"
+              />
+              <div class="weather-temp-box">
+                <div id="temp" class="temp-now">0 °C</div>
+                <div id="description" class="temp-desc">맑음</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상세 정보 -->
+          <section class="weather-details">
+            <h3 class="details-title">상세 정보</h3>
+            <div class="details-grid">
+              <div class="detail-item">
+                <span class="detail-label">체감 온도</span>
+                <span class="detail-value">
+                  <span id="feels-like">0 °C</span>
+                </span>
+              </div>
+
+              <div class="detail-item">
+                <span class="detail-label">습도</span>
+                <span class="detail-value">
+                  <span id="humidity">0</span><span class="detail-unit">%</span>
+                </span>
+              </div>
+
+              <div class="detail-item">
+                <span class="detail-label">풍속</span>
+                <span class="detail-value">
+                  <span id="wind">0</span><span class="detail-unit">m/s</span>
+                </span>
+              </div>
+
+              <div class="detail-item">
+                <span class="detail-label">기압</span>
+                <span class="detail-value">
+                  <span id="pressure">0</span><span class="detail-unit">hPa</span>
+                </span>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <!-- 푸터 -->
+        <footer class="app-footer">
+          <p>Powered by OpenWeather · Made for JS Practice</p>
+        </footer>
+      </div>
+    </div>
+
+    <script src="open_weather.js"></script>
+  </body>
+</html>

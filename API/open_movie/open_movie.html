@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Open Movie | 영화 검색 앱</title>
+    <link rel="stylesheet" href="open_movie.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <!-- 헤더 -->
+      <header class="app-header">
+        <div class="brand">
+          <div class="brand-mark">🎬</div>
+          <div class="brand-text">
+            <div class="brand-title">Open Movie</div>
+            <div class="brand-subtitle">TMDb 기반 영화 검색 서비스</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- 에러 배너 -->
+      <div id="error-banner" class="error-banner hidden"></div>
+
+      <!-- 메인 컨텐츠 -->
+      <main class="app-main">
+        <!-- 검색 영역 -->
+        <section class="search-section">
+          <div class="search-area">
+            <label for="search-input" class="visually-hidden">영화 제목 검색</label>
+            <input
+              id="search-input"
+              type="text"
+              placeholder="영화 제목을 입력하세요 (예: 기생충, Inception)"
+              autocomplete="off"
+            />
+            <button id="search-btn">검색</button>
+
+            <!-- 자동완성 리스트 (날씨앱과 동일 구조) -->
+            <ul id="search-suggestions" class="suggestions"></ul>
+          </div>
+          <p class="search-hint">
+            제목의 일부만 입력해도 자동완성으로 영화 목록이 나타납니다.
+          </p>
+        </section>
+
+        <!-- 영화 상세 정보 -->
+        <section id="movie-detail" class="movie-detail hidden"></section>
+
+        <!-- 검색 결과 섹션 -->
+        <section id="search-section" class="movie-section">
+          <div class="section-header">
+            <h2>검색 결과</h2>
+            <span id="search-count" class="section-badge"></span>
+          </div>
+          <div id="search-movie-list" class="movie-list empty"></div>
+        </section>
+
+        <!-- 인기 영화 섹션 -->
+        <section id="popular-section" class="movie-section">
+          <div class="section-header">
+            <h2>인기 영화</h2>
+          </div>
+          <div id="popular-movie-list" class="movie-list"></div>
+        </section>
+      </main>
+
+      <!-- 푸터 -->
+      <footer class="app-footer">
+        <p>
+          이 서비스는
+          <span class="footer-strong">TMDb API</span>를 사용하지만,
+          TMDb와 공식적인 연관이 없습니다.
+        </p>
+      </footer>
+
+      <!-- 로딩 오버레이 -->
+      <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>데이터를 불러오는 중...</p>
+      </div>
+    </div>
+
+    <script src="open_movie.js"></script>
+  </body>
+</html>
