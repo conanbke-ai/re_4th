@@ -11,6 +11,9 @@ import Footer from "./components/Footer";
 import Profile from "./components/Profile";
 import UseStateExample from "./components/UseStateExample";
 import Greeting from "./components/Greeting";
+import Clock from "./components/Clock";
+import ScrollPosition from "./components/ScrollPosition";
+import Countdown from "./components/Countdown";
 import { useState } from "react";
 
 function App() {
@@ -46,6 +49,9 @@ function App() {
       <Profile />
       <UseStateExample />
       <Greeting />
+      <Clock />
+      <ScrollPosition />
+      <Countdown />
     </div>
   );
 }
