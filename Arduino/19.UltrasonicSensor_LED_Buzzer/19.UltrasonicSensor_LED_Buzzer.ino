@@ -3,7 +3,7 @@
 #define TRIG 8
 #define ECHO 9
 #define LED 2
-#define PIEZO 3
+#define FIEZO 3
 
 void setup() {
   // put your setup code here, to run once:
@@ -11,7 +11,7 @@ void setup() {
   pinMode(TRIG, OUTPUT);
   pinMode(ECHO, INPUT);
   pinMode(LED, OUTPUT);
-  pinMode(PIEZO, OUTPUT);
+  pinMode(FIEZO, OUTPUT);
 
 }
 
@@ -34,13 +34,13 @@ void loop() {
 
   if (distance < 15) {
     digitalWrite(LED, HIGH);
-    digitalWrite(PIEZO, HIGH);
+    digitalWrite(FIEZO, HIGH);
     Serial.println("==================");
-    Serial.println("LED ON | PIEZO ON");
+    Serial.println("LED ON | FIEZO ON");
     Serial.println("==================");
   } else {
     digitalWrite(LED, LOW);
-    digitalWrite(PIEZO, LOW);
+    digitalWrite(FIEZO, LOW);
   }
 
 }
