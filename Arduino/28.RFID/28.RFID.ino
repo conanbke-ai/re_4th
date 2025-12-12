@@ -1,8 +1,8 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-#define SS_PIN  9    // MFRC522의 SDA(SS) 연결 핀
-#define RST_PIN 10   // MFRC522의 RST 연결 핀
+#define SS_PIN  10    // MFRC522의 SDA(SS) 연결 핀
+#define RST_PIN 9   // MFRC522의 RST 연결 핀
 
 // 실제 배선
 // MFRC522 SDA  → D10
@@ -33,23 +33,23 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("loop start");   // ★ loop 들어왔는지 확인
+  // Serial.println("loop start");   // ★ loop 들어왔는지 확인
   delay(200);                     // 너무 빨리 도는 것 방지용
 
-  Serial.println("call IsNewCardPresent()");
+  // Serial.println("call IsNewCardPresent()");
   bool hasNewCard = mfrc.PICC_IsNewCardPresent();
-  Serial.println("after IsNewCardPresent()");   // ★ 여기까지 오면 멈추지 않은 것
+  // Serial.println("after IsNewCardPresent()");   // ★ 여기까지 오면 멈추지 않은 것
 
   if (!hasNewCard) {
-    Serial.println("No new card.");
+    // Serial.println("No new card.");
     delay(500);
     return;
   }
   Serial.println(">> 새 카드 감지됨!");
 
-  Serial.println("call ReadCardSerial()");
+  // Serial.println("call ReadCardSerial()");
   bool canRead = mfrc.PICC_ReadCardSerial();
-  Serial.println("after ReadCardSerial()");     // ★ 여기까지 오면 UID 읽기까지 무한루프는 아님
+  // Serial.println("after ReadCardSerial()");     // ★ 여기까지 오면 UID 읽기까지 무한루프는 아님
 
   if (!canRead) {
     Serial.println("!! 카드 감지됨, 하지만 UID 읽기 실패");
