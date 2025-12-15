@@ -231,13 +231,13 @@ def record_video_from_camera(device_index: int = 0, duration_sec: int = 5):
 
 if __name__ == "__main__":
     # 1) 영상 파일 재생 예제
-    play_video_file("./AI/videos/dog.mp4")
+    # play_video_file("./AI/videos/dog.mp4")
 
     # 2) 웹캠 미리보기 + 캡처 예제
     camera_preview_and_capture(device_index=0)
 
     # 3) 웹캠 녹화 예제
-    record_video_from_camera(device_index=0, duration_sec=5)
+    # record_video_from_camera(device_index=0, duration_sec=5)/
 
 '''
 1) 영상 파일 재생 예제
