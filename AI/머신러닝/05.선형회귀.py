@@ -234,3 +234,37 @@ print("\n[연습 문제]")
 print("  1. 당신의 데이터로 모델 만들어보기")
 print("  2. R²가 0.5 미만이면? → 다른 모델 고려")
 print("  3. 예측 결과를 1분 안에 설명할 수 있나요?")
+
+###################################################################################################################
+# 실습 1
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+# 광고비(백만원)와 매출(천만원) 데이터
+ad = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+sales = np.array([3, 5, 6, 8, 11, 13, 14, 16, 17, 20])
+
+# sklearn은 X를 (샘플수, 특성수) 2차원 형태로 받아야 함
+X = ad.reshape(-1, 1)
+y = sales
+
+# 1) 선형 회귀 모델 학습
+model = LinearRegression()
+model.fit(X, y)
+
+# 2) 기울기(계수)와 절편 확인
+slope = model.coef_[0]      # 기울기
+intercept = model.intercept_ # 절편
+
+print("기울기(slope):", slope)
+print("절편(intercept):", intercept)
+print(f"회귀식: y = {slope:.2f} * x + {intercept:.2f}")
+
+# 3) 광고비 15백만원일 때 예상 매출(천만원) 예측
+pred_15 = model.predict(np.array([[15]]))[0]
+print(f"광고비 15백만원 예상 매출(천만원): {pred_15:.2f}")
+
+# 4) R^2 Score 계산
+r2 = model.score(X, y)  # 또는 r2_score(y, model.predict(X))
+print(f'R^2 Score: {r2:.2f}')

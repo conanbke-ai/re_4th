@@ -227,3 +227,277 @@ print("\n[연습 문제]")
 print("  1. 학습률을 0.01, 0.5로 바꿔보기")
 print("  2. epochs를 10, 1000으로 바꿔보기")
 print("  3. 초기값 w=10, b=-5로 시작하면?")
+
+###################################################################################################################
+# 실습 1
+import numpy as np
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+from sklearn.inspection import permutation_importance
+
+
+# =========================================================
+# 1. 데이터 준비
+# =========================================================
+housing = fetch_california_housing()
+
+X = housing.data
+y = housing.target
+feature_names = housing.feature_names
+
+df = pd.DataFrame(X, columns=feature_names)
+df["Target"] = y
+
+print("데이터 크기:", X.shape)
+print(df.describe())
+
+
+# =========================================================
+# 2. 학습/테스트 분할 (예: 70:30)
+# =========================================================
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.30,
+    random_state=42
+)
+
+print("\nTrain:", X_train.shape, "Test:", X_test.shape)
+
+
+# =========================================================
+# 3. 다중 선형 회귀 모델 학습 (스케일링 포함: Pipeline)
+# =========================================================
+model = Pipeline([
+    ("scaler", StandardScaler()),   # train에만 fit되고 test에는 transform만 적용됨
+    ("lr", LinearRegression())
+])
+
+model.fit(X_train, y_train)
+
+y_pred_train = model.predict(X_train)
+y_pred_test = model.predict(X_test)
+
+
+# =========================================================
+# 4. R² Score 확인
+# =========================================================
+r2_train = r2_score(y_train, y_pred_train)
+r2_test  = r2_score(y_test, y_pred_test)
+
+print("\n[R² Score]")
+print("Train R²:", r2_train)
+print("Test  R²:", r2_test)
+
+
+# =========================================================
+# 5. 각 특성의 중요도 분석
+#    (A) 표준화된 계수 기반 중요도(절대값이 클수록 영향 큼)
+# =========================================================
+coef = model.named_steps["lr"].coef_  # StandardScaler 적용된 입력 기준 계수
+coef_df = pd.DataFrame({
+    "feature": feature_names,
+    "coef": coef,
+    "abs_coef": np.abs(coef)
+}).sort_values("abs_coef", ascending=False)
+
+print("\n[특성 중요도: 표준화 계수 |coef| 기준]")
+print(coef_df.to_string(index=False))
+
+
+# =========================================================
+# 6. (선택) Permutation Importance (테스트 기준, 더 신뢰도 높은 방식)
+#    - 특정 변수를 섞었을 때 성능(R²)이 얼마나 떨어지는지로 중요도를 측정
+# =========================================================
+perm = permutation_importance(
+    model, X_test, y_test,
+    n_repeats=20,
+    random_state=42,
+    scoring="r2"
+)
+
+perm_df = pd.DataFrame({
+    "feature": feature_names,
+    "importance_mean": perm.importances_mean,
+    "importance_std": perm.importances_std
+}).sort_values("importance_mean", ascending=False)
+
+print("\n[특성 중요도: Permutation Importance (R² 감소량 기준)]")
+print(perm_df.to_string(index=False))
+
+
+# 예시 추가 버전
+'''
+- LinearRegression(기본)
+
+- Ridge / Lasso / ElasticNet (규제 모델)
+
+- GridSearchCV로 하이퍼파라미터 튜닝
+
+- Train/Test R² 비교 + Best 모델 선택
+
+(추가) Best 모델의 계수 중요도 + Permutation Importance
+'''
+import numpy as np
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+from sklearn.inspection import permutation_importance
+
+
+# =========================================================
+# 1) 데이터 준비
+# =========================================================
+housing = fetch_california_housing()
+X = housing.data
+y = housing.target
+feature_names = housing.feature_names
+
+df = pd.DataFrame(X, columns=feature_names)
+df["Target"] = y
+print("데이터 크기:", X.shape)
+print(df.describe())
+
+# =========================================================
+# 2) 학습/테스트 분할
+# =========================================================
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.30,
+    random_state=42
+)
+print("\nTrain:", X_train.shape, "Test:", X_test.shape)
+
+
+# =========================================================
+# 3) 모델 + 튜닝(규제) 설정
+#    - 스케일링은 Pipeline으로 (데이터 누수 방지)
+# =========================================================
+pipelines = {
+    "Linear": Pipeline([("scaler", StandardScaler()), ("model", LinearRegression())]),
+    "Ridge":  Pipeline([("scaler", StandardScaler()), ("model", Ridge(random_state=42))]),
+    "Lasso":  Pipeline([("scaler", StandardScaler()), ("model", Lasso(max_iter=20000, random_state=42))]),
+    "ElasticNet": Pipeline([("scaler", StandardScaler()), ("model", ElasticNet(max_iter=20000, random_state=42))]),
+}
+
+param_grids = {
+    "Linear": {},  # 튜닝 없음
+    "Ridge": {"model__alpha": [0.001, 0.01, 0.1, 1, 10, 100]},
+    "Lasso": {"model__alpha": [0.0001, 0.001, 0.01, 0.1, 1]},
+    "ElasticNet": {
+        "model__alpha": [0.0001, 0.001, 0.01, 0.1, 1],
+        "model__l1_ratio": [0.2, 0.5, 0.8],
+    },
+}
+
+
+# =========================================================
+# 4) 학습 + 성능 평가 (R² + MAE + RMSE)
+#    - GridSearchCV는 train에서만 수행
+# =========================================================
+rows = []
+best_model_name = None
+best_estimator = None
+best_test_r2 = -np.inf
+
+for name, pipe in pipelines.items():
+    if param_grids[name]:
+        gs = GridSearchCV(
+            estimator=pipe,
+            param_grid=param_grids[name],
+            scoring="r2",
+            cv=5,
+            n_jobs=-1
+        )
+        gs.fit(X_train, y_train)
+        est = gs.best_estimator_
+        best_params = gs.best_params_
+    else:
+        est = pipe.fit(X_train, y_train)
+        best_params = {}
+
+    # 예측
+    pred_train = est.predict(X_train)
+    pred_test = est.predict(X_test)
+
+    # 지표
+    train_r2 = r2_score(y_train, pred_train)
+    test_r2  = r2_score(y_test, pred_test)
+
+    train_mae = mean_absolute_error(y_train, pred_train)
+    test_mae  = mean_absolute_error(y_test, pred_test)
+
+    train_rmse = np.sqrt(mean_squared_error(y_train, pred_train))
+    test_rmse  = np.sqrt(mean_squared_error(y_test, pred_test))
+
+    rows.append({
+        "model": name,
+        "best_params": best_params,
+        "train_r2": train_r2,
+        "test_r2": test_r2,
+        "train_mae": train_mae,
+        "test_mae": test_mae,
+        "train_rmse": train_rmse,
+        "test_rmse": test_rmse,
+    })
+
+    # best 갱신 (test R² 기준)
+    if test_r2 > best_test_r2:
+        best_test_r2 = test_r2
+        best_model_name = name
+        best_estimator = est
+
+
+results = pd.DataFrame(rows).sort_values(["test_r2", "test_rmse"], ascending=[False, True])
+print("\n=== 모델 비교 결과 (test R² 우선, 동률이면 RMSE 낮은 순) ===")
+print(results.to_string(index=False))
+
+print(f"\n>>> Best Model: {best_model_name} (Test R² = {best_test_r2:.4f})")
+print(">>> Best Params:", results.iloc[0]["best_params"])
+
+
+# =========================================================
+# 5) Best 모델의 특성 중요도 분석
+#    (A) 계수(선형모델) 중요도: |coef|
+# =========================================================
+best_linear = best_estimator.named_steps["model"]
+if hasattr(best_linear, "coef_"):
+    coef = best_linear.coef_
+    coef_df = pd.DataFrame({
+        "feature": feature_names,
+        "coef": coef,
+        "abs_coef": np.abs(coef)
+    }).sort_values("abs_coef", ascending=False)
+
+    print("\n[Best 모델 특성 중요도: 표준화 계수 |coef| 기준]")
+    print(coef_df.to_string(index=False))
+
+
+# =========================================================
+# 6) (선택) Permutation Importance (테스트 기준)
+# =========================================================
+perm = permutation_importance(
+    best_estimator, X_test, y_test,
+    n_repeats=20,
+    random_state=42,
+    scoring="r2"
+)
+
+perm_df = pd.DataFrame({
+    "feature": feature_names,
+    "importance_mean": perm.importances_mean,
+    "importance_std": perm.importances_std
+}).sort_values("importance_mean", ascending=False)
+
+print("\n[Best 모델 특성 중요도: Permutation Importance (R² 감소량 기준)]")
+print(perm_df.to_string(index=False))
