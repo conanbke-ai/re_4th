@@ -97,7 +97,7 @@ def leakage_rate_survived_equals_female(df: pd.DataFrame):
 
 
 # =========================================================
-# 3) 1단계: EDA
+# 3) 1단계: EDA : Exploratory Data Analysis(탐색적 데이터 분석)
 # =========================================================
 def eda(df: pd.DataFrame, prefix="train"):
     print(f"\n==================== 1단계: EDA ({prefix}) ====================")
