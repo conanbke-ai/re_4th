@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-14.image_processing_basics.py
+14.openCV_영상처리_기초.py
 ================================================================================
-[대주제] 영상처리 기초 (그리기/텍스트/블러/이진화/트랙바)
+[대주제] openCV 영상처리 기초 (그리기/텍스트/블러/이진화/트랙바)
 
 이 파일은 업로드된 PDF:
 - 12_OpenCV(2)_영상처리기초.pdf
@@ -11,12 +11,20 @@
 
 실행 방식
 --------------------------------------------------------------------------------
+0) 기본 실행(가장 간단):
+    python ./AI/수업자료/14.openCV_영상처리_기초.py
+
+   * 기본 데모(보통 00)가 바로 실행됩니다.
+   * 데모 선택 메뉴가 필요하면 --menu 옵션을 사용하세요.
+
 1) 데모 목록 보기:
-    python 14.image_processing_basics.py --list
+    python ./AI/수업자료/14.openCV_영상처리_기초.py --list
 
 2) 데모 실행:
-    python ./AI/수업자료/14.image_processing_basics.py --demo 01
-    python ./AI/수업자료/14.image_processing_basics.py --demo 05 --image ./Images/sample.jpg
+    python ./AI/수업자료/14.openCV_영상처리_기초.py --menu   # 메뉴에서 demo key 선택
+    python ./AI/수업자료/14.openCV_영상처리_기초.py --demo 01
+    python ./AI/수업자료/14.openCV_영상처리_기초.py --demo all   # 데모를 순서대로 전부 실행
+    python ./AI/수업자료/14.openCV_영상처리_기초.py --demo 05 --image ./Images/sample.jpg
 
 - 공통 종료 키: 'q' 또는 ESC
 
@@ -28,7 +36,7 @@ from __future__ import annotations
 import os
 from typing import Any, Tuple
 
-from opencv_common import (
+from openCV_공용 import (
     require_cv2, require_np,
     auto_find_image,
     make_blank, make_random_noise, make_gradient,
@@ -44,7 +52,6 @@ np = require_np()
 
 # =============================================================================
 # [PDF 체크리스트] 12_OpenCV(2)_영상처리기초.pdf 대주제 → 코드 매핑
-# =============================================================================
 # PDF 체크리스트(슬라이드 대주제 → 코드 위치)
 # --------------------------------------------------------------------
 # 번호 | 슬라이드(p) | 대주제 | 코드 섹션/데모
@@ -79,7 +86,6 @@ np = require_np()
 # --------------------------------------------------------------------
 # =============================================================================
 # 0. 입력 이미지 로드(없으면 더미 생성)
-# =============================================================================
 def _load_or_make_image(path: str) -> Any:
     if path and os.path.isfile(path):
         img = cv2.imread(path, cv2.IMREAD_COLOR)
@@ -104,7 +110,6 @@ def _load_or_make_image(path: str) -> Any:
 
 # =============================================================================
 # demo 00. 개요(영상처리 기초)
-# =============================================================================
 def demo_00_overview(args) -> None:
     """
     [개념]
@@ -130,7 +135,6 @@ def demo_00_overview(args) -> None:
 
 # =============================================================================
 # demo 01. 도형 그리기(선/원/타원/사각형/다각형) + 실습1
-# =============================================================================
 def demo_01_draw_shapes(args) -> None:
     """
     [개념] 기본 도형 API
@@ -140,6 +144,8 @@ def demo_01_draw_shapes(args) -> None:
     - cv2.ellipse(img, center, axes, angle, startAngle, endAngle, color, thickness)
     - cv2.polylines(img, [pts], isClosed, color, thickness)
     - cv2.fillPoly(img, [pts], color)
+    - cv2.drawContours(img, contours, contourIdx, color, thickness)
+    - cv2.arrowedLine(img, pt1, pt2, color, thickness)
 
     [라인 타입]
     - cv2.LINE_4, cv2.LINE_8, cv2.LINE_AA(안티앨리어싱)
@@ -159,7 +165,15 @@ def demo_01_draw_shapes(args) -> None:
     cv2.line(canvas, (50, 200), (850, 200), (255, 255, 255), 1, cv2.LINE_AA)
     cv2.putText(canvas, "LINE_AA", (60, 190), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (200, 200, 200), 2)
 
-    # --- 사각형/원/타원
+        # 화살표 선(arrowedLine) — 진행 방향을 표시할 때 유용
+    cv2.arrowedLine(canvas, (60, 235), (260, 235), (0, 200, 255), 2, tipLength=0.25)
+
+    # drawContours 예제:
+    # - contours는 (N, 1, 2) 형태의 int32 점 배열들의 리스트
+    contour = np.array([[700, 260], [820, 300], [780, 420], [660, 380]], dtype=np.int32).reshape((-1, 1, 2))
+    cv2.drawContours(canvas, [contour], contourIdx=-1, color=(180, 0, 180), thickness=3)
+
+# --- 사각형/원/타원
     cv2.rectangle(canvas, (80, 260), (330, 470), (0, 255, 0), 4)
     cv2.circle(canvas, (520, 365), 85, (0, 0, 255), -1)  # 채우기
     cv2.ellipse(canvas, (730, 365), (120, 60), 25, 0, 360, (255, 0, 0), 3)
@@ -178,7 +192,6 @@ def demo_01_draw_shapes(args) -> None:
 
 # =============================================================================
 # demo 02. 사각형과 직선이 만나는 점(clipLine)
-# =============================================================================
 def demo_02_clipline_intersection(args) -> None:
     """
     [개념] cv2.clipLine
@@ -223,7 +236,6 @@ def demo_02_clipline_intersection(args) -> None:
 
 # =============================================================================
 # demo 03. 텍스트 그리기(putText) + 한국어 오버레이(응용)
-# =============================================================================
 def demo_03_puttext_kor_eng(args) -> None:
     """
     [개념] cv2.putText
@@ -278,7 +290,6 @@ def demo_03_puttext_kor_eng(args) -> None:
 
 # =============================================================================
 # demo 04. 흐리기(Blur) / 노이즈 제거(기초)
-# =============================================================================
 def demo_04_blur_denoise(args) -> None:
     """
     [개념] 블러(흐리기)는 노이즈를 줄이고, 작은 디테일을 완화하는 기본 기법입니다.
@@ -318,7 +329,6 @@ def demo_04_blur_denoise(args) -> None:
 
 # =============================================================================
 # demo 05. 이진화(Threshold) + 트랙바 + 적응형/오츠 + 컬러 팔레트(실습2-2)
-# =============================================================================
 def demo_05_threshold_trackbar_palette(args) -> None:
     """
     [개념] 기본 이진화(threshold)
@@ -453,7 +463,6 @@ def demo_05_threshold_trackbar_palette(args) -> None:
 #   2) Edge(Canny)로 경계 강조
 #   3) Connected Components로 객체 개수 세기
 # 여기서는 간단히 "침식/팽창" 맛보기 예제를 추가합니다.
-# =============================================================================
 def demo_06_bonus_morphology(args) -> None:
     """
     [BONUS] Morphology(침식/팽창) 미니 예제
@@ -484,6 +493,339 @@ def demo_06_bonus_morphology(args) -> None:
     close_all_windows()
 
 
+
+def demo_07_text_size_center_and_alpha_overlay(args: argparse.Namespace) -> None:
+    """
+    [활용 팁] 반투명 오버레이(addWeighted) + getTextSize로 텍스트 레이아웃(가운데 정렬)
+
+    포함 개념(요청 사항):
+    1) 원본 보존을 위해 copy() 사용
+    2) 반투명(투명도) 도형/영역 만들기:
+       overlay = img.copy()
+       cv2.rectangle(overlay, ..., thickness=-1)
+       cv2.addWeighted(overlay, alpha, img, 1-alpha, 0, dst)
+    3) 텍스트 크기 계산:
+       (w, h), baseline = cv2.getTextSize(text, fontFace, fontScale, thickness)
+    4) 이미지 중앙에 텍스트 배치:
+       x = (W - w) // 2
+       y = (H + h) // 2   # putText는 '좌하단' 기준이므로 h를 더해줌
+    """
+    cv2 = require_cv2()
+    np = require_np()
+
+    W, H = 900, 520
+    img = make_gradient(W, H, direction="horizontal", start_bgr=(20, 20, 20), end_bgr=(80, 80, 80))
+
+    # -----------------------------
+    # 1) 반투명 오버레이
+    # -----------------------------
+    overlay = img.copy()
+    cv2.rectangle(overlay, (80, 120), (W - 80, H - 120), (0, 180, 0), -1)  # 채워진 사각형
+    alpha = 0.35
+    cv2.addWeighted(overlay, alpha, img, 1 - alpha, 0, img)
+
+    # -----------------------------
+    # 2) getTextSize + 가운데 정렬
+    # -----------------------------
+    text = "Centered Text (getTextSize)"
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 1.2
+    thickness = 2
+
+    (tw, th), baseline = cv2.getTextSize(text, font, font_scale, thickness)
+
+    x = (W - tw) // 2
+    y = (H + th) // 2  # putText는 좌하단 기준
+
+    # 텍스트 배경 박스(가독성)
+    pad = 10
+    cv2.rectangle(img, (x - pad, y - th - pad), (x + tw + pad, y + baseline + pad), (0, 0, 0), -1)
+    cv2.putText(img, text, (x, y), font, font_scale, (255, 255, 255), thickness, cv2.LINE_AA)
+
+    # 하단 안내 텍스트
+    cv2.putText(
+        img,
+        "Tip: putText origin is bottom-left; use (H+text_h)//2 for vertical centering.",
+        (40, H - 30),
+        cv2.FONT_HERSHEY_PLAIN,
+        1.2,
+        (255, 255, 255),
+        1,
+        cv2.LINE_AA,
+    )
+
+    safe_named_window("demo_07_overlay_text", resizable=True)
+    cv2.imshow("demo_07_overlay_text", img)
+    print("[조작] q 또는 ESC를 누르면 종료합니다.")
+    while True:
+        key = cv2.waitKey(20)
+        if is_exit_key(key):
+            break
+    close_window("demo_07_overlay_text")
+
+# =============================================================================
+# [추가] 사용자 제공 예제: 색상 공간 변환 + 비트 연산/마스킹
+# -----------------------------------------------------------------------------
+# 아래 데모(08~09)는 사용자가 제공한 'OpenCV 기초 02~03' 예제를
+# 이 파일의 데모 러너 체계에 맞춰 그대로 실행 가능하도록 편입한 것입니다.
+# =============================================================================
+
+
+def demo_08_color_space_conversion(args: argparse.Namespace) -> None:
+    """
+    OpenCV 기초 - 02. 색상 공간 변환
+
+    이 데모에서 배울 내용:
+    1) 다양한 색상 공간의 종류와 특징 이해하기
+    2) BGR, HSV, Grayscale 등으로 변환하는 방법
+    3) 각 색상 공간이 언제 유용한지 알아보기
+
+    ------------------------------------------------------------
+    색상 공간(Color Space)이란?
+    ------------------------------------------------------------
+    색상을 표현하는 방법은 여러 가지가 있습니다.
+    우리가 보는 색을 컴퓨터가 이해할 수 있도록 숫자로 나타내는 방식입니다.
+
+    왜 여러 가지 색상 공간이 필요할까?
+    - 작업의 목적에 따라 적합한 색상 표현 방식이 다르기 때문!
+    - 예: 특정 색의 물체를 찾을 때는 HSV가 더 쉬운 경우가 많습니다.
+
+    ------------------------------------------------------------
+    주요 색상 공간 소개
+    ------------------------------------------------------------
+
+    1) RGB/BGR (Red, Green, Blue)
+    - 빛의 3원색을 섞는 방식(가산 혼합)
+    - 모니터/화면에서 사용하는 표준 방식
+    - ⚠️ OpenCV는 BGR 순서를 사용! (다른 라이브러리는 RGB가 흔함)
+    - 값의 범위: 각 채널 0~255
+
+    2) HSV (Hue, Saturation, Value)
+    - Hue(색상): 0~179 (OpenCV 기준)
+    - Saturation(채도): 0~255 (0=회색, 255=선명한 색)
+    - Value(명도): 0~255 (0=검정, 255=밝음)
+    - 💡 언제 사용? 특정 색상의 물체를 찾을 때 매우 유용!
+
+    3) HLS (Hue, Lightness, Saturation)
+    - HSV와 유사하지만 명도 대신 밝기(Lightness)를 사용
+    - HSV와 비슷하지만 밝기 계산 방식이 조금 다릅니다.
+
+    4) YCrCb (휘도, 색차)
+    - Y: 휘도(밝기 정보)
+    - Cr, Cb: 색차(색상 정보)
+    - 💡 언제 사용? 동영상/JPEG 압축 등에서 자주 등장
+
+    5) Lab (CIE L*a*b)
+    - L: 밝기
+    - a: 녹색~빨강 축
+    - b: 파랑~노랑 축
+    - 💡 언제 사용? 색상 비교, 피부색 검출 등(사람 시각과 유사한 축)
+
+    6) Grayscale (흑백)
+    - 단일 채널 (색상 정보 없음)
+    - 0(검정) ~ 255(흰색)의 밝기 정보만
+    - 💡 언제 사용? 처리 속도가 중요하거나 색상이 필요 없을 때
+    """
+    cv = require_cv2()
+    np = require_np()
+
+    # (선택) Matplotlib이 있으면 2x2로 보기 좋게 표시, 없으면 OpenCV 창으로 표시
+    try:
+        import matplotlib.pyplot as plt  # type: ignore
+        has_mpl = True
+    except Exception:
+        has_mpl = False
+
+    # ============================================================
+    # 예제 1: 무지개 그라데이션 이미지 만들고 색상 공간 변환하기
+    # ============================================================
+    h, w = 400, 600
+    img = np.zeros((h, w, 3), dtype=np.uint8)
+
+    # 왼쪽->오른쪽으로 Hue가 0~179로 증가하도록 만들어 무지개 생성
+    for i in range(w):
+        hue = int(180 * i / w)  # 0~179
+        hsv_pix = np.array([[[hue, 255, 255]]], dtype=np.uint8)  # (1,1,3)
+        bgr_pix = cv.cvtColor(hsv_pix, cv.COLOR_HSV2BGR)
+        img[:, i] = bgr_pix[0, 0]
+
+    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
+    lab = cv.cvtColor(img, cv.COLOR_BGR2LAB)
+
+    if has_mpl:
+        fig, axes = plt.subplots(2, 2, figsize=(12, 6))
+
+        # Matplotlib은 RGB 순서이므로 변환 필요
+        axes[0, 0].imshow(cv.cvtColor(img, cv.COLOR_BGR2RGB))
+        axes[0, 0].set_title("Original (BGR)")
+
+        axes[0, 1].imshow(gray, cmap="gray")
+        axes[0, 1].set_title("Grayscale")
+
+        axes[1, 0].imshow(hsv[:, :, 0], cmap="hsv")
+        axes[1, 0].set_title("HSV - Hue Channel (색상)")
+
+        axes[1, 1].imshow(lab[:, :, 0], cmap="gray")
+        axes[1, 1].set_title("Lab - L Channel (밝기)")
+
+        for ax in axes.flat:
+            ax.axis("off")
+
+        plt.tight_layout()
+        plt.show()
+    else:
+        # Matplotlib이 없으면 OpenCV 창으로 기본 표시
+        safe_imshow("08-1 Original (BGR)", img)
+        safe_imshow("08-1 Grayscale", gray)
+        safe_imshow("08-1 HSV Hue (0~179)", hsv[:, :, 0])
+        safe_imshow("08-1 Lab L (밝기)", lab[:, :, 0])
+        cv.waitKey(0)
+        close_all_windows()
+
+    # ============================================================
+    # 예제 2: 4가지 색상 블록 만들고 다양한 색상 공간으로 변환하기
+    # ============================================================
+    img_bgr = np.zeros((200, 200, 3), dtype=np.uint8)
+    img_bgr[:100, :100] = [255, 0, 0]    # 파란색 (BGR)
+    img_bgr[:100, 100:] = [0, 255, 0]    # 초록색
+    img_bgr[100:, :100] = [0, 0, 255]    # 빨간색
+    img_bgr[100:, 100:] = [255, 0, 255]  # 보라색 (파랑+빨강)
+
+    gray2 = cv.cvtColor(img_bgr, cv.COLOR_BGR2GRAY)
+    rgb2 = cv.cvtColor(img_bgr, cv.COLOR_BGR2RGB)
+    hsv2 = cv.cvtColor(img_bgr, cv.COLOR_BGR2HSV)
+    hls2 = cv.cvtColor(img_bgr, cv.COLOR_BGR2HLS)
+    ycrcb2 = cv.cvtColor(img_bgr, cv.COLOR_BGR2YCrCb)
+    lab2 = cv.cvtColor(img_bgr, cv.COLOR_BGR2LAB)
+
+    print(f"[Demo 08] BGR 이미지 shape: {img_bgr.shape}")
+    print(f"[Demo 08] Grayscale shape: {gray2.shape}")
+    print(f"[Demo 08] HSV 이미지 shape: {hsv2.shape}")
+
+    # 예제 2는 OpenCV 창으로 간단히 확인
+    safe_imshow("08-2 Color Blocks (BGR)", img_bgr)
+    safe_imshow("08-2 Color Blocks (Gray)", gray2)
+    cv.waitKey(0)
+    close_all_windows()
+
+    # ============================================================
+    # 예제 3: BGR을 Grayscale로 변환하는 원리 이해하기
+    # ============================================================
+    """
+    BGR 이미지를 흑백으로 변환할 때, 단순 평균이 아니라 사람 시각 특성을 반영한 가중치 사용:
+        Gray = 0.299 * R + 0.587 * G + 0.114 * B
+    왜 Green의 비중이 가장 클까?
+    - 사람의 눈은 녹색 빛에 가장 민감하기 때문
+    """
+
+    tiny = np.array([[
+        [255, 0, 0],   # 파란색(B)
+        [0, 255, 0],   # 초록색(G)
+        [0, 0, 255],   # 빨간색(R)
+    ]], dtype=np.uint8)
+
+    gray_cv = cv.cvtColor(tiny, cv.COLOR_BGR2GRAY)
+
+    print("[Demo 08] BGR -> Grayscale 변환 결과:")
+    print(gray_cv)
+    print("\n각 색상이 얼마나 밝게 변환되었는지 확인해보세요!")
+    print("초록색이 가장 밝게(값이 크게) 나타날 거예요!")
+
+
+def demo_09_bitwise_and_masking(args: argparse.Namespace) -> None:
+    """
+    OpenCV 기초 - 03. 비트 연산과 마스킹
+
+    이 데모에서 배울 내용:
+    1) 비트 연산(AND, OR, XOR, NOT)이 무엇인지
+    2) 마스크를 만들고 사용하는 방법
+    3) 마스크를 이용해서 이미지의 특정 부분만 선택하거나 합성하기
+
+    ------------------------------------------------------------
+    비트 연산이란?
+    ------------------------------------------------------------
+    - 이미지의 각 픽셀값을 0과 1(혹은 0과 255)로 생각하고 논리 연산을 수행
+    - 마스크(선택 영역)를 만들 때 매우 유용
+
+    주요 비트 연산:
+    - AND: 교집합(겹치는 부분만)
+    - OR : 합집합(둘 중 하나라도 포함)
+    - XOR: 배타적 논리합(겹치지 않는 부분만)
+    - NOT: 반전(흰색<->검은색 뒤집기)
+    """
+    cv = require_cv2()
+    np = require_np()
+
+    h, w = 300, 300
+
+    # ------------------------------------------------------------
+    # 1) 비트 연산 시각화: 원/사각형 마스크로 AND/OR/XOR/NOT 보기
+    # ------------------------------------------------------------
+    circle_mask = np.zeros((h, w), dtype=np.uint8)
+    cv.circle(circle_mask, (150, 150), 100, 255, -1)  # -1: 채우기
+
+    rect_mask = np.zeros((h, w), dtype=np.uint8)
+    cv.rectangle(rect_mask, (100, 100), (200, 200), 255, -1)
+
+    and_mask = cv.bitwise_and(circle_mask, rect_mask)
+    or_mask = cv.bitwise_or(circle_mask, rect_mask)
+    xor_mask = cv.bitwise_xor(circle_mask, rect_mask)
+    not_mask = cv.bitwise_not(circle_mask)
+
+    # 결과를 한 줄로 나란히 배치
+    result = np.hstack([circle_mask, rect_mask, and_mask, or_mask, xor_mask, not_mask])
+
+    safe_imshow("09-1 Bitwise Ops: circle | rect | AND | OR | XOR | NOT", result)
+    print("[Demo 09] 비트 연산 결과를 확인하세요! 아무 키로 다음.")
+    cv.waitKey(0)
+    close_all_windows()
+
+    # ------------------------------------------------------------
+    # 2) 마스크를 이용한 이미지 합성
+    # ------------------------------------------------------------
+    """
+    마스킹이란?
+    - 이미지의 특정 부분만 선택하거나 숨기는 기술
+    - 사진 배경 바꾸기, 로고/워터마크 합성 등에 자주 사용
+
+    절차:
+    1) 마스크(mask)를 만든다 (선택 영역: 255, 나머지: 0)
+    2) bitwise_and로 원본에서 필요한 부분만 추출
+    3) 배경(background) 생성
+    4) 마스크 반전(inv_mask)으로 배경에서 필요한 부분만 추출
+    5) 두 결과를 add로 합성
+    """
+
+    # 원본 이미지 생성 (파란색 계열 랜덤 이미지)
+    img = np.random.randint(100, 200, (300, 300, 3), dtype=np.uint8)
+    img[:, :, 0] = 200  # Blue 채널 강조
+
+    # 원형 마스크 생성 (원 안쪽만 선택)
+    mask = np.zeros((300, 300), dtype=np.uint8)
+    cv.circle(mask, (150, 150), 100, 255, -1)
+
+    # 1) 원본에서 원 부분만 추출
+    masked = cv.bitwise_and(img, img, mask=mask)
+
+    # 2) 새로운 배경 만들기 (빨간색)
+    background = np.zeros_like(img)
+    background[:] = [0, 0, 255]
+
+    # 3) 마스크 반전 -> 원 바깥 부분만 선택
+    inv_mask = cv.bitwise_not(mask)
+    bg_part = cv.bitwise_and(background, background, mask=inv_mask)
+
+    # 4) 합성
+    composite = cv.add(masked, bg_part)
+
+    display = np.hstack([img, masked, composite])
+    safe_imshow("09-2 Masking: original | masked | composite", display)
+    print("[Demo 09] 마스킹/합성 결과를 확인하세요! 아무 키로 종료.")
+    cv.waitKey(0)
+    close_all_windows()
+
+
 def main() -> None:
     parser = build_cli_parser("Image Processing Basics (PDF2) - demos")
     args = parser.parse_args()
@@ -496,8 +838,11 @@ def main() -> None:
         Demo("04", "블러/노이즈 제거(평균/가우시안/중값/양방향)", demo_04_blur_denoise),
         Demo("05", "이진화(threshold) + 트랙바 + adaptive/otsu + 컬러 팔레트", demo_05_threshold_trackbar_palette),
         Demo("06", "BONUS: Morphology(침식/팽창/열림/닫힘)", demo_06_bonus_morphology),
-    ]
-
+        Demo("07", "BONUS: addWeighted(반투명) + getTextSize(가운데 정렬)", demo_07_text_size_center_and_alpha_overlay),
+    
+        Demo("08", "Color space conversion (BGR/HSV/GRAY/Lab)", demo_08_color_space_conversion),
+        Demo("09", "Bitwise ops & masking (AND/OR/XOR/NOT)", demo_09_bitwise_and_masking),
+]
     run_demos(demos, args)
 
 

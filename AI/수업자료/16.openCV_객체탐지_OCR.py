@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-16.object_detection_and_ocr.py
+16.openCV_객체탐지_OCR.py
 ================================================================================
-[대주제] 객체 탐지 & 문자인식 (Face/Haar, YOLO(DNN), Tesseract OCR)
+[대주제] openCV 객체 탐지 & 문자인식 (Face/Haar, YOLO(DNN), Tesseract OCR)
 
 이 파일은 업로드된 PDF:
 - 14_OpenCV(4)_객체탐지및문자인식.pdf
@@ -11,20 +11,26 @@
 
 실행 방식
 --------------------------------------------------------------------------------
-python ./AI/수업자료/16.object_detection_and_ocr.py --list
+0) 기본 실행(가장 간단):
+    python ./AI/수업자료/16.openCV_객체탐지_OCR.py
+
+   * 기본 데모(보통 00)가 바로 실행됩니다.
+   * 데모 선택 메뉴가 필요하면 --menu 옵션을 사용하세요.
+
+python ./AI/수업자료/16.openCV_객체탐지_OCR.py --list
 
 # 얼굴 인식(이미지)
-python ./AI/수업자료/16.object_detection_and_ocr.py --demo 01 --image ./Images/face.jpg
+python ./AI/수업자료/16.openCV_객체탐지_OCR.py --demo 01 --image ./Images/face.jpg
 
 # 얼굴 인식(웹캠)
-python ./AI/수업자료/16.object_detection_and_ocr.py --demo 02 --source 0
+python ./AI/수업자료/16.openCV_객체탐지_OCR.py --demo 02 --source 0
 
 # YOLO (cfg/weights/names 필요)
-python ./AI/수업자료/16.object_detection_and_ocr.py --demo 03 --image ./Images/street.jpg \
+python ./AI/수업자료/16.openCV_객체탐지_OCR.py --demo 03 --image ./Images/street.jpg \
     --yolo_cfg ./yolo/yolov3.cfg --yolo_weights ./yolo/yolov3.weights --yolo_names ./yolo/coco.names
 
 # OCR (Tesseract 설치 필요)
-python ./AI/수업자료/16.object_detection_and_ocr.py --demo 04 --image ./Images/text.png --lang kor+eng
+python ./AI/수업자료/16.openCV_객체탐지_OCR.py --demo 04 --image ./Images/text.png --lang kor+eng
 
 - 공통 종료 키: 'q' 또는 ESC
 
@@ -36,7 +42,7 @@ from __future__ import annotations
 import os
 from typing import Any, List, Tuple
 
-from opencv_common import (
+from openCV_공용 import (
     require_cv2, require_np,
     auto_find_image,
     make_blank, make_gradient,
@@ -52,7 +58,6 @@ np = require_np()
 
 # =============================================================================
 # [PDF 체크리스트] 14_OpenCV(4)_객체탐지및문자인식.pdf 대주제 → 코드 매핑
-# =============================================================================
 # PDF 체크리스트(슬라이드 대주제 → 코드 위치)
 # --------------------------------------------------------------------
 # 번호 | 슬라이드(p) | 대주제 | 코드 섹션/데모
@@ -67,7 +72,6 @@ np = require_np()
 
 # =============================================================================
 # 0. 입력 로드
-# =============================================================================
 def _load_or_make_image(path: str) -> Any:
     if path and os.path.isfile(path):
         img = cv2.imread(path, cv2.IMREAD_COLOR)
@@ -98,7 +102,6 @@ def _open_capture(source: str) -> Any:
 
 # =============================================================================
 # demo 00. 개요
-# =============================================================================
 def demo_00_overview(args) -> None:
     """
     [개념] 객체 탐지(Object Detection) vs 문자인식(OCR)
@@ -123,7 +126,6 @@ def demo_00_overview(args) -> None:
 
 # =============================================================================
 # demo 01. 얼굴 인식(이미지) - Haar Cascade
-# =============================================================================
 def demo_01_face_detection_image(args) -> None:
     """
     [개념] Haar Cascade 얼굴 검출
@@ -163,7 +165,6 @@ def demo_01_face_detection_image(args) -> None:
 
 # =============================================================================
 # demo 02. 얼굴 인식(웹캠) + 트랙바(파라미터 튜닝) + 눈 검출(응용)
-# =============================================================================
 def demo_02_face_detection_webcam(args) -> None:
     """
     [개념] 실시간 얼굴 검출
@@ -242,7 +243,6 @@ def demo_02_face_detection_webcam(args) -> None:
 
 # =============================================================================
 # demo 03. YOLO 객체 탐지 (OpenCV DNN)
-# =============================================================================
 def demo_03_yolo_detection(args) -> None:
     """
     [개념] OpenCV DNN + YOLO
@@ -375,7 +375,6 @@ def demo_03_yolo_detection(args) -> None:
 
 # =============================================================================
 # demo 04. OCR 기본(pytesseract) + 전처리(그레이/이진화)
-# =============================================================================
 def demo_04_ocr_basic(args) -> None:
     """
     [개념] Tesseract OCR + pytesseract
@@ -426,7 +425,6 @@ def demo_04_ocr_basic(args) -> None:
 
 # =============================================================================
 # demo 05. OCR 응용: 숫자/한정 문자 인식 + ROI + 모폴로지
-# =============================================================================
 def demo_05_ocr_digits_roi(args) -> None:
     """
     [응용] 숫자만 인식하기 / ROI 기반 인식
